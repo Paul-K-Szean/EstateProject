@@ -5,6 +5,8 @@ Project:
 	
 Coding rules:
 	- please follow the style of the original codes (IMPORTANT)
+	
+Github Desktop:
 	- before commiting any changes, you have to write a summary of what you have done in the description box.
 
 *******************************************************************************************************************************************************************
