@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="estateco.estate.UpdateUserProperty">
+    tools:context="estateco.estate.FragmentUpdateUserProperty">
 
     <!-- TODO: Update blank fragment layout -->
     <ScrollView
@@ -45,6 +45,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <Button
+                android:text="Select Photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/BTNEditPhoto" />
+
             <TextView
                 android:id="@+id/TVLblUpdateDesc"
                 android:layout_width="match_parent"
@@ -82,6 +88,13 @@
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
+            <CheckBox
+                android:text="WholeApartment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/CHKBXEditWholeApartment"
+                android:textAlignment="center" />
+
             <TextView
                 android:id="@+id/TVLblUpdateFurnishLevel"
                 android:layout_width="match_parent"
@@ -105,7 +118,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/ETPrice"
+                android:id="@+id/ETEditPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -135,7 +148,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/ETBathrooms"
+                android:id="@+id/ETEditBathrooms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -173,6 +186,13 @@
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
+            <EditText
+                android:id="@+id/ETEditAddressName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
             <TextView
                 android:id="@+id/TVPostalCode"
                 android:layout_width="match_parent"
@@ -180,6 +200,13 @@
                 android:text="PostalCode"
                 android:textAlignment="center"
                 android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/ETEditPostalCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
             <TextView
                 android:id="@+id/TVunit"
@@ -189,71 +216,19 @@
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/textView28"
+            <EditText
+                android:id="@+id/ETEditUnit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Owner Details"
-                android:textAlignment="center"
-                android:textSize="24sp"
-                android:textStyle="normal|bold" />
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-            <TextView
-                android:id="@+id/TVOwnerName"
+            <Button
+                android:text="Save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="OwnerName"
-                android:textAlignment="center"
-                android:textSize="20sp" />
+                android:id="@+id/BTNUpdateProperty" />
 
-            <TextView
-                android:id="@+id/TVOwnerEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="OwnerEmail"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/TVOwnerContact"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="OwnerContact"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:id="@+id/IMGVPreview"
-                app:srcCompat="@drawable/ic_menu_gallery"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-            <ImageView
-                android:id="@+id/IMGVPreview"
-                app:srcCompat="@drawable/ic_menu_gallery"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-            <ImageView
-                android:id="@+id/IMGVPreview"
-                app:srcCompat="@drawable/ic_menu_gallery"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <ImageView
-                android:id="@+id/IMGVPreview"
-                app:srcCompat="@drawable/ic_menu_gallery"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-            <ImageView
-                android:id="@+id/IMGVPreview"
-                app:srcCompat="@drawable/ic_menu_gallery"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </ScrollView>
