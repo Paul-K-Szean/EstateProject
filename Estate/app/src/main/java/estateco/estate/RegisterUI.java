@@ -27,14 +27,14 @@ import controllers.EstateConfig;
 import controllers.EstateCtrl;
 import controllers.UserCtrl;
 import entities.User;
-import helper.SQLiteHandler;
-import helper.SessionManager;
-import helper.Utility;
+import handler.SQLiteHandler;
+import handler.SessionHandler;
+import handler.Utility;
 
 public class RegisterUI extends Activity {
     private static final String TAG = RegisterUI.class.getSimpleName();
     private ProgressDialog pDialog;
-    private SessionManager session;
+    private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private User user;
@@ -63,7 +63,7 @@ public class RegisterUI extends Activity {
         // setup ctrl objects
         db = new SQLiteHandler(getApplicationContext());
         userCtrl = new UserCtrl(getApplicationContext());
-        session = new SessionManager(getApplicationContext());
+        session = new SessionHandler(getApplicationContext());
 
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {

@@ -33,9 +33,10 @@ import entities.Lease;
 import entities.Property;
 import entities.Sale;
 import entities.User;
-import helper.ImageHandler;
-import helper.SQLiteHandler;
-import helper.SessionManager;
+import enums.DealType;
+import handler.ImageHandler;
+import handler.SQLiteHandler;
+import handler.SessionHandler;
 
 
 /**
@@ -44,7 +45,7 @@ import helper.SessionManager;
 public class FragmentPropertyDetails extends Fragment {
     private static final String TAG = FragmentPropertyDetails.class.getSimpleName();
     private ProgressDialog pDialog;
-    private SessionManager session;
+    private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private User user;
@@ -205,24 +206,31 @@ public class FragmentPropertyDetails extends Fragment {
                                         propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
                                         propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
 
-                                tvTitle.setText(property.getTitle());
-                                tvUnit.setText(property.getUnit());
-                                tvDesc.setText(property.getDescription());
                                 tvFlatType.setText(property.getFlatType());
                                 tvDealType.setText(property.getDealType());
+                                tvTitle.setText(property.getTitle());
+                                tvDesc.setText(property.getDescription());
+
                                 tvFurnishLevel.setText(property.getFurnishLevel());
                                 tvPrice.setText("SGD$" + property.getPrice());
-                                tvAddressName.setText(property.getAddressName());
-                                tvPostalCode.setText(property.getPostalcode());
+                                tvPostalCode.setText("S'pore(" + property.getPostalcode() + ")");
                                 tvUnit.setText("#" + property.getUnit());
-                                tvNoOfBedrooms.setText(property.getNoOfbedrooms() + "bedroom(s)");
-                                tvNoOfBathrooms.setText(property.getNoOfbathrooms() + "bathroom(s)");
+                                tvAddressName.setText(property.getAddressName());
+                                tvNoOfBedrooms.setText(property.getNoOfbedrooms() + " bedroom(s)");
+                                tvNoOfBathrooms.setText(property.getNoOfbathrooms() + " bathroom(s)");
+
 
                                 tvOwnerName.setText(property.getOwner().getName());
                                 tvOwnerEmail.setText(property.getOwner().getEmail());
                                 tvOwnerContact.setText(property.getOwner().getContact());
+                                // TODO WHOLEAPARTMENT
+                                if (propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE).equals(DealType.ForSale)) {
+                                    lease = new Lease(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT));
+                                } else {
+                                    sale = new Sale(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORAREA));
+                                    tvFloorArea.setText(sale.getFloorArea() + "Sq Meters");
+                                }
 
-                                // tvFloorArea.setText(sale.getFloorArea());    // TODO get floor area
 
                                 // check if photo is empty
                                 String photoData = property.getPhoto();
@@ -230,7 +238,25 @@ public class FragmentPropertyDetails extends Fragment {
                                     imgvPreview.setImageResource(R.drawable.ic_menu_camera);
                                 else
                                     imgvPreview.setImageBitmap(ImageHandler.getInstance().decodeStringToImage(photoData));
-                                // TODO DISPLAY BEDROOM, BATHROOM, FLOOR AREA
+
+
+//                                tvTitle.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_TITLE));
+//                                tvDesc.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DESC));
+//                                tvUnit.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT));
+//                                tvFlatType.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE));
+//                                tvDealType.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE));
+//                                tvFurnishLevel.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL));
+//                                tvPrice.setText("SGD$" + propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PRICE));
+//                                tvPostalCode.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_POSTALCODE));
+//                                tvUnit.setText("#" + propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT));
+//                                tvAddressName.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME));
+//                                tvNoOfBedrooms.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS + "bedroom(s)"));
+//                                tvNoOfBathrooms.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS + "bathroom(s)"));
+//                                tvFloorArea.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORAREA));
+//
+//                                tvOwnerName.setText(user.getName());
+//                                tvOwnerEmail.setText(user.getEmail());
+//                                tvOwnerContact.setText(user.getContact());
                             }
                         } catch (JSONException e) {
                             // JSON error

@@ -17,10 +17,10 @@ import java.util.HashMap;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.User;
-import helper.FragmentHandler;
-import helper.SQLiteHandler;
-import helper.SessionManager;
-import helper.Utility;
+import handler.FragmentHandler;
+import handler.SQLiteHandler;
+import handler.SessionHandler;
+import handler.Utility;
 
 
 /**
@@ -29,7 +29,7 @@ import helper.Utility;
 public class FragmentNewPropertyStep1 extends Fragment {
     private static final String TAG = FragmentNewPropertyStep1.class.getSimpleName();
     private ProgressDialog pDialog;
-    private SessionManager session;
+    private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private User user;
@@ -51,7 +51,7 @@ public class FragmentNewPropertyStep1 extends Fragment {
         // setup ctrl objects
         db = new SQLiteHandler(getActivity());
         userCtrl = new UserCtrl(getActivity());
-        session = new SessionManager(getActivity());
+        session = new SessionHandler(getActivity());
 
         // check if user is already logged in or not
         if (session.isLoggedIn()) {

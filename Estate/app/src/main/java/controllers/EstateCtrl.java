@@ -61,6 +61,7 @@ public class EstateCtrl extends Application {
         }
     }
 
+
     // hide keyboard
     public static void hideSoftKeyboard(Activity activity) {
         Log.i(TAG, "hideSoftKeyboard()");

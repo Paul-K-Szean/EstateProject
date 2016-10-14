@@ -46,11 +46,11 @@ import entities.Property;
 import entities.User;
 import enums.FlatType;
 import enums.FurnishLevel;
-import helper.FragmentHandler;
-import helper.ImageHandler;
-import helper.SQLiteHandler;
-import helper.SessionManager;
-import helper.Utility;
+import handler.FragmentHandler;
+import handler.ImageHandler;
+import handler.SQLiteHandler;
+import handler.SessionHandler;
+import handler.Utility;
 
 
 /**
@@ -59,7 +59,7 @@ import helper.Utility;
 public class FragmentNewPropertyStep2 extends Fragment {
     private static final String TAG = FragmentNewPropertyStep2.class.getSimpleName();
     private ProgressDialog pDialog;
-    private SessionManager session;
+    private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private User user;
@@ -94,7 +94,7 @@ public class FragmentNewPropertyStep2 extends Fragment {
         // setup ctrl objects
         db = new SQLiteHandler(getActivity());
         userCtrl = new UserCtrl(getActivity());
-        session = new SessionManager(getActivity());
+        session = new SessionHandler(getActivity());
         user = userCtrl.getUserDetails();
 
         // check if user is already logged in or not
@@ -130,7 +130,7 @@ public class FragmentNewPropertyStep2 extends Fragment {
         spSaleNoOfBathrooms.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, arrBathRooms));
 
         // edit texts
-        etPrice = (EditText) view.findViewById(R.id.ETPrice);
+        etPrice = (EditText) view.findViewById(R.id.ETEditPrice);
         etFloorArea = (EditText) view.findViewById(R.id.ETFloorArea);
 
         // image view

@@ -6,7 +6,7 @@ import android.util.Log;
 import java.util.HashMap;
 
 import entities.User;
-import helper.SQLiteHandler;
+import handler.SQLiteHandler;
 
 /**
  * Created by Paul K Szean on 30/9/2016.

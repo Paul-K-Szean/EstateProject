@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -35,10 +36,10 @@ import entities.Lease;
 import entities.Property;
 import entities.Sale;
 import entities.User;
-import helper.FragmentHandler;
-import helper.SQLiteHandler;
-import helper.SessionManager;
-import helper.ViewAdapterAllProperties;
+import handler.FragmentHandler;
+import handler.SQLiteHandler;
+import handler.SessionHandler;
+import handler.ViewAdapterAllProperties;
 
 
 /**
@@ -47,7 +48,7 @@ import helper.ViewAdapterAllProperties;
 public class FragmentUserListings extends Fragment {
     private static final String TAG = FragmentUserListings.class.getSimpleName();
     private ProgressDialog pDialog;
-    private SessionManager session;
+    private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private User user;
@@ -58,8 +59,9 @@ public class FragmentUserListings extends Fragment {
 
 
     Button btnNewListing;
-    GridView gvMyListings;
-    TextView tvUserMsg;
+    GridView gvUserListings;
+    TextView tvUserMsg, itemDataID;
+
 
     public FragmentUserListings() {
         // Required empty public constructor
@@ -82,11 +84,9 @@ public class FragmentUserListings extends Fragment {
         user = userCtrl.getUserDetails();
         propertyCtrl = new PropertyCtrl(getActivity());
 
-        // clear existing property data
-        propertyCtrl.deletePropertyDetails();
 
         // check if user is already logged in or not
-        session = new SessionManager(getActivity());
+        session = new SessionHandler(getActivity());
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
 
@@ -108,7 +108,12 @@ public class FragmentUserListings extends Fragment {
         tvUserMsg = (TextView) view.findViewById(R.id.TVUserMsg);
 
         // get user listings
-        gvMyListings = (GridView) view.findViewById(R.id.GVMyListings);
+        gvUserListings = (GridView) view.findViewById(R.id.GVUserListings);
+
+        // TODO: DO SOMETHING WHEN RECORD ALREADY EXIST INSTEAD OR REMOVING AND ADDING BACK TO LOCAL DB
+        // clear existing property data
+        propertyCtrl.deletePropertyDetails();
+        // fetch from server, copy to local DB
         new AsyncTask_UserListings().execute(user.getUserID());
 
         // new property listing
@@ -122,7 +127,17 @@ public class FragmentUserListings extends Fragment {
         });
 
         // TODO ALLOW USER TO EDIT THEIR PROPERTIES
-
+        // item selected behaviour
+        gvUserListings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // retrieve property id
+                itemDataID = (TextView) view.findViewById(R.id.TVPropertyID);
+                Bundle bundlePropertyDetails = new Bundle();
+                bundlePropertyDetails.putString(PropertyCtrl.KEY_PROPERTY_PROPERTYID, itemDataID.getText().toString());
+                FragmentHandler.getInstance().loadFragment(FragmentUserListings.this, new FragmentUpdateUserProperty(), bundlePropertyDetails);
+            }
+        });
     }
 
     @Override
@@ -201,7 +216,7 @@ public class FragmentUserListings extends Fragment {
                             if (error) {
                                 // Error. Get the error message
                                 String errorMsg = jObj.getString("error_msg");
-                                gvMyListings.setAdapter(new ViewAdapterAllProperties(getActivity(), userPropertyList));
+                                gvUserListings.setAdapter(new ViewAdapterAllProperties(getActivity(), userPropertyList));
                                 tvUserMsg.setText("You do not have any property created.");
                                 Log.e("Json Response Error", errorMsg);
                             } else {
@@ -230,7 +245,7 @@ public class FragmentUserListings extends Fragment {
                                                 propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
                                         // insert data into local db
                                         propertyCtrl.addPropertyDetails(sale);
-                                        publishProgress(sale);
+                                        // publishProgress(sale);
                                     } else {
                                         lease = new Lease(
                                                 propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
@@ -252,7 +267,7 @@ public class FragmentUserListings extends Fragment {
                                                 propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
                                         // insert data into local db
                                         propertyCtrl.addPropertyDetails(lease);
-                                        publishProgress(lease);
+                                        // publishProgress(lease);
                                     }
                                 }
 
@@ -260,7 +275,7 @@ public class FragmentUserListings extends Fragment {
                                 userPropertyList = propertyCtrl.getUserProperties(user);
 
                                 // displays into grid view
-                                gvMyListings.setAdapter(new ViewAdapterAllProperties(getActivity(), userPropertyList));
+                                gvUserListings.setAdapter(new ViewAdapterAllProperties(getActivity(), userPropertyList));
 
                                 if (results.length() > 1)
                                     tvUserMsg.setText("You have a total of " + results.length() + " properties");
@@ -304,7 +319,6 @@ public class FragmentUserListings extends Fragment {
         @Override
         protected void onProgressUpdate(Property... property) {
             Log.w("onProgressUpdate", "onProgressUpdate()");
-
         }
 
         @Override

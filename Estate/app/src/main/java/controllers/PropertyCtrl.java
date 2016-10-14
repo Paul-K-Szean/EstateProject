@@ -10,7 +10,7 @@ import entities.Lease;
 import entities.Property;
 import entities.Sale;
 import entities.User;
-import helper.SQLiteHandler;
+import handler.SQLiteHandler;
 
 /**
  * Created by Paul K Szean on 26/9/2016.

@@ -28,13 +28,14 @@ import controllers.EstateCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.User;
-import helper.SQLiteHandler;
-import helper.SessionManager;
+import handler.ErrorHandler;
+import handler.SQLiteHandler;
+import handler.SessionHandler;
 
 public class LoginUI extends Activity {
     private static final String TAG = LoginUI.class.getSimpleName();
     private ProgressDialog pDialog;
-    private SessionManager session;
+    private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private User user;
@@ -72,7 +73,7 @@ public class LoginUI extends Activity {
         db = new SQLiteHandler(getApplicationContext());
         userCtrl = new UserCtrl(getApplicationContext());
         propertyCtrl = new PropertyCtrl(getApplicationContext());
-        session = new SessionManager(getApplicationContext());
+        session = new SessionHandler(getApplicationContext());
 
         // check if user is already logged in or not
         if (session.isLoggedIn()) {
@@ -219,10 +220,9 @@ public class LoginUI extends Activity {
                                 hideDialog();
                                 finish();
                             }
-                        } catch (JSONException e) {
+                        } catch (JSONException error) {
                             // JSON error
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            ErrorHandler.errorHandler(getApplicationContext(), error);
                         }
                         hideDialog();
                     }
@@ -230,9 +230,7 @@ public class LoginUI extends Activity {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "Login Error: " + error.getMessage());
-                        Toast.makeText(getApplicationContext(),
-                                "Server is down...", Toast.LENGTH_LONG).show();
+                        ErrorHandler.errorHandler(getApplicationContext(), error);
                         hideDialog();
                     }
                 }) {

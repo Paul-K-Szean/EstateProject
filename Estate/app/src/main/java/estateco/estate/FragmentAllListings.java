@@ -34,10 +34,10 @@ import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.Property;
 import entities.User;
-import helper.FragmentHandler;
-import helper.SQLiteHandler;
-import helper.SessionManager;
-import helper.ViewAdapterAllProperties;
+import handler.FragmentHandler;
+import handler.SQLiteHandler;
+import handler.SessionHandler;
+import handler.ViewAdapterAllProperties;
 
 
 /**
@@ -46,7 +46,7 @@ import helper.ViewAdapterAllProperties;
 public class FragmentAllListings extends Fragment {
     private static final String TAG = FragmentAllListings.class.getSimpleName();
     private ProgressDialog pDialog;
-    private SessionManager session;
+    private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private User user;
@@ -57,7 +57,7 @@ public class FragmentAllListings extends Fragment {
 
     GridView gvAllListings;
     SearchView svSearch;
-    TextView tvAllListingCount, itemDataPropertyID;
+    TextView tvAllListingCount, itemDataID;
 
     public FragmentAllListings() {
         // Required empty public constructor
@@ -76,11 +76,17 @@ public class FragmentAllListings extends Fragment {
         // setup ctrl objects
         db = new SQLiteHandler(getActivity());
         userCtrl = new UserCtrl(getActivity());
-        session = new SessionManager(getActivity());
+        session = new SessionHandler(getActivity());
 
         setControls(view);
-        // new AsyncTask_AllListing().execute();
 
+
+
+        // loading dialog
+        pDialog.setIndeterminate(true);
+        pDialog.setMessage("Loading properties ...");
+        showDialog();
+        // get all property listing from server
         new AsyncTask_SearchListing().execute("");
         return view;
     }
@@ -108,17 +114,16 @@ public class FragmentAllListings extends Fragment {
         });
 
 
-        // TODO get property details from server
+
         // item selected behaviour
         gvAllListings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 // retrieve property id
-                itemDataPropertyID = (TextView) view.findViewById(R.id.TVPropertyID);
-
+                itemDataID = (TextView) view.findViewById(R.id.TVPropertyID);
                 Bundle bundlePropertyDetails = new Bundle();
-                bundlePropertyDetails.putString(PropertyCtrl.KEY_PROPERTY_PROPERTYID, itemDataPropertyID.getText().toString());
+                bundlePropertyDetails.putString(PropertyCtrl.KEY_PROPERTY_PROPERTYID, itemDataID.getText().toString());
                 FragmentHandler.getInstance().loadFragment(FragmentAllListings.this, new FragmentPropertyDetails(), bundlePropertyDetails);
             }
         });
@@ -175,10 +180,7 @@ public class FragmentAllListings extends Fragment {
             Log.w("onPreExecute", "onPreExecute()");
             IsInternetConnected = EstateCtrl.CheckInternetConnection(getActivity());
             properties = new ArrayList<>();
-            // loading dialog
-            pDialog.setIndeterminate(true);
-            pDialog.setMessage("Loading properties ...");
-            showDialog();
+
         }
 
         @Override
@@ -236,7 +238,7 @@ public class FragmentAllListings extends Fragment {
                                     properties.add(i, property);
                                 }
                             }
-                            // Creates ViewAdapterAllProperties Object to gvMyListings
+                            // Creates ViewAdapterAllProperties Object to gvUserListings
                             gvAllListings.setAdapter(new ViewAdapterAllProperties(getActivity(), properties));
                             tvAllListingCount.setText(properties.size() + " records.");
                         } catch (JSONException e) {

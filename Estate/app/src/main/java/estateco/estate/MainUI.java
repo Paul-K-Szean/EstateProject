@@ -25,15 +25,15 @@ import java.util.ArrayList;
 import controllers.UserCtrl;
 import entities.Property;
 import entities.User;
-import helper.SQLiteHandler;
-import helper.SessionManager;
+import handler.SQLiteHandler;
+import handler.SessionHandler;
 
 public class MainUI extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainUI.class.getSimpleName();
     private ProgressDialog pDialog;
-    private SessionManager session;
+    private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private User user;
@@ -82,7 +82,7 @@ public class MainUI extends AppCompatActivity
         // setup ctrl objects
         db = new SQLiteHandler(getApplicationContext());
         userCtrl = new UserCtrl(getApplicationContext());
-        session = new SessionManager(getApplicationContext());
+        session = new SessionHandler(getApplicationContext());
         user = userCtrl.getUserDetails();
 
         // check if user is already logged in or not

@@ -15,6 +15,7 @@ public class EstateConfig {
     public static String URL_ALLLISTINGS = "http://10.0.2.2/estatealllistings.php";
     public static String URL_PROPERTYDETAILS = "http://10.0.2.2/estatepropertydetails.php";
     public static String URL_USERLISTINGS = "http://10.0.2.2/estateuserlistings.php";
+    public static String URL_UPDATEUSERPROPERTY = "http://10.0.2.2/estateupdateuserproperty.php";
     public static String URL_SEARCHLISTINGS = "http://10.0.2.2/estatesearchlistings.php";
     public static String URL_NEWPROPERTY = "http://10.0.2.2/estatenewproperty.php";
 
