@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="estateco.estate.FragmentUserListings"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <Button
+        android:text="New Listings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/BTNNewListing"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/TVUserMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="normal|bold" />
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/GVMyListings" />
+
+</LinearLayout>

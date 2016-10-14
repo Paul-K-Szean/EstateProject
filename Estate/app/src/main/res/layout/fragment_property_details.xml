@@ -1,0 +1,370 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="estateco.estate.FragmentPropertyDetails">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Property Details"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVLblUpdateTitle"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="Title" />
+
+                <ImageView
+                    android:id="@+id/IMGVPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_menu_gallery" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVDesc"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="Description" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVFlatType"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="FlatType" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVDealType"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="DealType" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVFurnishLevel"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="FurnishLevel" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVPrice"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="Price" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVNoOfBedrooms"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="noofbedrooms" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVNoOfBathrooms"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="noofbathrooms" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVFloorArea"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="floorarea" />
+
+                <TextView
+                    android:id="@+id/textView30"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Address Details"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVAddressName"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="AddressName" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVPostalCode"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="PostalCode" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVunit"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="Unit" />
+
+                <TextView
+                    android:id="@+id/textView28"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Owner Details"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVOwnerName"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="OwnerName" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVOwnerEmail"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="OwnerEmail" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVOwnerContact"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="OwnerContact" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Property Summary"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:textStyle="normal|bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVLblUpdateTitle"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="Title" />
+
+                <ImageView
+                    android:id="@+id/IMGVPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_menu_gallery" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/TVDesc"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="Description" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Property Summary"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TVLblUpdateTitle"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="Title" />
+
+            <ImageView
+                android:id="@+id/IMGVPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_menu_gallery" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TVDesc"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="Description" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Property Summary"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TVLblUpdateTitle"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="Title" />
+
+            <ImageView
+                android:id="@+id/IMGVPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_menu_gallery" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TVDesc"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="Description" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Property Summary"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TVLblUpdateTitle"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="Title" />
+
+            <ImageView
+                android:id="@+id/IMGVPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_menu_gallery" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TVDesc"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="Description" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Property Summary"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/TVLblUpdateTitle"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:text="Title" />
+
+        <ImageView
+            android:id="@+id/IMGVPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_menu_gallery" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/TVDesc"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:text="Description" />
+
+
+    </LinearLayout>
+</LinearLayout>
