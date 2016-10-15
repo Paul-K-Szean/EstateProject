@@ -13,7 +13,7 @@ public class Lease extends Property {
         this.wholeApartment = wholeApartment;
     }
 
-    public Lease(String propertyID, User owner, String flatType, String dealType, String title, String description, String furnishLevel, String price, String postalcode, String unit, String addressName, String photo, String status, String noOfbedrooms, String noOfbathrooms, String createdate, String wholeApartment) {
+    public Lease(String propertyID, User owner, String flatType, String dealType, String title, String description, String furnishLevel, String price, String postalcode, String unit, String addressName, String photo, String status, String noOfbedrooms, String noOfbathrooms, String wholeApartment, String createdate) {
         super(propertyID, owner, flatType, dealType, title, description, furnishLevel, price, postalcode, unit, addressName, photo, status, noOfbedrooms, noOfbathrooms, createdate);
         this.wholeApartment = wholeApartment;
     }

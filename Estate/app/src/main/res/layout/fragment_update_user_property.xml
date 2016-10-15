@@ -25,7 +25,22 @@
                 android:textStyle="normal|bold" />
 
             <TextView
-                android:id="@+id/TVLblUpdateTitle"
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CreatedOn"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/TVLblCreatedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/TVLblTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
@@ -37,7 +52,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <ImageView
                 android:id="@+id/IMGVPreview"
@@ -64,7 +80,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/TVLblUpdateFlatType"
@@ -122,13 +139,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/TVNoOfBedrooms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="noofbedrooms"
+                android:text="Bedroom(s)"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -137,13 +155,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/TVNoOfBathrooms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="noofbathrooms"
+                android:text="Bathroom(s)"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -152,13 +171,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/TVFloorArea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="floorarea"
+                android:text="Floor Area (Sq Meter)"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -167,7 +187,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/textView30"
@@ -191,7 +212,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/TVPostalCode"
@@ -206,7 +228,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/TVunit"
@@ -221,7 +244,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
 
             <Button
                 android:text="Save"

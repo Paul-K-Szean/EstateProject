@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import controllers.EstateCtrl;
 import controllers.UserCtrl;
 import entities.Property;
 import entities.User;
@@ -84,6 +85,7 @@ public class MainUI extends AppCompatActivity
         userCtrl = new UserCtrl(getApplicationContext());
         session = new SessionHandler(getApplicationContext());
         user = userCtrl.getUserDetails();
+        Log.i(TAG, user.getName());
 
         // check if user is already logged in or not
         if (session.isLoggedIn()) {

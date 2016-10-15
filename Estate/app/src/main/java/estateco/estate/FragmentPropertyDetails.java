@@ -88,7 +88,7 @@ public class FragmentPropertyDetails extends Fragment {
     private void setControls(View view, Bundle savedInstanceState) {
 
         imgvPreview = (ImageView) view.findViewById(R.id.IMGVPreview);
-        tvTitle = (TextView) view.findViewById(R.id.TVLblUpdateTitle);
+        tvTitle = (TextView) view.findViewById(R.id.TVLblTitle);
         tvDesc = (TextView) view.findViewById(R.id.TVDesc);
         tvFlatType = (TextView) view.findViewById(R.id.TVFlatType);
         tvDealType = (TextView) view.findViewById(R.id.TVDealType);

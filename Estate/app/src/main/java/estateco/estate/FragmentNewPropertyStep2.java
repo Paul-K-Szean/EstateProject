@@ -66,6 +66,7 @@ public class FragmentNewPropertyStep2 extends Fragment {
     private Property property;
 
     private static final int SELECTED_IMAGE = 1;
+    Bitmap bitmap;
     Button btnCreateListing, btnSelectPhoto, btnRandomise;
     ImageView imgvPreview;
     Spinner spSaleNoOfBedrooms, spSaleNoOfBathrooms, spFlatType, spFurnishLevel;
@@ -74,7 +75,7 @@ public class FragmentNewPropertyStep2 extends Fragment {
     String valOwnerID, valFlatType, valDealType, valTitle, valDescription, valFurnishLevel, valPrice,
             valPostalCode, valUnit, valAddressName, valPhoto, valStatus,
             valSaleNoOfBedrooms, valSaleNoOfBathrooms, valFloorArea, valWholeApartment, selectedImagePath;
-    Bitmap bitmap;
+
     CheckBox chkbxWholeApartment;
 
     public FragmentNewPropertyStep2() {
@@ -431,7 +432,7 @@ public class FragmentNewPropertyStep2 extends Fragment {
                     protected Map<String, String> getParams() {
                         // Posting parameters to login url
                         Map<String, String> paramsLogin = new HashMap<>();
-                        paramsLogin.put(PropertyCtrl.KEY_PROPERTY_OWNER, params[0]);    // ownerID
+                        paramsLogin.put(PropertyCtrl.KEY_PROPERTY_OWNERID, params[0]);    // ownerID
                         paramsLogin.put(PropertyCtrl.KEY_PROPERTY_FLATTYPE, params[1]); // flattype
                         paramsLogin.put(PropertyCtrl.KEY_PROPERTY_DEALTYPE, params[2]);    // dealtype
                         paramsLogin.put(PropertyCtrl.KEY_PROPERTY_TITLE, params[3]); // title

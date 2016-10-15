@@ -10,6 +10,7 @@ import entities.Lease;
 import entities.Property;
 import entities.Sale;
 import entities.User;
+import enums.DealType;
 import handler.SQLiteHandler;
 
 /**
@@ -31,7 +32,7 @@ public class PropertyCtrl {
 
     // table columns names
     public static String KEY_PROPERTY_PROPERTYID = "propertyID";
-    public static String KEY_PROPERTY_OWNER = "ownerID";
+    public static String KEY_PROPERTY_OWNERID = "ownerID";
     public static String KEY_PROPERTY_FLATTYPE = "flattype";
     public static String KEY_PROPERTY_DEALTYPE = "dealtype";
     public static String KEY_PROPERTY_TITLE = "title";
@@ -64,54 +65,54 @@ public class PropertyCtrl {
         // Fetching user details from sqlite
         HashMap<String, String> savedProperty = db.getUserProperty(propertyID);
 
+        Log.i(TAG, String.valueOf(savedProperty.size()));
         if (savedProperty != null) {
-
-            Sale sale = new Sale(
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
-                    owner,
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_TITLE),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_DESC),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_PRICE),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_UNIT),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_PHOTO),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_STATUS),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_FLOORAREA),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_CREATEDDATE)
-            );
-
-            Lease lease = new Lease(
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
-                    owner,
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_TITLE),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_DESC),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_PRICE),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_UNIT),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_PHOTO),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_STATUS),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT),
-                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
-
-            if (savedProperty.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE).toLowerCase().contains("rent")) {
-                Log.i(TAG, lease.getOwner().getName());
+            Log.i(TAG, "KEY_PROPERTY_CREATEDDATE: " + savedProperty.get(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
+            if (savedProperty.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE).equals(DealType.ForLease.toString())) {
+                Log.i(TAG, "Retrieving lease propertyID" + savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
+                Lease lease = new Lease(
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
+                        owner,
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_TITLE),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_DESC),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_PRICE),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_UNIT),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_PHOTO),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_STATUS),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
                 return lease;
-            } else {
-                Log.i(TAG, sale.getOwner().getName());
+            }
+            if (savedProperty.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE).equals(DealType.ForSale.toString())) {
+                Log.i(TAG, "Retrieving sale propertyID" + savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
+                Sale sale = new Sale(
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
+                        owner,
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_TITLE),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_DESC),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_PRICE),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_UNIT),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_PHOTO),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_STATUS),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_FLOORAREA),
+                        savedProperty.get(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
                 return sale;
             }
+            return null;
         } else {
             Log.e(TAG, "No property data from local database.");
             return null;

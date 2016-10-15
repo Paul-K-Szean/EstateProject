@@ -47,7 +47,7 @@ public class ViewAdapterAllProperties extends BaseAdapter {
     }
 
 
-    TextView PropertyID, Title, Desc, Price, OwnerName, AddressName;
+    TextView PropertyID, FlatType, Title, Desc, Price, OwnerName, AddressName;
     ImageView Photo;
 
     @Override
@@ -57,15 +57,17 @@ public class ViewAdapterAllProperties extends BaseAdapter {
         View row = inflater.inflate(R.layout.viewstyle_row, parent, false);
         row.setPadding(22, 0, 12, 22);
 
-        PropertyID = (TextView) row.findViewById(R.id.TVPropertyID);
-        Title = (TextView) row.findViewById(R.id.TVLblUpdateTitle);
-        Desc = (TextView) row.findViewById(R.id.TVDesc);
-        Price = (TextView) row.findViewById(R.id.TVPrice);
-        OwnerName = (TextView) row.findViewById(R.id.TVOwnerName);
-        AddressName = (TextView) row.findViewById(R.id.TVAddressName);
-        Photo = (ImageView) row.findViewById(R.id.IMGVPhoto);
+        PropertyID = (TextView) row.findViewById(R.id.TVLblPropertyID);
+        FlatType = (TextView) row.findViewById(R.id.TVLblFlatType);
+        Title = (TextView) row.findViewById(R.id.TVLblTitle);
+        Desc = (TextView) row.findViewById(R.id.TVLblDesc);
+        Price = (TextView) row.findViewById(R.id.TVLblPrice);
+        OwnerName = (TextView) row.findViewById(R.id.TVLblOwnerName);
+        AddressName = (TextView) row.findViewById(R.id.TVLblAddressName);
+        Photo = (ImageView) row.findViewById(R.id.IMGVLblImage);
 
         PropertyID.setText(properties.get(position).getPropertyID());
+        FlatType.setText(properties.get(position).getFlatType());
         Title.setText(" - " + properties.get(position).getTitle());
         Desc.setText(properties.get(position).getDescription());
         Price.setText("Price : SGD$" + properties.get(position).getPrice());

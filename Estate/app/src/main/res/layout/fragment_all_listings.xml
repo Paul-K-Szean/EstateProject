@@ -7,6 +7,15 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:text="All Listings" />
+
     <SearchView
         android:id="@+id/SVSearch"
         android:layout_width="match_parent"
@@ -14,7 +23,6 @@
         android:queryHint="Search here..." >
 
     </SearchView>
-
 
     <TextView
         android:layout_width="match_parent"

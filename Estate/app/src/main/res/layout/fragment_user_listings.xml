@@ -16,6 +16,15 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
+        android:id="@+id/textView16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textStyle="normal|bold"
+        android:text="Your Listings" />
+
+    <TextView
         android:id="@+id/TVUserMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

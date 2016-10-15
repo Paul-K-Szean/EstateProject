@@ -6,8 +6,8 @@ package enums;
 
 public enum DealType {
 
-    ForSale("Sale"),
-    ForLease("Lease");
+    ForSale("For Sale"),
+    ForLease("For Lease");
 
 
     private String DealType;

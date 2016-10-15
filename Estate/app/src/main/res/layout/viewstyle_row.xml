@@ -12,19 +12,19 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/TVPropertyID"
+            android:id="@+id/TVLblPropertyID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/IMGVPhoto"
+            android:layout_toRightOf="@+id/IMGVLblImage"
             android:text="PropertyID" />
 
         <TextView
-            android:id="@+id/TVLblUpdateTitle"
+            android:id="@+id/TVLblTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/IMGVPhoto"
+            android:layout_toRightOf="@+id/IMGVLblImage"
             android:text="Title"
             android:textAlignment="textStart" />
     </LinearLayout>
@@ -35,7 +35,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/IMGVPhoto"
+            android:id="@+id/IMGVLblImage"
             android:layout_width="wrap_content"
             android:layout_height="120dp"
             android:layout_weight="0.96"
@@ -50,7 +50,13 @@
 
 
             <TextView
-                android:id="@+id/TVPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/TVLblFlatType"
+                android:text="FlatType" />
+
+            <TextView
+                android:id="@+id/TVLblPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -61,26 +67,26 @@
                 android:text="Price" />
 
             <TextView
-                android:id="@+id/TVOwnerName"
+                android:id="@+id/TVLblOwnerName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="OwnerName" />
 
             <TextView
-                android:id="@+id/TVAddressName"
+                android:id="@+id/TVLblAddressName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Addressname" />
 
             <TextView
-                android:id="@+id/TVDesc"
+                android:id="@+id/TVLblDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/IMGVPhoto"
+                android:layout_alignBottom="@+id/IMGVLblImage"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/TVLblUpdateTitle"
-                android:layout_toRightOf="@+id/IMGVPhoto"
+                android:layout_below="@+id/TVLblTitle"
+                android:layout_toRightOf="@+id/IMGVLblImage"
                 android:text="Description" />
 
         </LinearLayout>
