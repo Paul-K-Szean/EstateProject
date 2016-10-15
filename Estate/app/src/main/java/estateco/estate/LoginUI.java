@@ -1,21 +1,15 @@
 package estateco.estate;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,18 +22,20 @@ import controllers.EstateCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.User;
+import handler.AsyncTaskResponse;
+import handler.AsyncTaskHandler;
 import handler.ErrorHandler;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
 
 public class LoginUI extends Activity {
     private static final String TAG = LoginUI.class.getSimpleName();
-    private ProgressDialog pDialog;
+
     private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
-    private User user;
     private PropertyCtrl propertyCtrl;
+    private User user;
 
 
     private EditText etLoginEmail, etLoginPassword;
@@ -47,6 +43,7 @@ public class LoginUI extends Activity {
     private TextView tvErrorMsgLogin, tvRegisterLink;
     private String valLoginEmail, valLoginPassword;
 
+    private Map<String, String> paramValues;
 
     public LoginUI() {
     }
@@ -65,9 +62,6 @@ public class LoginUI extends Activity {
         etLoginEmail.setText("user01@gmail.com");
         etLoginPassword.setText("user01");
 
-        // Progress dialog
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
 
         // setup ctrl objects
         db = new SQLiteHandler(getApplicationContext());
@@ -81,42 +75,84 @@ public class LoginUI extends Activity {
             startActivity(new Intent(LoginUI.this, MainUI.class));
             finish();
         } else {
-            db.deleteUsers();
+            // remove any existing data in local db.
+            userCtrl.deleteUserDetails();
+            propertyCtrl.deletePropertyDetails();
             session.setLogin(false);
         }
 
-        // Login button Click Event
+        // login button click
         btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("btnLogin", "LoginClicked");
-                valLoginEmail = etLoginEmail.getText().toString();
-                valLoginPassword = etLoginPassword.getText().toString();
+                                        @Override
+                                        public void onClick(View view) {
+                                            Log.i(TAG, "LoginClicked");
+                                            valLoginEmail = etLoginEmail.getText().toString();
+                                            valLoginPassword = etLoginPassword.getText().toString();
 
-                // Check for empty data in the form
-                if (!valLoginEmail.isEmpty() && !valLoginPassword.isEmpty()) {
+                                            // Check for empty data in the form
+                                            if (!valLoginEmail.isEmpty() && !valLoginPassword.isEmpty()) {
+                                                // get user data from server
+                                                paramValues = new HashMap<>();
+                                                paramValues.put(UserCtrl.KEY_EMAIL, valLoginEmail);
+                                                paramValues.put(UserCtrl.KEY_PASSWORD, valLoginPassword);
+                                                new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_LOGIN, paramValues, LoginUI.this, new AsyncTaskResponse() {
+                                                    @Override
+                                                    public void onAsyncTaskResponse(String response) {
+                                                        try {
+                                                            Log.i(TAG, response);
+                                                            JSONObject jObj = new JSONObject(response);
+                                                            boolean error = jObj.getBoolean("error");
+                                                            // check for error in json
+                                                            if (error) {
+                                                                String errorMsg = jObj.getString("error_msg");
+                                                                ErrorHandler.errorHandler(LoginUI.this, errorMsg);
+                                                            } else {
+                                                                session.setLogin(true);
+                                                                JSONObject userObj = jObj.getJSONObject("user");
+                                                                user = new User(
+                                                                        userObj.getString(UserCtrl.KEY_USERID),
+                                                                        userObj.getString(UserCtrl.KEY_NAME),
+                                                                        userObj.getString(UserCtrl.KEY_EMAIL),
+                                                                        userObj.getString(UserCtrl.KEY_PASSWORD),
+                                                                        userObj.getString(UserCtrl.KEY_CONTACT));
+                                                                Log.i(TAG, "user: " + user.getUserID());
+                                                                EstateCtrl.syncToLocalDB(LoginUI.this, user);
+                                                                startActivity(new Intent(LoginUI.this, MainUI.class));
+                                                                finish(); // close this activity
+                                                            }
+                                                        } catch (JSONException error) {
+                                                            // JSON error
+                                                            ErrorHandler.errorHandler(LoginUI.this, error);
+                                                        }
+                                                    }
+                                                }).execute();
 
-                    new AsyncTask_Login().execute(valLoginEmail, valLoginPassword);
-                } else {
-                    // prompt user to enter credentials
-                    if (valLoginEmail.isEmpty())
-                        etLoginEmail.setError("Cannot be empty!");
-                    if (valLoginPassword.isEmpty())
-                        etLoginPassword.setError("Cannot be empty!");
-                }
 
-            }
-        });
+                                            } else {
+                                                // prompt user to enter credentials
+                                                if (valLoginEmail.isEmpty())
+                                                    etLoginEmail.setError("Cannot be empty!");
+                                                if (valLoginPassword.isEmpty())
+                                                    etLoginPassword.setError("Cannot be empty!");
+                                            }
+                                            Log.i(TAG, "End of login clicked");
+                                        }
+                                    }
+        );
 
-        // Link to RegisterUI
-        tvRegisterLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginUI.this, RegisterUI.class));
-                finish();
-            }
-        });
+        // link to RegisterUI
+        tvRegisterLink.setOnClickListener(new View.OnClickListener()
+
+                                          {
+                                              @Override
+                                              public void onClick(View v) {
+                                                  startActivity(new Intent(LoginUI.this, RegisterUI.class));
+                                              }
+                                          }
+
+        );
     }
+
 
     @Override
     public void onStart() {
@@ -154,125 +190,5 @@ public class LoginUI extends Activity {
         super.onDestroy();
     }
 
-    // Async Task - Login
-    private class AsyncTask_Login extends AsyncTask<String, Void, Void> {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        Boolean IsInternetConnected = false;
 
-        @Override
-        protected void onPreExecute() {
-            Log.w(TAG, "onPreExecute()");
-            IsInternetConnected = EstateCtrl.CheckInternetConnection(getApplicationContext());
-            // login user
-            pDialog.setIndeterminate(true);
-            pDialog.setMessage("Logging in ...");
-            showDialog();
-        }
-
-        @Override
-        protected Void doInBackground(final String... params) {
-            Log.w(TAG, "doInBackground()");
-            if (IsInternetConnected) {
-
-                // Connect to server
-                StringRequest strReq = new StringRequest(Request.Method.POST,
-                        EstateConfig.URL_LOGIN, new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, "Login Response: " + response.toString());
-                        try {
-                            JSONObject jObj = new JSONObject(response);
-                            boolean error = jObj.getBoolean("error");
-
-                            // Check for error node in json
-                            if (error) {
-                                // Error in login. Get the error message
-                                String errorMsg = jObj.getString("error_msg");
-                                Toast.makeText(getApplicationContext(),
-                                        errorMsg, Toast.LENGTH_LONG).show();
-                                hideDialog();
-                            } else {
-                                // user successfully logged in, create login session
-                                session.setLogin(true);
-
-                                // store the user in SQLite
-                                JSONObject jObjUser = jObj.getJSONObject("user");
-                                user = new User(
-                                        jObjUser.getString("userID"),
-                                        jObjUser.getString("name"),
-                                        jObjUser.getString("email"),
-                                        jObjUser.getString("password"),
-                                        jObjUser.getString("contact"));
-
-                                // remove existing user data
-                                userCtrl.deleteUserDetails();
-                                // remove any existing property data.
-                                propertyCtrl.deletePropertyDetails();
-                                // inserting row in users table
-                                userCtrl.addUserDetails(user);
-
-                                // Launch main activity
-                                Intent intent = new Intent(LoginUI.this,
-                                        MainUI.class);
-                                startActivity(intent);
-                                hideDialog();
-                                finish();
-                            }
-                        } catch (JSONException error) {
-                            // JSON error
-                            ErrorHandler.errorHandler(getApplicationContext(), error);
-                        }
-                        hideDialog();
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        ErrorHandler.errorHandler(getApplicationContext(), error);
-                        hideDialog();
-                    }
-                }) {
-
-                    @Override
-                    protected Map<String, String> getParams() {
-                        // Posting parameters to login url
-                        Map<String, String> paramsLogin = new HashMap<>();
-                        paramsLogin.put("email", params[0]);    // Email
-                        paramsLogin.put("password", params[1]); // Password
-                        return paramsLogin;
-                    }
-
-                };
-
-                // Adding request to request queue
-                EstateCtrl.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-
-            } else {
-                Toast.makeText(getApplicationContext(), "Network not detected!", Toast.LENGTH_LONG).show();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void response) {
-            Log.w(TAG, "onPostExecute()");
-            // hide soft key board
-            EstateCtrl.getInstance().hideSoftKeyboard(LoginUI.this);
-        }
-
-    }
-
-
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
 }
