@@ -193,7 +193,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
 
     /**
-     * Storing property details in database
+     * store property details in database
      */
     public void addProperty(Property property) {
         Log.i(TAG, "addProperty()");
@@ -236,9 +236,10 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Getting a property detail from database
+     * get user property from local db
      */
     public HashMap<String, String> getUserProperty(String propertyID) {
+        Log.i(TAG, "getUserProperty()");
         HashMap<String, String> userPropertyHashMap = new HashMap<>();
         String selectQuery = "SELECT  * FROM " + PropertyCtrl.TABLE_PROPERTY + " WHERE PROPERTYID = ?";
 
@@ -249,9 +250,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         // Move to first row
         if (cursor.moveToFirst()) {
             Log.d(TAG, "Fetching property from sqlite: " + cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_PROPERTYID)));
-            Log.d(TAG, "KEY_PROPERTY_FLOORAREA: " + cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_FLOORAREA)));
-            Log.d(TAG, "KEY_PROPERTY_WHOLEAPARTMENT: " + cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT)));
-            Log.d(TAG, "KEY_PROPERTY_CREATEDDATE: " + cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_CREATEDDATE)));
             userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_PROPERTYID)));
             userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_OWNERID, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_OWNERID)));
             userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_FLATTYPE, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_FLATTYPE)));
@@ -280,9 +278,10 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Getting a property detail from database
+     * get user properties from local db
      */
     public ArrayList<Property> getUserProperties(User owner) {
+        Log.i(TAG, "getUserProperties()");
         ArrayList<Property> userPropertyList = new ArrayList<>();
         String selectQuery = "SELECT  * FROM " + PropertyCtrl.TABLE_PROPERTY + " WHERE OWNERID = ?";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -292,9 +291,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             Log.d(TAG, "Fetching user properties from sqlite. Total count: " + cursor.getCount());
             Lease lease;
             Sale sale;
-            Log.i(TAG, DealType.ForLease.toString());
             do {
-
                 if (cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_DEALTYPE)).toLowerCase().contains(DealType.ForLease.toString().toLowerCase())) {
                     lease = new Lease(
                             cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_PROPERTYID)),
@@ -345,6 +342,53 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return userPropertyList;
+    }
+
+    /**
+     * update user property to local db
+     */
+    public void updateUserProperty(Property property) {
+        Log.i(TAG, "updateUserProperty()");
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, property.getPropertyID());
+        values.put(PropertyCtrl.KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
+        values.put(PropertyCtrl.KEY_PROPERTY_FLATTYPE, property.getFlatType());
+        values.put(PropertyCtrl.KEY_PROPERTY_DEALTYPE, property.getDealType());
+        values.put(PropertyCtrl.KEY_PROPERTY_TITLE, property.getTitle());
+        values.put(PropertyCtrl.KEY_PROPERTY_DESC, property.getDescription());
+        values.put(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel());
+        values.put(PropertyCtrl.KEY_PROPERTY_PRICE, property.getPrice());
+        values.put(PropertyCtrl.KEY_PROPERTY_POSTALCODE, property.getPostalcode());
+        values.put(PropertyCtrl.KEY_PROPERTY_UNIT, property.getUnit());
+        values.put(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME, property.getAddressName());
+        values.put(PropertyCtrl.KEY_PROPERTY_PHOTO, property.getPhoto());
+        values.put(PropertyCtrl.KEY_PROPERTY_STATUS, property.getStatus());
+        values.put(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS, property.getNoOfbedrooms());
+        values.put(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS, property.getNoOfbathrooms());
+
+        if (property instanceof Sale) {
+            Log.d(TAG, "Updating instanceof Sale.getFloorArea: " + ((Sale) property).getFloorArea());
+            // down casting
+            values.put(PropertyCtrl.KEY_PROPERTY_FLOORAREA, ((Sale) property).getFloorArea());
+        }
+        if (property instanceof Lease) {
+            Log.d(TAG, "Updating instanceof Lease.getWholeApartment:" + ((Lease) property).getWholeApartment());
+            // down casting
+            values.put(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT, ((Lease) property).getWholeApartment());
+        }
+        values.put(PropertyCtrl.KEY_PROPERTY_CREATEDDATE, property.getCreatedate());
+
+        // inserting a new row
+        long id = db.update(PropertyCtrl.TABLE_PROPERTY, values, "PROPERTYID = ?", new String[]{property.getPropertyID()});
+        // closing database connection
+        db.close();
+
+        if (id != 0)
+            Log.d(TAG, "Property updated into sqlite.");
+        else
+            Log.d(TAG, "Property did not update into sqlite.");
     }
 
 

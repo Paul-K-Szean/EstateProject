@@ -25,6 +25,7 @@ public class ErrorHandler {
         Log.e(TAG, "ErrorHandler: " + error.getMessage());
         error.printStackTrace();
         if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+
             Toast.makeText(context,
                     "Server Time Out...",
                     Toast.LENGTH_LONG).show();

@@ -60,16 +60,15 @@ public class PropertyCtrl {
         db.addProperty(property);
     }
 
-    // get property details from local db
+    // get user property details from local db
     public Property getUserPropertyDetails(String propertyID, User owner) {
         // Fetching user details from sqlite
         HashMap<String, String> savedProperty = db.getUserProperty(propertyID);
 
-        Log.i(TAG, String.valueOf(savedProperty.size()));
         if (savedProperty != null) {
             Log.i(TAG, "KEY_PROPERTY_CREATEDDATE: " + savedProperty.get(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
             if (savedProperty.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE).equals(DealType.ForLease.toString())) {
-                Log.i(TAG, "Retrieving lease propertyID" + savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
+                Log.i(TAG, "Retrieving lease propertyID: " + savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
                 Lease lease = new Lease(
                         savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
                         owner,
@@ -91,7 +90,7 @@ public class PropertyCtrl {
                 return lease;
             }
             if (savedProperty.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE).equals(DealType.ForSale.toString())) {
-                Log.i(TAG, "Retrieving sale propertyID" + savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
+                Log.i(TAG, "Retrieving sale propertyID: " + savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
                 Sale sale = new Sale(
                         savedProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
                         owner,
@@ -119,10 +118,18 @@ public class PropertyCtrl {
         }
     }
 
+    // get user properties from local db
     public ArrayList<Property> getUserProperties(User owner) {
         return db.getUserProperties(owner);
     }
 
+    // update user property from local db
+    public void updateUserPropertyDetails(Property property) {
+        db.updateUserProperty(property);
+    }
+
+
+    // remove all property from local db
     public void deletePropertyDetails() {
         db.deleteProperty();
     }

@@ -31,7 +31,7 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
     private AsyncTaskResponse asyncTaskResponse;
     private ProgressDialog pDialog;
     // Tag used to cancel the request
-    String tag_string_req = "req_backgroundtask";
+    String tag_string_req = "req_" + TAG;
     Boolean IsInternetConnected = false;
 
     public AsyncTaskHandler(int MethodType, String URLAddress, Map<String, String> paramToPost, Activity activity, AsyncTaskResponse asyncTaskResponse) {
@@ -73,7 +73,7 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
 
                 @Override
                 public void onResponse(String response) {
-                    Log.d(TAG, "Response: " + response.toString());
+                    Log.d(TAG, "onResponse: " + response.toString());
                     try {
                         JSONObject jObj = new JSONObject(response);
                         boolean error = jObj.getBoolean("error");

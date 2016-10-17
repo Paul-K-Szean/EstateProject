@@ -4,6 +4,7 @@ package estateco.estate;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,7 @@ public class FragmentUserListings extends Fragment {
     Button btnNewListing;
     GridView gvUserListings;
     TextView tvUserMsg, itemDataID;
-
+    Toolbar toolbar;
 
     public FragmentUserListings() {
         // Required empty public constructor
@@ -85,7 +86,8 @@ public class FragmentUserListings extends Fragment {
     }
 
     public void setControls(View view) {
-
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle("My Lisings");
         // error msg
         tvUserMsg = (TextView) view.findViewById(R.id.TVUserMsg);
 
@@ -113,8 +115,6 @@ public class FragmentUserListings extends Fragment {
         else
             tvUserMsg.setText("You have a total of " + userProperties.size() + " property");
 
-
-        // TODO ALLOW USER TO EDIT THEIR PROPERTIES
         // item selected behaviour
         gvUserListings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

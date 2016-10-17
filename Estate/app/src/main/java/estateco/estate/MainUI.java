@@ -19,10 +19,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import controllers.EstateCtrl;
 import controllers.UserCtrl;
 import entities.Property;
 import entities.User;
@@ -136,6 +136,10 @@ public class MainUI extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_favorite) {
+            Toast.makeText(MainUI.this, "FAVOURITE CLICKED", Toast.LENGTH_LONG).show();
+            return true;
+        }
         if (id == R.id.action_settings) {
             return true;
         }

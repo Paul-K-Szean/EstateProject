@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Spinner;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,8 +27,8 @@ import entities.Property;
 import entities.Sale;
 import entities.User;
 import enums.DealType;
-import handler.AsyncTaskResponse;
 import handler.AsyncTaskHandler;
+import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
 
 /**
@@ -188,4 +189,14 @@ public class EstateCtrl extends Application {
 
     }
 
+
+    public static int getSpinnerItemPosition(Spinner spinner, String value) {
+        int index = 0;
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().contains(value)) {
+                return i;
+            }
+        }
+        return index;
+    }
 }

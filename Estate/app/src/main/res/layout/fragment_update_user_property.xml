@@ -40,6 +40,20 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/SPEditStatus"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:textAlignment="center" />
+
+            <TextView
                 android:id="@+id/TVLblTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,21 +112,6 @@
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/TVLblUpdateDealType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="DealType"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <CheckBox
-                android:text="WholeApartment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/CHKBXEditWholeApartment"
-                android:textAlignment="center" />
-
-            <TextView
                 android:id="@+id/TVLblUpdateFurnishLevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -130,7 +129,7 @@
                 android:id="@+id/TVLblUpdatePrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Price"
+                android:text="Price (SGD$)"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -150,12 +149,10 @@
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/ETEditBedRooms"
+            <Spinner
+                android:id="@+id/SPEditBedrooms"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
+                android:layout_height="45dp"
                 android:textAlignment="center" />
 
             <TextView
@@ -166,16 +163,44 @@
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/ETEditBathrooms"
+            <Spinner
+                android:id="@+id/SPEditBathrooms"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
+                android:layout_height="45dp"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/TVFloorArea"
+                android:id="@+id/textView19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Deal Details"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/TVLblUpdateDealType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DealType"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/SPEditDealType"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:textAlignment="center" />
+
+            <CheckBox
+                android:text="WholeApartment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/CHKBXEditWholeApartment"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/TVLblFloorArea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Floor Area (Sq Meter)"
@@ -252,6 +277,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/BTNUpdateProperty" />
+
+            <Button
+                android:text="Randomise"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/BTNEditRandom" />
 
 
         </LinearLayout>

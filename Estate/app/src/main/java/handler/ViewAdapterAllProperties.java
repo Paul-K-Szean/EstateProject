@@ -11,7 +11,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import controllers.PropertyCtrl;
+import entities.Lease;
 import entities.Property;
+import entities.Sale;
 import estateco.estate.R;
 
 /**
@@ -47,7 +50,7 @@ public class ViewAdapterAllProperties extends BaseAdapter {
     }
 
 
-    TextView PropertyID, FlatType, Title, Desc, Price, OwnerName, AddressName;
+    TextView PropertyID, FlatType, DealType, Title, Desc, Price, OwnerName, AddressName, Status;
     ImageView Photo;
 
     @Override
@@ -59,16 +62,54 @@ public class ViewAdapterAllProperties extends BaseAdapter {
 
         PropertyID = (TextView) row.findViewById(R.id.TVLblPropertyID);
         FlatType = (TextView) row.findViewById(R.id.TVLblFlatType);
+        DealType = (TextView) row.findViewById(R.id.TVLblDealType);
         Title = (TextView) row.findViewById(R.id.TVLblTitle);
         Desc = (TextView) row.findViewById(R.id.TVLblDesc);
         Price = (TextView) row.findViewById(R.id.TVLblPrice);
         OwnerName = (TextView) row.findViewById(R.id.TVLblOwnerName);
         AddressName = (TextView) row.findViewById(R.id.TVLblAddressName);
         Photo = (ImageView) row.findViewById(R.id.IMGVLblImage);
+        Status = (TextView) row.findViewById(R.id.TVLblStatus);
+
+
+        if (properties.get(position).getStatus().toString().equals("open"))
+            Status.setText("");
+        else
+            Status.setText(properties.get(position).getStatus());
 
         PropertyID.setText(properties.get(position).getPropertyID());
-        FlatType.setText(properties.get(position).getFlatType());
-        Title.setText(" - " + properties.get(position).getTitle());
+        FlatType.setText("Flat Type : " + properties.get(position).getFlatType());
+        int roomCount = Integer.valueOf(properties.get(position).getNoOfbedrooms().trim());
+
+        if (properties.get(position) instanceof Lease) {
+            // if leasing only rooms
+            if (((Lease) properties.get(position)).getWholeApartment().toString().equals("room")) {
+                if (roomCount <= 1)
+                    DealType.setText(" - " + properties.get(position).getDealType()
+                            + " - "
+                            + roomCount
+                            + " "
+                            + ((Lease) properties.get(position)).getWholeApartment());
+                else
+                    DealType.setText(" - " + properties.get(position).getDealType()
+                            + " - "
+                            + roomCount
+                            + " "
+                            + ((Lease) properties.get(position)).getWholeApartment() + "s");
+            }
+            // if leasing whole apartment
+            if (((Lease) properties.get(position)).getWholeApartment().toString().equals(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT.toString())) {
+                DealType.setText(" - " + properties.get(position).getDealType()
+                        + " - "
+                        + ((Lease) properties.get(position)).getWholeApartment());
+            }
+        }
+        if (properties.get(position) instanceof Sale) {
+            DealType.setText(" - " + properties.get(position).getDealType());
+        }
+
+
+        Title.setText(properties.get(position).getTitle());
         Desc.setText(properties.get(position).getDescription());
         Price.setText("Price : SGD$" + properties.get(position).getPrice());
         AddressName.setText("Address : " + properties.get(position).getAddressName());

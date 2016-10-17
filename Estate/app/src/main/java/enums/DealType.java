@@ -5,7 +5,7 @@ package enums;
  */
 
 public enum DealType {
-
+    Select("Select Deal Type"),
     ForSale("For Sale"),
     ForLease("For Lease");
 

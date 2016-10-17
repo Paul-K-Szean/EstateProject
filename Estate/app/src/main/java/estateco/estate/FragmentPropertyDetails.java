@@ -1,39 +1,34 @@
 package estateco.estate;
 
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import controllers.EstateConfig;
-import controllers.EstateCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.Lease;
-import entities.Property;
 import entities.Sale;
 import entities.User;
 import enums.DealType;
+import handler.AsyncTaskHandler;
+import handler.AsyncTaskResponse;
+import handler.ErrorHandler;
 import handler.ImageHandler;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
@@ -44,19 +39,22 @@ import handler.SessionHandler;
  */
 public class FragmentPropertyDetails extends Fragment {
     private static final String TAG = FragmentPropertyDetails.class.getSimpleName();
-    private ProgressDialog pDialog;
     private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private User user;
+    private User owner;
     private PropertyCtrl propertyCtrl;
-    private Property property;
     private Sale sale;
     private Lease lease;
 
     TextView tvTitle, tvDesc, tvFlatType, tvDealType, tvFurnishLevel, tvPrice, tvNoOfBedrooms, tvNoOfBathrooms, tvFloorArea,
-            tvAddressName, tvPostalCode, tvUnit, tvOwnerName, tvOwnerEmail, tvOwnerContact;
+            tvAddressName, tvPostalCode, tvUnit, tvWholeApartment, tvOwnerName, tvOwnerEmail, tvOwnerContact;
     ImageView imgvPreview;
+    String valProDetPropertyID, valProDetOwnerID, valProDetOwnerName, valProDetOwnerEmail, valProDetOwnerContact, valProDetFlatType, valProDetDealType, valProDetTitle, valProDetDescription, valProDetFurnishLevel, valProDetPrice,
+            valProDetPostalCode, valProDetUnit, valProDetAddressName, valProDetPhoto, valProDetStatus,
+            valProDetSaleNoOfBedrooms, valProDetSaleNoOfBathrooms, valProDetFloorArea, valProDetWholeApartment, valProDetCreatedDate;
+    Toolbar toolbar;
 
     public FragmentPropertyDetails() {
         // Required empty public constructor
@@ -68,9 +66,6 @@ public class FragmentPropertyDetails extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_property_details, container, false);
-        // Progress dialog
-        pDialog = new ProgressDialog(getActivity());
-        pDialog.setCancelable(false);
 
         // setup ctrl objects
         db = new SQLiteHandler(getActivity());
@@ -86,6 +81,12 @@ public class FragmentPropertyDetails extends Fragment {
     }
 
     private void setControls(View view, Bundle savedInstanceState) {
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle("Property Details");
+        // TODO SHOW FAVOURITE ICON
+        Log.i(TAG, toolbar.getMenu().getItem(0).toString());
+        Log.i(TAG, toolbar.getMenu().getItem(1).toString());
+        Log.i(TAG, toolbar.getMenu().getItem(2).toString());
 
         imgvPreview = (ImageView) view.findViewById(R.id.IMGVPreview);
         tvTitle = (TextView) view.findViewById(R.id.TVLblTitle);
@@ -100,12 +101,128 @@ public class FragmentPropertyDetails extends Fragment {
         tvAddressName = (TextView) view.findViewById(R.id.TVAddressName);
         tvPostalCode = (TextView) view.findViewById(R.id.TVPostalCode);
         tvUnit = (TextView) view.findViewById(R.id.TVunit);
+        tvWholeApartment = (TextView) view.findViewById(R.id.TVWholeApartment);
         tvOwnerName = (TextView) view.findViewById(R.id.TVOwnerName);
         tvOwnerEmail = (TextView) view.findViewById(R.id.TVOwnerEmail);
         tvOwnerContact = (TextView) view.findViewById(R.id.TVOwnerContact);
 
+
         // get property details from server
-        new AsyncTask_PropertyDetails().execute(savedInstanceState.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
+        Map<String, String> paramValues = new HashMap<>();
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, savedInstanceState.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID).toString());
+        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_PROPERTYDETAILS, paramValues, getActivity(), new AsyncTaskResponse() {
+            @Override
+            public void onAsyncTaskResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    // check for error in json
+                    if (error) {
+                        // ALREADY HANDLED
+                    } else {
+                        JSONObject propertyObj = jObj.getJSONObject("property");
+                        owner = new User(
+                                valProDetOwnerID = propertyObj.getString(UserCtrl.KEY_USERID),
+                                valProDetOwnerName = propertyObj.getString(UserCtrl.KEY_NAME),
+                                valProDetOwnerEmail = propertyObj.getString(UserCtrl.KEY_EMAIL),
+                                valProDetOwnerContact = propertyObj.getString(UserCtrl.KEY_CONTACT));
+
+                        // sale type
+                        if (propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE).toString().equals(DealType.ForSale.toString())) {
+                            sale = new Sale(
+                                    valProDetPropertyID = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
+                                    owner,
+                                    valProDetFlatType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
+                                    valProDetDealType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
+                                    valProDetTitle = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_TITLE),
+                                    valProDetDescription = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DESC),
+                                    valProDetFurnishLevel = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
+                                    valProDetPrice = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PRICE),
+                                    valProDetPostalCode = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
+                                    valProDetUnit = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT),
+                                    valProDetAddressName = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
+                                    valProDetPhoto = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PHOTO),
+                                    valProDetStatus = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_STATUS),
+                                    valProDetSaleNoOfBedrooms = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
+                                    valProDetSaleNoOfBathrooms = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
+                                    valProDetFloorArea = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORAREA),
+                                    valProDetCreatedDate = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
+                        }
+                        // lease type
+                        if (propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE).toString().equals(DealType.ForLease.toString())) {
+                            lease = new Lease(
+                                    valProDetPropertyID = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
+                                    owner,
+                                    valProDetFlatType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
+                                    valProDetDealType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
+                                    valProDetTitle = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_TITLE),
+                                    valProDetDescription = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DESC),
+                                    valProDetFurnishLevel = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
+                                    valProDetPrice = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PRICE),
+                                    valProDetPostalCode = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
+                                    valProDetUnit = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT),
+                                    valProDetAddressName = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
+                                    valProDetPhoto = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PHOTO),
+                                    valProDetStatus = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_STATUS),
+                                    valProDetSaleNoOfBedrooms = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
+                                    valProDetSaleNoOfBathrooms = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
+                                    valProDetWholeApartment = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT),
+                                    valProDetCreatedDate = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
+                            // leasing whole apartment
+                            valProDetFloorArea = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORAREA);
+                        }
+
+
+                    }
+                } catch (JSONException error) {
+                    error.printStackTrace();
+                    ErrorHandler.errorHandler(getActivity(), error);
+                }
+
+                tvFlatType.setText(valProDetFlatType);
+                tvDealType.setText(valProDetDealType);
+                tvTitle.setText(valProDetTitle);
+                tvDesc.setText(valProDetDescription);
+                tvFurnishLevel.setText(valProDetFurnishLevel);
+                tvPrice.setText("SGD$" + valProDetPrice);
+                tvPostalCode.setText("S'pore(" + valProDetPostalCode + ")");
+                tvUnit.setText("#" + valProDetUnit);
+                tvAddressName.setText(valProDetAddressName);
+                tvNoOfBedrooms.setText(valProDetSaleNoOfBedrooms + " bedroom(s)");
+                tvNoOfBathrooms.setText(valProDetSaleNoOfBathrooms + " bathroom(s)");
+                tvFloorArea.setText(valProDetFloorArea + " Sq Meters");
+
+                tvOwnerName.setText(valProDetOwnerName);
+                tvOwnerEmail.setText(valProDetOwnerEmail);
+                tvOwnerContact.setText(valProDetOwnerContact);
+                int roomCount = Integer.valueOf(valProDetSaleNoOfBedrooms);
+                if (lease != null) {
+                    // room
+                    if (valProDetWholeApartment.equals("room")) {
+                        if (roomCount <= 1) {
+                            tvWholeApartment.setText(valProDetSaleNoOfBedrooms + " " + valProDetWholeApartment);
+                        } else {
+                            tvWholeApartment.setText(valProDetSaleNoOfBedrooms + " " + valProDetWholeApartment + "s");
+                        }
+                    }
+                    if (valProDetWholeApartment.equals(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT)) {
+                        tvWholeApartment.setText("Leasing whole apartment");
+                    }
+
+                }
+                if (sale != null) {
+
+                }
+
+
+                // check if photo is empty
+
+                if (valProDetPhoto.isEmpty())
+                    imgvPreview.setImageResource(R.drawable.ic_menu_camera);
+                else
+                    imgvPreview.setImageBitmap(ImageHandler.getInstance().decodeStringToImage(valProDetPhoto));
+            }
+        }).execute();
 
 
     }
@@ -145,172 +262,6 @@ public class FragmentPropertyDetails extends Fragment {
     public void onDestroy() {
         Log.w(TAG, "onDestroy");
         super.onDestroy();
-    }
-
-    // Async Task
-    private class AsyncTask_PropertyDetails extends AsyncTask<String, Property, Void> {
-        // Tag used to cancel the request
-        String tag_string_req = "req_propertydetails";
-        Boolean IsInternetConnected = false;
-        ArrayList<Property> userPropertyList;
-
-        @Override
-        protected void onPreExecute() {
-            Log.w("onPreExecute", "onPreExecute()");
-            IsInternetConnected = EstateCtrl.CheckInternetConnection(getActivity());
-            userPropertyList = new ArrayList<>();
-            // loading dialog
-            pDialog.setIndeterminate(true);
-            pDialog.setMessage("Loading property detail ...");
-            showDialog();
-        }
-
-        @Override
-        protected Void doInBackground(final String... params) {
-            Log.w("doInBackground", "doInBackground()");
-            if (IsInternetConnected) {
-
-                // Connect to server
-                StringRequest strReq = new StringRequest(Request.Method.POST,
-                        EstateConfig.URL_PROPERTYDETAILS, new Response.Listener<String>() {
-
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, "Property Details Response: " + response.toString());
-                        try {
-                            JSONObject jObj = new JSONObject(response);
-                            boolean error = jObj.getBoolean("error");
-
-                            // Check for error node in json
-                            if (error) {
-                                // Error. Get the error message
-                                String errorMsg = jObj.getString("error_msg");
-                                Log.e("Json Response Error", errorMsg);
-                            } else {
-                                JSONObject propertyObj = jObj.getJSONObject("property");
-                                property = new Property(
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
-                                        user,
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_TITLE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DESC),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PRICE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PHOTO),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_STATUS),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
-
-                                tvFlatType.setText(property.getFlatType());
-                                tvDealType.setText(property.getDealType());
-                                tvTitle.setText(property.getTitle());
-                                tvDesc.setText(property.getDescription());
-
-                                tvFurnishLevel.setText(property.getFurnishLevel());
-                                tvPrice.setText("SGD$" + property.getPrice());
-                                tvPostalCode.setText("S'pore(" + property.getPostalcode() + ")");
-                                tvUnit.setText("#" + property.getUnit());
-                                tvAddressName.setText(property.getAddressName());
-                                tvNoOfBedrooms.setText(property.getNoOfbedrooms() + " bedroom(s)");
-                                tvNoOfBathrooms.setText(property.getNoOfbathrooms() + " bathroom(s)");
-
-
-                                tvOwnerName.setText(property.getOwner().getName());
-                                tvOwnerEmail.setText(property.getOwner().getEmail());
-                                tvOwnerContact.setText(property.getOwner().getContact());
-                                // TODO WHOLEAPARTMENT
-                                if (propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE).equals(DealType.ForSale)) {
-                                    lease = new Lease(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT));
-                                } else {
-                                    sale = new Sale(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORAREA));
-                                    tvFloorArea.setText(sale.getFloorArea() + "Sq Meters");
-                                }
-
-
-                                // check if photo is empty
-                                String photoData = property.getPhoto();
-                                if (photoData.isEmpty())
-                                    imgvPreview.setImageResource(R.drawable.ic_menu_camera);
-                                else
-                                    imgvPreview.setImageBitmap(ImageHandler.getInstance().decodeStringToImage(photoData));
-
-
-//                                tvTitle.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_TITLE));
-//                                tvDesc.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DESC));
-//                                tvUnit.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT));
-//                                tvFlatType.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE));
-//                                tvDealType.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE));
-//                                tvFurnishLevel.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL));
-//                                tvPrice.setText("SGD$" + propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PRICE));
-//                                tvPostalCode.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_POSTALCODE));
-//                                tvUnit.setText("#" + propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT));
-//                                tvAddressName.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME));
-//                                tvNoOfBedrooms.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS + "bedroom(s)"));
-//                                tvNoOfBathrooms.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS + "bathroom(s)"));
-//                                tvFloorArea.setText(propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORAREA));
-//
-//                                tvOwnerName.setText(user.getName());
-//                                tvOwnerEmail.setText(user.getEmail());
-//                                tvOwnerContact.setText(user.getContact());
-                            }
-                        } catch (JSONException e) {
-                            // JSON error
-                            e.printStackTrace();
-                            Log.e("Json Error:", e.getMessage());
-                        }
-                        hideDialog();
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "Property Ctrl Error: " + error.getMessage());
-                        Toast.makeText(getActivity(), "Server is down...", Toast.LENGTH_LONG).show();
-                        hideDialog();
-                    }
-                }) {
-
-                    @Override
-                    protected Map<String, String> getParams() {
-                        // Posting parameters to url
-                        Map<String, String> paramsUser = new HashMap<>();
-                        paramsUser.put("propertyID", params[0]);
-                        return paramsUser;
-                    }
-                };
-
-                // Adding request to request queue
-                EstateCtrl.getInstance().addToRequestQueue(strReq, tag_string_req);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Property... property) {
-            Log.w("onProgressUpdate", "onProgressUpdate()");
-
-        }
-
-        @Override
-        protected void onPostExecute(Void response) {
-            Log.w("onPostExecute", "onPostExecute()");
-        }
-
-    }
-
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
     }
 
 

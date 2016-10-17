@@ -44,6 +44,7 @@ import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.Property;
 import entities.User;
+import enums.DealType;
 import enums.FlatType;
 import enums.FurnishLevel;
 import handler.FragmentHandler;
@@ -123,11 +124,11 @@ public class FragmentNewPropertyStep2 extends Fragment {
         spFurnishLevel.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, FurnishLevel.values()));
 
         spSaleNoOfBedrooms = (Spinner) view.findViewById(R.id.SPNoOfBedRooms);
-        String[] arrBedRooms = {"Select Number Of Bed Room(s)", "1 Bed Room", "2 Bed Rooms", "3 Bed Rooms", "4 Bed Rooms", "5 Bed Rooms", "6 Bed Rooms"};
+        String[] arrBedRooms = {"Select Number Of Bed Room(s)", "1", "2", "3", "4", "5"};
         spSaleNoOfBedrooms.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, arrBedRooms));
 
         spSaleNoOfBathrooms = (Spinner) view.findViewById(R.id.SPNoOfBathRooms);
-        String[] arrBathRooms = {"Select Number Of Bath Room(s)", "1 Bath Room", "2 Bath Rooms", "3 Bath Rooms", "4 Bath Rooms"};
+        String[] arrBathRooms = {"Select Number Of Bath Room(s)", "1", "2", "3"};
         spSaleNoOfBathrooms.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, arrBathRooms));
 
         // edit texts
@@ -199,16 +200,17 @@ public class FragmentNewPropertyStep2 extends Fragment {
                 valSaleNoOfBathrooms = spSaleNoOfBathrooms.getSelectedItem().toString().trim();
                 valFloorArea = etFloorArea.getText().toString().trim();
 
-                if (valDealType.equals("For Sale"))
+                if (valDealType.equals(DealType.ForSale))
                     valWholeApartment = PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
-                else {
+
+                if (valDealType.equals(DealType.ForLease)) {
                     if (chkbxWholeApartment.isChecked())
                         valWholeApartment = PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
                     else
                         valWholeApartment = "room";
                 }
 
-                // no empty field
+                // check for no empty fields then create
                 if (spFlatType.getSelectedItemId() != 0 &&
                         spFurnishLevel.getSelectedItemId() != 0 &&
                         spSaleNoOfBedrooms.getSelectedItemId() != 0 &&
@@ -222,8 +224,6 @@ public class FragmentNewPropertyStep2 extends Fragment {
                             valSaleNoOfBedrooms, valSaleNoOfBathrooms, valFloorArea, valWholeApartment);
 
                 } else {
-                    Log.i(TAG, valPrice);
-                    Log.i(TAG, valFloorArea);
                     // empty fields
                     if (spFlatType.getSelectedItemId() == 0)
                         ((TextView) spFlatType.getSelectedView()).setError("Required field!");
