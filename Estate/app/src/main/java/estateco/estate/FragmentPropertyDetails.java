@@ -1,8 +1,11 @@
 package estateco.estate;
 
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,18 +38,21 @@ import handler.ImageHandler;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentPropertyDetails extends Fragment {
+public class FragmentPropertyDetails extends Fragment implements View.OnClickListener {
     private static final String TAG = FragmentPropertyDetails.class.getSimpleName();
+    private static final String TAG_PHONECALL = "phonecall";
+    private static final String TAG_PHONEMESSAGE = "phonemessage";
     private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
+    private PropertyCtrl propertyCtrl;
+
     private User user;
     private User owner;
-    private PropertyCtrl propertyCtrl;
+    private Property property;
 
     TextView tvPropDetTitle, tvPropDetDesc, tvPropDetFlatType, tvPropDetDealType, tvPropDetFurnishLevel, tvPropDetPrice, tvPropDetBedroomCount,
             tvPropDetBathroomCount, tvPropDetFloorArea, tvPropDetStreetName, tvPropDetFloorLevel, tvPropDetBlock, tvPropDetWholeApartment,
@@ -54,7 +63,7 @@ public class FragmentPropertyDetails extends Fragment {
             valProDetBlock, valProDetStreetName, valProDetImage, valProDetStatus, valProDetBedroomCount, valProDetBathroomCount,
             valProDetFloorLevel, valProDetFloorArea, valProDetWholeApartment, valProDetCreatedDate;
     Toolbar toolbar;
-    FloatingActionButton floatingActionButton;
+
 
     public FragmentPropertyDetails() {
         // Required empty public constructor
@@ -88,8 +97,10 @@ public class FragmentPropertyDetails extends Fragment {
         //        Log.i(TAG, toolbar.getMenu().getItem(2).toString());
 
         //
-        floatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        floatingActionButton.show();
+
+        // create icons for floating action bar
+        setFloatingAction();
+
 
         imgvPropDetImage = (ImageView) view.findViewById(R.id.IMGVPropDetImage);
         tvPropDetTitle = (TextView) view.findViewById(R.id.TVPropDet_Title);
@@ -126,7 +137,7 @@ public class FragmentPropertyDetails extends Fragment {
                                 valProDetOwnerEmail = propertyObj.getString(UserCtrl.KEY_EMAIL),
                                 valProDetOwnerContact = propertyObj.getString(UserCtrl.KEY_CONTACT));
 
-                        Property property = new Property(
+                        property = new Property(
                                 valProDetPropertyID = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
                                 owner,
                                 valProDetFlatType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
@@ -183,6 +194,43 @@ public class FragmentPropertyDetails extends Fragment {
 
     }
 
+    private void setFloatingAction() {
+
+
+        // in Activity Context
+        ImageView icon = new ImageView(getActivity()); // Create an icon
+
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(getActivity())
+                .setContentView(icon)
+                .setBackgroundDrawable(R.drawable.selector_mainfab)
+                .build();
+
+
+        // icons
+        ImageView itemIconPhoneCall = new ImageView(getActivity());
+        itemIconPhoneCall.setImageResource(R.drawable.ic_action_phonecall_white);
+        ImageView itemIconMessage = new ImageView(getActivity());
+        itemIconMessage.setImageResource(R.drawable.ic_action_message_white);
+
+        // sub buttons
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(getActivity())
+                .setBackgroundDrawable(getResources().getDrawable(R.drawable.selector_subfab));
+
+        SubActionButton btnPhoneCall = itemBuilder.setContentView(itemIconPhoneCall).build();
+        SubActionButton btnMessage = itemBuilder.setContentView(itemIconMessage).build();
+        btnPhoneCall.setOnClickListener(this);
+        btnMessage.setOnClickListener(this);
+        btnPhoneCall.setTag(TAG_PHONECALL);
+        btnMessage.setTag(TAG_PHONEMESSAGE);
+
+        // create fab
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(getActivity())
+                .addSubActionView(btnPhoneCall)
+                .addSubActionView(btnMessage)
+                .attachTo(actionButton)
+                .build();
+    }
+
     @Override
     public void onStart() {
         Log.w(TAG, "onStart");
@@ -218,6 +266,27 @@ public class FragmentPropertyDetails extends Fragment {
     public void onDestroy() {
         Log.w(TAG, "onDestroy");
         super.onDestroy();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if (v.getTag().equals(TAG_PHONECALL)) {
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
+        }
+        if (v.getTag().equals(TAG_PHONEMESSAGE)) {
+
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getActivity().startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:" + property.getOwner().getContact())));
+        }
     }
 
 

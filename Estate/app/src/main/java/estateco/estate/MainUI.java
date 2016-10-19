@@ -24,6 +24,8 @@ import entities.User;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
 
+// import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+
 public class MainUI extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -56,7 +58,6 @@ public class MainUI extends AppCompatActivity
         setSupportActionBar(toolbar);
         toolbar.setTitle("All Listings");
 
-        // creae
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +68,6 @@ public class MainUI extends AppCompatActivity
             }
         });
         fab.hide();
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -107,6 +107,7 @@ public class MainUI extends AppCompatActivity
         tvHderEmail.setText(user.getEmail());
 
     }
+
 
     @Override
     public void onBackPressed() {

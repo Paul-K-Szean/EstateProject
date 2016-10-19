@@ -3,8 +3,10 @@ package controllers;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -197,5 +199,9 @@ public class EstateCtrl extends Application {
             }
         }
         return index;
+    }
+
+    public static void makePhoneCall(Context context, String mobilenumber) {
+        context.startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse(mobilenumber)));
     }
 }
