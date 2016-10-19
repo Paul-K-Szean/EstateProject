@@ -18,9 +18,7 @@ import java.util.ArrayList;
 
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
-import entities.Lease;
 import entities.Property;
-import entities.Sale;
 import entities.User;
 import handler.FragmentHandler;
 import handler.SQLiteHandler;
@@ -39,11 +37,7 @@ public class FragmentUserListings extends Fragment {
     private UserCtrl userCtrl;
     private User user;
     private PropertyCtrl propertyCtrl;
-    private Property property;
     private ArrayList<Property> userProperties;
-    private Sale sale;
-    private Lease lease;
-
 
     Button btnNewListing;
     GridView gvUserListings;
@@ -99,14 +93,13 @@ public class FragmentUserListings extends Fragment {
             @Override
             public void onClick(View v) {
                 // move to new listing step 1
-                FragmentHandler.getInstance().loadFragment(FragmentUserListings.this, new FragmentNewPropertyStep1());
+                FragmentHandler.loadFragment(FragmentUserListings.this, new FragmentNewProperty());
             }
         });
 
 
         // retrieves data from local db
         userProperties = propertyCtrl.getUserProperties(user);
-
         // displays into grid view
         gvUserListings.setAdapter(new ViewAdapterAllProperties(getActivity(), userProperties));
 
@@ -123,7 +116,7 @@ public class FragmentUserListings extends Fragment {
                 itemDataID = (TextView) view.findViewById(R.id.TVLblPropertyID);
                 Bundle bundlePropertyDetails = new Bundle();
                 bundlePropertyDetails.putString(PropertyCtrl.KEY_PROPERTY_PROPERTYID, itemDataID.getText().toString());
-                FragmentHandler.getInstance().loadFragment(FragmentUserListings.this, new FragmentUpdateUserProperty(), bundlePropertyDetails);
+                FragmentHandler.loadFragment(FragmentUserListings.this, new FragmentUpdateUserProperty(), bundlePropertyDetails);
             }
         });
     }

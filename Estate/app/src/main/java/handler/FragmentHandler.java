@@ -11,23 +11,17 @@ import estateco.estate.R;
  */
 
 public class FragmentHandler {
-    private static FragmentHandler fragmentHandler;
-
-    public static FragmentHandler getInstance() {
-        if (fragmentHandler == null)
-            fragmentHandler = new FragmentHandler();
-        return fragmentHandler;
-    }
 
 
-    public void loadFragment(Fragment currentFragment, Fragment nextFragment) {
+
+    public static void loadFragment(Fragment currentFragment, Fragment nextFragment) {
         FragmentTransaction fragmentTransaction = currentFragment.getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, nextFragment);
         fragmentTransaction.addToBackStack(currentFragment.getTag());  // add to stack for back button
         fragmentTransaction.commit();
     }
 
-    public void loadFragment(Fragment currentFragment, Fragment nextFragment, Bundle savedInstanceState) {
+    public static void loadFragment(Fragment currentFragment, Fragment nextFragment, Bundle savedInstanceState) {
 
         FragmentTransaction fragmentTransaction = currentFragment.getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, nextFragment);

@@ -60,6 +60,20 @@
 
     <!-- Link to Register Screen -->
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6" />
+
+    <Button
+        android:id="@+id/BTNLoginRandom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ETLoginPassword"
+        android:layout_centerHorizontal="true"
+        android:background="@color/btn_login_bg"
+        android:text="Random" />
+
+    <TextView
         android:id="@+id/TVRegisterLink"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

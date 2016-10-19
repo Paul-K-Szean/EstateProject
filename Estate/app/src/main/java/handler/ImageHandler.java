@@ -11,15 +11,9 @@ import java.io.ByteArrayOutputStream;
  */
 
 public class ImageHandler {
-    private static ImageHandler imageHandler;
 
-    public static ImageHandler getInstance() {
-        if (imageHandler == null)
-            imageHandler = new ImageHandler();
-        return imageHandler;
-    }
 
-    public String encodeImagetoString(Bitmap bitmap) {
+    public static String encodeImagetoString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] imageBytes = baos.toByteArray();
@@ -27,7 +21,7 @@ public class ImageHandler {
         return encodedImage;
     }
 
-    public Bitmap decodeStringToImage(String imageBytes) {
+    public static Bitmap decodeStringToImage(String imageBytes) {
         // Decode data on other side, by processing encoded data
         byte[] valueDecoded = Base64.decode(imageBytes, Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(valueDecoded, 0, valueDecoded.length);

@@ -1,6 +1,5 @@
 package estateco.estate;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,14 +16,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import controllers.UserCtrl;
-import entities.Property;
 import entities.User;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
@@ -33,17 +28,15 @@ public class MainUI extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = MainUI.class.getSimpleName();
-    private ProgressDialog pDialog;
+
     private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private User user;
 
-    //GridView Object
-    private GridView gridView;
 
     //ArrayList for property info
-    private ArrayList<Property> properties;
+
     NavigationView navigationView;
     Toolbar toolbar;
     TextView tvHderName, tvHderEmail;
@@ -61,15 +54,20 @@ public class MainUI extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("All Listings");
 
+        // creae
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
             }
         });
+        fab.hide();
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -85,7 +83,7 @@ public class MainUI extends AppCompatActivity
         userCtrl = new UserCtrl(getApplicationContext());
         session = new SessionHandler(getApplicationContext());
         user = userCtrl.getUserDetails();
-        Log.i(TAG, user.getName());
+//         Log.i(TAG, user.getName());
 
         // check if user is already logged in or not
         if (session.isLoggedIn()) {

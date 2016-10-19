@@ -16,160 +16,6 @@
             android:weightSum="1">
 
             <TextView
-                android:id="@+id/textView1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Edit Property Details"
-                android:textAlignment="center"
-                android:textSize="24sp"
-                android:textStyle="normal|bold" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="CreatedOn"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/TVLblCreatedDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/textView20"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Status"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <Spinner
-                android:id="@+id/SPEditStatus"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/TVLblTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/ETEditTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
-
-            <ImageView
-                android:id="@+id/IMGVPreview"
-                app:srcCompat="@drawable/ic_menu_gallery"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:text="Select Photo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/BTNEditPhoto" />
-
-            <TextView
-                android:id="@+id/TVLblUpdateDesc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Description"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/ETEditDesc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/TVLblUpdateFlatType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="FlatType"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <Spinner
-                android:id="@+id/SPEditFlatType"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/TVLblUpdateFurnishLevel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="FurnishLevel"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <Spinner
-                android:id="@+id/SPEditFurnishLevel"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/TVLblUpdatePrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Price (SGD$)"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/ETEditPrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/TVNoOfBedrooms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Bedroom(s)"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <Spinner
-                android:id="@+id/SPEditBedrooms"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/TVNoOfBathrooms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Bathroom(s)"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <Spinner
-                android:id="@+id/SPEditBathrooms"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:textAlignment="center" />
-
-            <TextView
                 android:id="@+id/textView19"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -179,7 +25,7 @@
                 android:textStyle="normal|bold" />
 
             <TextView
-                android:id="@+id/TVLblUpdateDealType"
+                android:id="@+id/TVLblEditDealType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="DealType"
@@ -200,6 +46,171 @@
                 android:textAlignment="center" />
 
             <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="General Details"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CreatedOn"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/TVLblCreatedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="Create On" />
+
+            <TextView
+                android:id="@+id/TVLblEditStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/SPEditStatus"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/TVLblEditTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/ETEditTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:hint="Title" />
+
+            <TextView
+                android:id="@+id/TVLblEditDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/ETEditDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:hint="Desc" />
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address Details"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/TVLblEditFloorLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Floor Level"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/SPEditFloorLevel"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/TVLblEditStreetName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Street Name"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/ETEditStreetName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:hint="Street Name" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="House Details"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
+
+            <ImageView
+                android:id="@+id/IMGVEditImage"
+                app:srcCompat="@drawable/ic_menu_gallery"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:text="Select Photo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/BTNEditPhoto" />
+
+            <TextView
+                android:id="@+id/TVLblEditFlatType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FlatType"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/SPEditFlatType"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/TVLblEditPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Price (SGD$)"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/ETEditPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:hint="Price SGD(nearest hundred)" />
+
+            <TextView
                 android:id="@+id/TVLblFloorArea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -213,70 +224,56 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/textView30"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Address Details"
                 android:textAlignment="center"
-                android:textSize="24sp"
-                android:textStyle="normal|bold" />
+                android:hint="Floor Area (SqMeters)" />
 
             <TextView
-                android:id="@+id/TVAddressName"
+                android:id="@+id/TVLblEditFurnishLevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="AddressName"
+                android:text="FurnishLevel"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/ETEditAddressName"
+            <Spinner
+                android:id="@+id/SPEditFurnishLevel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
+                android:layout_height="45dp"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/TVPostalCode"
+                android:id="@+id/TVNoOfBedrooms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PostalCode"
+                android:text="Bedroom(s)"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/ETEditPostalCode"
+            <Spinner
+                android:id="@+id/SPEditBedroomCount"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
+                android:layout_height="45dp"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/TVunit"
+                android:id="@+id/TVNoOfBathrooms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Unit"
+                android:text="Bathroom(s)"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/ETEditUnit"
+            <Spinner
+                android:id="@+id/SPEditBathroomCount"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
+                android:layout_height="45dp"
                 android:textAlignment="center" />
 
             <Button
                 android:text="Save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/BTNUpdateProperty" />
+                android:id="@+id/BTNEditPropertySave" />
 
             <Button
                 android:text="Randomise"

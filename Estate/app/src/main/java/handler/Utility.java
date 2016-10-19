@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
  */
 
 public class Utility {
+    private static final String TAG = Utility.class.getSimpleName();
 
     public Utility() {
 
@@ -26,22 +27,20 @@ public class Utility {
 
 
     public static boolean isEmailValid(String email) {
-        Log.i("isEmailValid", "Value is " + email);
         pattern = Pattern.compile(EMAIL_PATTERN);
         matcher = pattern.matcher(email);
-        Log.i("isEmailValid", "Result is " + matcher.matches());
+        Log.i(TAG, "isEmailValid: " + matcher.matches());
         return matcher.matches();
     }
 
     public static String generateTitle() {
-        String titles[] = {"House for sale", " Unit for sale"};
         Random random = new Random();
-        return titles[random.nextInt(titles.length)];
+        return "Some title number: " + random.nextInt(10000) + " !";
     }
 
     public static String generateDesc() {
         Random random = new Random();
-        return "Description number: " + random.nextInt(100) + " !";
+        return "Some description number: " + random.nextInt(10000) + " !";
     }
 
     public static String generateString(int length) {
@@ -69,8 +68,11 @@ public class Utility {
     public static String generateNumberAsString(int min, int max) {
         Random random = new Random();
         int number = random.nextInt(max - min + 1) + 1;
+        if (number >= 10)
+            return String.valueOf(number);
+        else
+            return new DecimalFormat("00").format(number);
 
-        return String.valueOf(number);
     }
 
     public static int generateNumber(int min, int max) {
@@ -99,5 +101,43 @@ public class Utility {
     public static boolean generateBool() {
         Random random = new Random();
         return random.nextBoolean();
+    }
+
+    public String generateLocation() {
+        String[] location = {"Raffles Place", "Cecil", "Marina",
+                "Anson", "Tanjong Pagar",
+                "Queenstown", "Tiong Bahru",
+                "Telok Blangah", "Harbourfront",
+                "Pasir Panjang", "Hong Leong Garden", "Clementi",
+                "High Street", "Beach Road ",
+                "Middle Road", "Golden Mile ",
+                "Little India ",
+                "Orchard", "Cairnhill", "River Valley ",
+                "Ardmore", "Bukit Timah", "Holland Road", "Tanglin",
+                "Watten Estate", "Novena", "Thomson",
+                "Balestier", "Toa Payoh", "Serangoon",
+                "Macpherson", "Braddell",
+                "Geylang", "Eunos",
+                "Katong", "Joo Chiat", "Amber Road",
+                "Bedok", "Upper East Coast", "Eastwood", "Kew Drive",
+                "Loyang", "Changi",
+                "Simei", "Tampines", "Pasir Ris",
+                "Serangoon Garden", "Hougang", "Punggol",
+                "Bishan", "Ang Mo Kio",
+                "Upper Bukit Timah", "Clementi Park", "Ulu Pandan",
+                "Jurong",
+                "Hillview", "Dairy Farm", "Bukit Panjang", "Choa Chu Kang",
+                "Lim Chu Kang", "Tengah",
+                "Kranji", "Woodgrove", "Woodlands",
+                "Upper Thomson", "Springleaf",
+                "Yishun", "Sembawang",
+                "Seletar"
+        };
+
+        Random random = new Random();
+        String locationValue = location[random.nextInt(location.length) + 1];
+        Log.i(TAG, locationValue);
+        return locationValue;
+
     }
 }

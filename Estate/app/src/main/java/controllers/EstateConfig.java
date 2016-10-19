@@ -1,5 +1,7 @@
 package controllers;
 
+import handler.Utility;
+
 /**
  * Created by Paul K Szean on 24/9/2016.
  */
@@ -18,5 +20,9 @@ public class EstateConfig {
     public static String URL_UPDATEUSERPROPERTY = "http://10.0.2.2/estateupdateuserproperty.php";
     public static String URL_SEARCHLISTINGS = "http://10.0.2.2/estatesearchlistings.php";
     public static String URL_NEWPROPERTY = "http://10.0.2.2/estatenewproperty.php";
+
+    // GOV DATA
+    public static String URL_GOVDATA_RESALEFLATPRICES = "https://data.gov.sg/api/action/datastore_search?resource_id=83b2fc37-ce8c-4df4-968b-370fd818138b";
+
 
 }

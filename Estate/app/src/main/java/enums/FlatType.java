@@ -5,20 +5,20 @@ package enums;
  */
 
 public enum FlatType {
-    Select("Select Residential Type"),
-    OneRoomFlat("1-Room Flat"),
-    TwoRoomFlat("2-Room Flat"),
-    ThreeRoomFlat("3-Room Flat"),
-    FourRoomFlat("4-Room Flat"),
-    FiveRoomFlat("5-Room Flat"),
-    ExecutiveFlat("Executive Flat"),
-    StudioApartment("Studio Apartment"),
-    BungalowDetached("Bungalow/Detached House"),
-    SemiDetached("Semi/Detached House"),
-    Terrace("Terrace House"),
-    Condominium("Condominium"),
-    ExecutiveCondominium("Executive Condominium"),
-    ShopHouse("Shop House");
+    Select("Select Flat Type"),
+    OneRoomFlat("1 ROOM"),
+    TwoRoomFlat("2 ROOM"),
+    ThreeRoomFlat("3 ROOM"),
+    FourRoomFlat("4 ROOM"),
+    FiveRoomFlat("5 ROOM"),
+    ExecutiveFlat("EXECUTIVE"),
+    StudioApartment("STUDIO APARTMENT"),
+    BungalowDetached("BUNGALOW/DETACHED HOUSE"),
+    SemiDetached("SEMI/DETACHED HOUSE"),
+    Terrace("TERRACE HOUSE"),
+    Condominium("CONDOMINIUM"),
+    ExecutiveCondominium("EXECUTIVE CONDOMINIUM"),
+    ShopHouse("SHOP HOUSE");
 
 
     private String FlatTypeNames;

@@ -2,6 +2,7 @@ package estateco.estate;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,10 +23,8 @@ import java.util.Map;
 import controllers.EstateConfig;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
-import entities.Lease;
-import entities.Sale;
+import entities.Property;
 import entities.User;
-import enums.DealType;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
@@ -45,16 +44,17 @@ public class FragmentPropertyDetails extends Fragment {
     private User user;
     private User owner;
     private PropertyCtrl propertyCtrl;
-    private Sale sale;
-    private Lease lease;
 
-    TextView tvTitle, tvDesc, tvFlatType, tvDealType, tvFurnishLevel, tvPrice, tvNoOfBedrooms, tvNoOfBathrooms, tvFloorArea,
-            tvAddressName, tvPostalCode, tvUnit, tvWholeApartment, tvOwnerName, tvOwnerEmail, tvOwnerContact;
-    ImageView imgvPreview;
-    String valProDetPropertyID, valProDetOwnerID, valProDetOwnerName, valProDetOwnerEmail, valProDetOwnerContact, valProDetFlatType, valProDetDealType, valProDetTitle, valProDetDescription, valProDetFurnishLevel, valProDetPrice,
-            valProDetPostalCode, valProDetUnit, valProDetAddressName, valProDetPhoto, valProDetStatus,
-            valProDetSaleNoOfBedrooms, valProDetSaleNoOfBathrooms, valProDetFloorArea, valProDetWholeApartment, valProDetCreatedDate;
+    TextView tvPropDetTitle, tvPropDetDesc, tvPropDetFlatType, tvPropDetDealType, tvPropDetFurnishLevel, tvPropDetPrice, tvPropDetBedroomCount,
+            tvPropDetBathroomCount, tvPropDetFloorArea, tvPropDetStreetName, tvPropDetFloorLevel, tvPropDetBlock, tvPropDetWholeApartment,
+            tvPropDetOwnerName, tvPropDetOwnerEmail, tvPropDetOwnerContact;
+    ImageView imgvPropDetImage;
+    String valProDetPropertyID, valProDetOwnerID, valProDetOwnerName, valProDetOwnerEmail, valProDetOwnerContact, valProDetFlatType,
+            valProDetDealType, valProDetTitle, valProDetDescription, valProDetFurnishLevel, valProDetPrice,
+            valProDetBlock, valProDetStreetName, valProDetImage, valProDetStatus, valProDetBedroomCount, valProDetBathroomCount,
+            valProDetFloorLevel, valProDetFloorArea, valProDetWholeApartment, valProDetCreatedDate;
     Toolbar toolbar;
+    FloatingActionButton floatingActionButton;
 
     public FragmentPropertyDetails() {
         // Required empty public constructor
@@ -66,16 +66,15 @@ public class FragmentPropertyDetails extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_property_details, container, false);
+        savedInstanceState = getArguments();
+        setControls(view, savedInstanceState);
 
         // setup ctrl objects
         db = new SQLiteHandler(getActivity());
         userCtrl = new UserCtrl(getActivity());
         user = userCtrl.getUserDetails();
         propertyCtrl = new PropertyCtrl(getActivity());
-        savedInstanceState = getArguments();
 
-        // setControls
-        setControls(view, savedInstanceState);
 
         return view;
     }
@@ -84,27 +83,31 @@ public class FragmentPropertyDetails extends Fragment {
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Property Details");
         // TODO SHOW FAVOURITE ICON
-        Log.i(TAG, toolbar.getMenu().getItem(0).toString());
-        Log.i(TAG, toolbar.getMenu().getItem(1).toString());
-        Log.i(TAG, toolbar.getMenu().getItem(2).toString());
+        //        Log.i(TAG, toolbar.getMenu().getItem(0).toString());
+        //        Log.i(TAG, toolbar.getMenu().getItem(1).toString());
+        //        Log.i(TAG, toolbar.getMenu().getItem(2).toString());
 
-        imgvPreview = (ImageView) view.findViewById(R.id.IMGVPreview);
-        tvTitle = (TextView) view.findViewById(R.id.TVLblTitle);
-        tvDesc = (TextView) view.findViewById(R.id.TVDesc);
-        tvFlatType = (TextView) view.findViewById(R.id.TVFlatType);
-        tvDealType = (TextView) view.findViewById(R.id.TVDealType);
-        tvFurnishLevel = (TextView) view.findViewById(R.id.TVFurnishLevel);
-        tvPrice = (TextView) view.findViewById(R.id.TVPrice);
-        tvNoOfBedrooms = (TextView) view.findViewById(R.id.TVNoOfBedrooms);
-        tvNoOfBathrooms = (TextView) view.findViewById(R.id.TVNoOfBathrooms);
-        tvFloorArea = (TextView) view.findViewById(R.id.TVFloorArea);
-        tvAddressName = (TextView) view.findViewById(R.id.TVAddressName);
-        tvPostalCode = (TextView) view.findViewById(R.id.TVPostalCode);
-        tvUnit = (TextView) view.findViewById(R.id.TVunit);
-        tvWholeApartment = (TextView) view.findViewById(R.id.TVWholeApartment);
-        tvOwnerName = (TextView) view.findViewById(R.id.TVOwnerName);
-        tvOwnerEmail = (TextView) view.findViewById(R.id.TVOwnerEmail);
-        tvOwnerContact = (TextView) view.findViewById(R.id.TVOwnerContact);
+        //
+        floatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        floatingActionButton.show();
+
+        imgvPropDetImage = (ImageView) view.findViewById(R.id.IMGVPropDetImage);
+        tvPropDetTitle = (TextView) view.findViewById(R.id.TVPropDet_Title);
+        tvPropDetDesc = (TextView) view.findViewById(R.id.TVPropDet_Desc);
+        tvPropDetFlatType = (TextView) view.findViewById(R.id.TVPropDet_FlatType);
+        tvPropDetDealType = (TextView) view.findViewById(R.id.TVPropDet_DealType);
+        tvPropDetFurnishLevel = (TextView) view.findViewById(R.id.TVPropDet_FurnishLevel);
+        tvPropDetPrice = (TextView) view.findViewById(R.id.TVPropDet_Price);
+        tvPropDetBedroomCount = (TextView) view.findViewById(R.id.TVPropDet_BedroomCount);
+        tvPropDetBathroomCount = (TextView) view.findViewById(R.id.TVPropDet_BathroomCount);
+        tvPropDetFloorArea = (TextView) view.findViewById(R.id.TVPropDet_FloorArea);
+        tvPropDetStreetName = (TextView) view.findViewById(R.id.TVPropDet_AddressName);
+        tvPropDetFloorLevel = (TextView) view.findViewById(R.id.TVPropDet_FloorLevel);
+
+        tvPropDetWholeApartment = (TextView) view.findViewById(R.id.TVPropDet_WholeApartment);
+        tvPropDetOwnerName = (TextView) view.findViewById(R.id.TVPropDet_OwnerName);
+        tvPropDetOwnerEmail = (TextView) view.findViewById(R.id.TVPropDet_OwnerEmail);
+        tvPropDetOwnerContact = (TextView) view.findViewById(R.id.TVPropDet_OwnerContact);
 
 
         // get property details from server
@@ -114,64 +117,34 @@ public class FragmentPropertyDetails extends Fragment {
             @Override
             public void onAsyncTaskResponse(String response) {
                 try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
+                    JSONObject propertyObj = JSONHandler.getResultAsObject(getActivity(), response);
                     // check for error in json
-                    if (error) {
-                        // ALREADY HANDLED
-                    } else {
-                        JSONObject propertyObj = jObj.getJSONObject("property");
+                    if (propertyObj != null) {
                         owner = new User(
                                 valProDetOwnerID = propertyObj.getString(UserCtrl.KEY_USERID),
                                 valProDetOwnerName = propertyObj.getString(UserCtrl.KEY_NAME),
                                 valProDetOwnerEmail = propertyObj.getString(UserCtrl.KEY_EMAIL),
                                 valProDetOwnerContact = propertyObj.getString(UserCtrl.KEY_CONTACT));
 
-                        // sale type
-                        if (propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE).toString().equals(DealType.ForSale.toString())) {
-                            sale = new Sale(
-                                    valProDetPropertyID = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
-                                    owner,
-                                    valProDetFlatType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
-                                    valProDetDealType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
-                                    valProDetTitle = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_TITLE),
-                                    valProDetDescription = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DESC),
-                                    valProDetFurnishLevel = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
-                                    valProDetPrice = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PRICE),
-                                    valProDetPostalCode = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
-                                    valProDetUnit = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT),
-                                    valProDetAddressName = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
-                                    valProDetPhoto = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PHOTO),
-                                    valProDetStatus = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_STATUS),
-                                    valProDetSaleNoOfBedrooms = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
-                                    valProDetSaleNoOfBathrooms = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
-                                    valProDetFloorArea = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORAREA),
-                                    valProDetCreatedDate = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
-                        }
-                        // lease type
-                        if (propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE).toString().equals(DealType.ForLease.toString())) {
-                            lease = new Lease(
-                                    valProDetPropertyID = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
-                                    owner,
-                                    valProDetFlatType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
-                                    valProDetDealType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
-                                    valProDetTitle = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_TITLE),
-                                    valProDetDescription = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DESC),
-                                    valProDetFurnishLevel = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
-                                    valProDetPrice = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PRICE),
-                                    valProDetPostalCode = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
-                                    valProDetUnit = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT),
-                                    valProDetAddressName = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
-                                    valProDetPhoto = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PHOTO),
-                                    valProDetStatus = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_STATUS),
-                                    valProDetSaleNoOfBedrooms = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
-                                    valProDetSaleNoOfBathrooms = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
-                                    valProDetWholeApartment = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT),
-                                    valProDetCreatedDate = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
-                            // leasing whole apartment
-                            valProDetFloorArea = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORAREA);
-                        }
-
+                        Property property = new Property(
+                                valProDetPropertyID = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
+                                owner,
+                                valProDetFlatType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
+                                valProDetBlock = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_BLOCK),
+                                valProDetStreetName = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_STREETNAME),
+                                valProDetFloorLevel = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORLEVEL),
+                                valProDetFloorArea = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORAREA),
+                                valProDetPrice = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PRICE),
+                                valProDetImage = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_IMAGE),
+                                valProDetStatus = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_STATUS),
+                                valProDetDealType = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
+                                valProDetTitle = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_TITLE),
+                                valProDetDescription = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DESC),
+                                valProDetFurnishLevel = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
+                                valProDetBedroomCount = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT),
+                                valProDetBathroomCount = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT),
+                                valProDetWholeApartment = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT),
+                                valProDetCreatedDate = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
 
                     }
                 } catch (JSONException error) {
@@ -179,48 +152,31 @@ public class FragmentPropertyDetails extends Fragment {
                     ErrorHandler.errorHandler(getActivity(), error);
                 }
 
-                tvFlatType.setText(valProDetFlatType);
-                tvDealType.setText(valProDetDealType);
-                tvTitle.setText(valProDetTitle);
-                tvDesc.setText(valProDetDescription);
-                tvFurnishLevel.setText(valProDetFurnishLevel);
-                tvPrice.setText("SGD$" + valProDetPrice);
-                tvPostalCode.setText("S'pore(" + valProDetPostalCode + ")");
-                tvUnit.setText("#" + valProDetUnit);
-                tvAddressName.setText(valProDetAddressName);
-                tvNoOfBedrooms.setText(valProDetSaleNoOfBedrooms + " bedroom(s)");
-                tvNoOfBathrooms.setText(valProDetSaleNoOfBathrooms + " bathroom(s)");
-                tvFloorArea.setText(valProDetFloorArea + " Sq Meters");
-
-                tvOwnerName.setText(valProDetOwnerName);
-                tvOwnerEmail.setText(valProDetOwnerEmail);
-                tvOwnerContact.setText(valProDetOwnerContact);
-                int roomCount = Integer.valueOf(valProDetSaleNoOfBedrooms);
-                if (lease != null) {
-                    // room
-                    if (valProDetWholeApartment.equals("room")) {
-                        if (roomCount <= 1) {
-                            tvWholeApartment.setText(valProDetSaleNoOfBedrooms + " " + valProDetWholeApartment);
-                        } else {
-                            tvWholeApartment.setText(valProDetSaleNoOfBedrooms + " " + valProDetWholeApartment + "s");
-                        }
-                    }
-                    if (valProDetWholeApartment.equals(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT)) {
-                        tvWholeApartment.setText("Leasing whole apartment");
-                    }
-
-                }
-                if (sale != null) {
-
-                }
-
-
-                // check if photo is empty
-
-                if (valProDetPhoto.isEmpty())
-                    imgvPreview.setImageResource(R.drawable.ic_menu_camera);
+                // deal details
+                tvPropDetDealType.setText(valProDetDealType);
+                // general details
+                tvPropDetTitle.setText(valProDetTitle);
+                tvPropDetDesc.setText(valProDetDescription);
+                // address details
+                tvPropDetFloorLevel.setText("Level " + valProDetFloorLevel);
+                tvPropDetStreetName.setText(valProDetStreetName);
+                // house details
+                if (valProDetImage.isEmpty())
+                    imgvPropDetImage.setImageResource(R.drawable.ic_menu_camera);
                 else
-                    imgvPreview.setImageBitmap(ImageHandler.getInstance().decodeStringToImage(valProDetPhoto));
+                    imgvPropDetImage.setImageBitmap(ImageHandler.decodeStringToImage(valProDetImage));
+                tvPropDetFlatType.setText(valProDetFlatType);
+                tvPropDetPrice.setText("SGD$" + valProDetPrice);
+                tvPropDetFloorArea.setText(valProDetFloorArea + " Sq Meters");
+                tvPropDetFurnishLevel.setText(valProDetFurnishLevel);
+                tvPropDetBedroomCount.setText(valProDetBedroomCount + " bedroom(s)");
+                tvPropDetBathroomCount.setText(valProDetBathroomCount + " bathroom(s)");
+                // owner details
+                tvPropDetOwnerName.setText(valProDetOwnerName);
+                tvPropDetOwnerEmail.setText(valProDetOwnerEmail);
+                tvPropDetOwnerContact.setText(valProDetOwnerContact);
+
+
             }
         }).execute();
 

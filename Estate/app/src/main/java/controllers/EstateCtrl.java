@@ -22,14 +22,30 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import entities.Lease;
 import entities.Property;
-import entities.Sale;
 import entities.User;
-import enums.DealType;
+import estateco.estate.JSONHandler;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
+
+import static controllers.PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT;
+import static controllers.PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT;
+import static controllers.PropertyCtrl.KEY_PROPERTY_BLOCK;
+import static controllers.PropertyCtrl.KEY_PROPERTY_CREATEDDATE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_DEALTYPE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_DESC;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FLATTYPE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORAREA;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORLEVEL;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL;
+import static controllers.PropertyCtrl.KEY_PROPERTY_IMAGE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_PRICE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
+import static controllers.PropertyCtrl.KEY_PROPERTY_STATUS;
+import static controllers.PropertyCtrl.KEY_PROPERTY_STREETNAME;
+import static controllers.PropertyCtrl.KEY_PROPERTY_TITLE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
 
 /**
  * Created by Paul K Szean on 24/9/2016.
@@ -43,8 +59,6 @@ public class EstateCtrl extends Application {
     private static PropertyCtrl propertyCtrl;
     private static User user;
     private static Property property;
-    private static Sale sale;
-    private static Lease lease;
 
     private static Map<String, String> paramValues;
 
@@ -101,98 +115,83 @@ public class EstateCtrl extends Application {
         return (networkInfo != null && networkInfo.isConnected());
     }
 
-    // get user data from server into local db
-    public static void syncToLocalDB(final Activity activity, final User user) {
-        Log.i(TAG, "syncToLocalDB");
+    // get user account into local db
+    public static void syncUserAccountToLocalDB(final User user) {
+        Log.i(TAG, "syncUserAccountToLocalDB");
         userCtrl = new UserCtrl(getInstance());
-        propertyCtrl = new PropertyCtrl(getInstance());
-        // insert user into local DB
+        // insert user account into local DB
         userCtrl.addUserDetails(user);
+    }
 
-        // insert user properties into local DB
+    // add user properties into local db (from server)
+    public static void syncUserPropertiesToLocalDB(final Activity activity, final User user) {
+        Log.i(TAG, "syncUserPropertiesToLocalDB");
+        propertyCtrl = new PropertyCtrl(getInstance());
+        // get user properties from server and insert into local DB
         paramValues = new HashMap<>();
         paramValues.put(PropertyCtrl.KEY_PROPERTY_OWNERID, user.getUserID());
         new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_GETUSERLISTINGS, paramValues, activity, new AsyncTaskResponse() {
             @Override
             public void onAsyncTaskResponse(String response) {
-                Log.i(TAG, response);
                 try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-
-                    // Check for error node in json
-                    if (error) {
-                        // Error in login. Get the error message
-                        String errorMsg = jObj.getString("error_msg");
-                        ErrorHandler.errorHandler(activity, errorMsg);
-                    } else {
-                        JSONArray results = jObj.getJSONArray("result");
-                        for (int i = 0; i < results.length(); i++) {
-                            JSONObject propertyObj = results.getJSONObject(i);
-                            if (propertyObj.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE).equals(DealType.ForSale.toString())) {
-                                Log.i(TAG, "Syncing propertyID: " + propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
-                                sale = new Sale(
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
-                                        user,
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_TITLE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DESC),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PRICE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PHOTO),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_STATUS),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLOORAREA),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
-                                // insert data into local db
-                                Log.i(TAG, "Floor Area: " + sale.getFloorArea() + ", CreatedDate: " + sale.getCreatedate());
-                                propertyCtrl.addPropertyDetails(sale);
-
-                            }
-                            if (propertyObj.get(PropertyCtrl.KEY_PROPERTY_DEALTYPE).equals(DealType.ForLease.toString())) {
-                                Log.i(TAG, "Syncing propertyID: " + propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
-                                lease = new Lease(
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID),
-                                        user,
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FLATTYPE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DEALTYPE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_TITLE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_DESC),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PRICE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_POSTALCODE),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_UNIT),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_ADDRESSNAME),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_PHOTO),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_STATUS),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBEDROOMS),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_NOOFBATHROOMS),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT),
-                                        propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
-                                // insert data into local db
-                                Log.i(TAG, "Floor Area: " + lease.getWholeApartment() + ", CreatedDate: " + lease.getCreatedate());
-                                propertyCtrl.addPropertyDetails(lease);
-                            }
+                    JSONArray jsonArray = JSONHandler.getResultAsArray(activity, response);
+                    if (jsonArray != null) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject propertyObj = jsonArray.getJSONObject(i);
+                            property = new Property(
+                                    propertyObj.getString(KEY_PROPERTY_PROPERTYID),
+                                    user,
+                                    propertyObj.getString(KEY_PROPERTY_FLATTYPE),
+                                    propertyObj.getString(KEY_PROPERTY_BLOCK),
+                                    propertyObj.getString(KEY_PROPERTY_STREETNAME),
+                                    propertyObj.getString(KEY_PROPERTY_FLOORLEVEL),
+                                    propertyObj.getString(KEY_PROPERTY_FLOORAREA),
+                                    propertyObj.getString(KEY_PROPERTY_PRICE),
+                                    propertyObj.getString(KEY_PROPERTY_IMAGE),
+                                    propertyObj.getString(KEY_PROPERTY_STATUS),
+                                    propertyObj.getString(KEY_PROPERTY_DEALTYPE),
+                                    propertyObj.getString(KEY_PROPERTY_TITLE),
+                                    propertyObj.getString(KEY_PROPERTY_DESC),
+                                    propertyObj.getString(KEY_PROPERTY_FURNISHLEVEL),
+                                    propertyObj.getString(KEY_PROPERTY_BEDROOMCOUNT),
+                                    propertyObj.getString(KEY_PROPERTY_BATHROOMCOUNT),
+                                    propertyObj.getString(KEY_PROPERTY_WHOLEAPARTMENT),
+                                    propertyObj.getString(KEY_PROPERTY_CREATEDDATE));
+                            // add into local db
+                            propertyCtrl.addPropertyDetails(property);
                         }// end of for loop
-                    }// end of else
+                    }
                 } catch (JSONException error) {
                     // JSON error
                     ErrorHandler.errorHandler(activity, error);
                 }
             }
-        }).execute();
+        }
+
+        ).execute();
 
     }
 
+    // add user property into local db
+    public static void syncUserPropertyToLocalDB(Property property) {
+        Log.i(TAG, "syncUserPropertyToLocalDB");
+        propertyCtrl = new PropertyCtrl(getInstance());
+        // insert user property into local DB
+        propertyCtrl.addPropertyDetails(property);
+    }
+
+    // update existing user property into local db
+    public static void syncUserUpdatedPropertyToLocalDB(Property property) {
+        Log.i(TAG, "syncUserUpdatedPropertyToLocalDB");
+        propertyCtrl = new PropertyCtrl(getInstance());
+        // insert user property into local DB
+        propertyCtrl.updateUserPropertyDetails(property);
+    }
 
     public static int getSpinnerItemPosition(Spinner spinner, String value) {
         int index = 0;
         for (int i = 0; i < spinner.getCount(); i++) {
+            // Log.i(TAG, spinner.getItemAtPosition(i).toString() + " " + value + " " + spinner.getItemAtPosition(i).toString().contains(value));
             if (spinner.getItemAtPosition(i).toString().contains(value)) {
                 return i;
             }

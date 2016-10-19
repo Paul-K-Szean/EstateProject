@@ -9,9 +9,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Map;
 
 import controllers.EstateConfig;
@@ -46,6 +43,7 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
         pDialog = new ProgressDialog(activity);
         pDialog.setCancelable(false);
 
+
     }
 
     @Override
@@ -53,8 +51,12 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
         Log.w("onPreExecute", "onPreExecute()");
         IsInternetConnected = EstateCtrl.CheckInternetConnection(activity);
         // disable dialog for searching function
-        if (!URLAddress.toLowerCase().equals(EstateConfig.URL_SEARCHLISTINGS)) {
-            // loading dialog
+        if (URLAddress.toLowerCase().equals(EstateConfig.URL_SEARCHLISTINGS)) {
+            // disable loading dialog
+            pDialog.setIndeterminate(false);
+            pDialog.setMessage("");
+            hideDialog();
+        } else {
             pDialog.setIndeterminate(true);
             pDialog.setMessage("Loading ...");
             showDialog();
@@ -66,6 +68,7 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
         Log.w("doInBackground", "doInBackground()");
         EstateCtrl.hideSoftKeyboard(activity);
 
+
         if (IsInternetConnected) {
             // Connect to server
             StringRequest strReq = new StringRequest(methodType,
@@ -74,24 +77,9 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
                 @Override
                 public void onResponse(String response) {
                     Log.d(TAG, "onResponse: " + response.toString());
-                    try {
-                        JSONObject jObj = new JSONObject(response);
-                        boolean error = jObj.getBoolean("error");
-                        // check for error node in json
-                        if (error) {
-                            // not json error, maybe user input error or etc(db)...
-                            String errorMsg = jObj.getString("error_msg");
-                            // display response msg
-                            ErrorHandler.errorHandler(activity.getApplicationContext(), errorMsg);
-                        }
-                        URLResponse = response;
-                        publishProgress(response);
+                    URLResponse = response;
+                    publishProgress(response);
 
-                    } catch (JSONException error) {
-                        // json error
-                        ErrorHandler.errorHandler(activity.getApplicationContext(), error);
-                    }
-                    hideDialog();
                 }
             }, new Response.ErrorListener() {
                 @Override

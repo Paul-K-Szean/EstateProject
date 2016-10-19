@@ -20,92 +20,13 @@
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Property Details"
-                android:textAlignment="center"
-                android:textSize="24sp"
-                android:textStyle="normal|bold" />
-
-            <ImageView
-                android:id="@+id/IMGVPreview"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                app:srcCompat="@drawable/ic_menu_gallery" />
-
-            <TextView
-                android:id="@+id/TVLblTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Title"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/TVDesc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Description"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/TVFlatType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="FlatType"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/TVFurnishLevel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="FurnishLevel"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/TVPrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Price"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/TVNoOfBedrooms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="noofbedrooms"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/TVNoOfBathrooms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="noofbathrooms"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/TVFloorArea"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="floorarea"
-                android:textAlignment="center"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/textView30"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Deal Type"
+                android:text="Deal Details"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="normal|bold" />
 
             <TextView
-                android:id="@+id/TVDealType"
+                android:id="@+id/TVPropDet_DealType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="DealType"
@@ -113,10 +34,35 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/TVWholeApartment"
+                android:id="@+id/TVPropDet_WholeApartment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="WholeApartment"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="General Details"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/TVPropDet_Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/TVPropDet_Desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -130,7 +76,15 @@
                 android:textStyle="normal|bold" />
 
             <TextView
-                android:id="@+id/TVAddressName"
+                android:id="@+id/TVPropDet_FloorLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Floor Level"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/TVPropDet_AddressName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="AddressName"
@@ -138,18 +92,66 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/TVPostalCode"
+                android:id="@+id/textView20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PostalCode"
+                android:text="House Details"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
+
+            <ImageView
+                android:id="@+id/IMGVPropDetImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_menu_gallery"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:id="@+id/TVPropDet_FlatType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FlatType"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/TVunit"
+                android:id="@+id/TVPropDet_Price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Unit"
+                android:text="Price"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/TVPropDet_FloorArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Floor Area"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/TVPropDet_FurnishLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FurnishLevel"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/TVPropDet_BedroomCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BedroomCount"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/TVPropDet_BathroomCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BathroomCount"
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
@@ -163,7 +165,7 @@
                 android:textStyle="normal|bold" />
 
             <TextView
-                android:id="@+id/TVOwnerName"
+                android:id="@+id/TVPropDet_OwnerName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="OwnerName"
@@ -171,7 +173,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/TVOwnerEmail"
+                android:id="@+id/TVPropDet_OwnerEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="OwnerEmail"
@@ -179,7 +181,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/TVOwnerContact"
+                android:id="@+id/TVPropDet_OwnerContact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="OwnerContact"
