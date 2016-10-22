@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,7 +38,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import controllers.EstateConfig;
 import controllers.EstateCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
@@ -54,12 +54,12 @@ import handler.AlertDialogResponse;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
-import handler.FragmentHandler;
 import handler.ImageHandler;
-import handler.SQLiteHandler;
-import handler.SessionHandler;
+import handler.JSONHandler;
 import handler.Utility;
+import tabs.SlidingTabLayout;
 
+import static android.view.View.GONE;
 import static controllers.EstateConfig.URL_GOVDATA_RESALEFLATPRICES;
 
 
@@ -68,8 +68,7 @@ import static controllers.EstateConfig.URL_GOVDATA_RESALEFLATPRICES;
  */
 public class FragmentUpdateUserProperty extends Fragment implements AlertDialogResponse {
     private static final String TAG = FragmentUpdateUserProperty.class.getSimpleName();
-    private SessionHandler session;
-    private SQLiteHandler db;
+
     private UserCtrl userCtrl;
     private User user;
     private PropertyCtrl propertyCtrl;
@@ -91,6 +90,8 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
             valEditBathroomCount, valEditWholeApartment, valEditCreatedDate;
     TextView tvLblCreatedDate, tvLblFloorArea;
     Toolbar toolbar;
+    private SlidingTabLayout slidingTabLayout;
+    private ViewPager viewPager;
 
     public FragmentUpdateUserProperty() {
         // Required empty public constructor
@@ -103,30 +104,25 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_update_user_property, container, false);
         savedInstanceState = getArguments();
-        setControls(view, savedInstanceState);
 
         // setup ctrl objects
-        db = new SQLiteHandler(getActivity());
         userCtrl = new UserCtrl(getActivity());
-        user = userCtrl.getUserDetails();
         propertyCtrl = new PropertyCtrl(getActivity());
+        user = userCtrl.getUserDetails();
 
-        // check if user is already logged in or not
-        session = new SessionHandler(getActivity());
-        if (session.isLoggedIn()) {
-            // User is already logged in. Take him to main activity
+        viewPager = (ViewPager) getActivity().findViewById(R.id.ViewPagerMain);
+        viewPager.setVisibility(GONE);
+        slidingTabLayout = (SlidingTabLayout) getActivity().findViewById(R.id.TabLayoutMain);
+        slidingTabLayout.setVisibility(GONE);
 
-        } else {
-            userCtrl.deleteUserDetails();
-            session.setLogin(false);
-        }
+        setControls(view, savedInstanceState);
         // set controls to user property
-        setUserProperty(view, savedInstanceState);
+        setUserData(view, savedInstanceState);
         return view;
     }
 
     private void setControls(View view, final Bundle savedInstanceState) {
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
         toolbar.setTitle("Update Property");
 
         // check box
@@ -144,7 +140,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
         tvLblFloorArea = (TextView) view.findViewById(R.id.TVLblFloorArea);
         // image view
         imgvEditImage = (ImageView) view.findViewById(R.id.IMGVEditImage);
-        
+
         // spinners
         spEditDealType = (Spinner) view.findViewById(R.id.SPEditDealType);
         spEditDealType.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, DealType.values()));
@@ -372,7 +368,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
         );
     }
 
-    private void setUserProperty(View view, final Bundle savedInstanceState) {
+    private void setUserData(View view, final Bundle savedInstanceState) {
 
         // get user property details from local db
         propertyLocalDB = propertyCtrl.getUserPropertyDetails(savedInstanceState.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID), user);
@@ -382,7 +378,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
         chkbxEditWholeApartment.setChecked(propertyLocalDB.getWholeapartment().toString().equals(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT.toString()));
 
         // general details
-        tvLblCreatedDate.setText(propertyLocalDB.getCreatedate());
+        tvLblCreatedDate.setText(propertyLocalDB.getCreateddate());
         spEditStatus.setSelection(EstateCtrl.getSpinnerItemPosition(spEditStatus, propertyLocalDB.getStatus()));
         etEditTitle.setText(propertyLocalDB.getTitle());
         etEditDesc.setText(propertyLocalDB.getDescription());
@@ -411,8 +407,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
@@ -450,52 +445,13 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
             Log.e(TAG, ex.getMessage());
             Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
         }
-
     }
 
 
     // alert dialog response
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-
-        // save to local DB first, then to server
-
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, property.getPropertyID());
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_FLATTYPE, property.getFlatType()); // flattype
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_BLOCK, property.getBlock());    // block
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_STREETNAME, property.getStreetname()); // streentname
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());    // floorarea
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_FLOORAREA, property.getFloorarea());    // floorarea
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_PRICE, property.getPrice());    // price
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_IMAGE, property.getImage());    // photo
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_STATUS, property.getStatus()); // status
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_DEALTYPE, property.getDealType());    // dealtype
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_TITLE, property.getTitle()); // title
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_DESC, property.getDescription());    // description
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel()); // furnishlevel
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount()); // noofbedrooms
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount()); // noofbathrooms
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());    // wholeapartment
-        Log.i(TAG, "Param size: " + String.valueOf(paramValues.size()));
-        for (String val : paramValues.values()) {
-            Log.i(TAG, "Param value: " + val);
-        }
-        // save to remote server
-        if (paramValues != null) {
-            new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_UPDATEUSERPROPERTY, paramValues, getActivity(), new AsyncTaskResponse() {
-                @Override
-                public void onAsyncTaskResponse(String response) {
-                    // Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
-                    JSONObject jsonObject = JSONHandler.getResultAsObject(getActivity(), response);
-                    if (jsonObject != null) {
-                        // TODO UPDATE TO LOCAL DB
-                        EstateCtrl.syncUserUpdatedPropertyToLocalDB(property);
-                        FragmentHandler.loadFragment(FragmentUpdateUserProperty.this, new FragmentUserListings());
-                    }
-                }
-            }).execute();
-        }
-
+        propertyCtrl.serverUpdateProperty(FragmentUpdateUserProperty.this, property, user);
 
     }
 
@@ -503,5 +459,47 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
     public void onDialogNegativeClick(DialogFragment dialog) {
         // btnEditPropertySave.setText("Cancelled");
         Toast.makeText(getActivity(), "Update was cancelled.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStart() {
+        Log.w(TAG, "onStart");
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        Log.w(TAG, "onResume");
+        super.onResume();
+        // Fetching user details from sqlite
+        user = userCtrl.getUserDetails();
+    }
+
+    @Override
+    public void onPause() {
+        Log.w(TAG, "onPause");
+        super.onPause();
+        if (user != null) {
+            userCtrl.updateUserDetails(user);
+        } else
+            Log.e(TAG, "No user to retain");
+    }
+
+    @Override
+    public void onStop() {
+        Log.w(TAG, "onStop");
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.w(TAG, "onDestroyView");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.w(TAG, "onDestroy");
+        super.onDestroy();
     }
 }

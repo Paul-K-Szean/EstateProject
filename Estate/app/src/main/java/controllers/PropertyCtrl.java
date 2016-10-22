@@ -1,9 +1,9 @@
 package controllers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -18,12 +18,11 @@ import java.util.Map;
 import entities.Property;
 import entities.User;
 import estateco.estate.FragmentUserListings;
-import estateco.estate.JSONHandler;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
 import handler.FragmentHandler;
-import handler.SQLiteHandler;
+import handler.JSONHandler;
 import handler.SessionHandler;
 
 /**
@@ -34,10 +33,10 @@ public class PropertyCtrl {
     private static final String TAG = PropertyCtrl.class.getSimpleName();
 
     private SessionHandler session;
-    private SQLiteHandler db;
+    private JSONHandler.SQLiteHandler db;
     private Property property;
-    // local database for property
-    public static final String DATABASE_NAME = "Estate";
+    private View view;
+
 
     // table name
     public static final String TABLE_PROPERTY = "estate_property";
@@ -67,14 +66,18 @@ public class PropertyCtrl {
 
     public PropertyCtrl(Context context) {
         // SQLite database handler
-        db = new SQLiteHandler(context);
+        db = new JSONHandler.SQLiteHandler(context);
     }
 
     public PropertyCtrl(Context context, SessionHandler session) {
         // SQLite database handler
-        db = new SQLiteHandler(context);
+        db = new JSONHandler.SQLiteHandler(context);
         this.session = session;
     }
+
+    // **********************************************************************
+    // ********************* LOCAL SQLITE DATABASE ACCESS *******************
+    // **********************************************************************
 
     // add property details into local db
     public void addPropertyDetails(Property property) {
@@ -125,15 +128,16 @@ public class PropertyCtrl {
     }
 
     // remove all property from local db
-    public void deletePropertyDetails() {
-        db.deleteProperty();
+    public void deletePropertyTable() {
+        db.deletePropertyTable();
     }
 
 
     // **********************************************************************
-    // ********************* LOCAL SQLITE DATABASE ACCESS *******************
+    // ********************* REMOTE WAMP SERVER ACCESS **********************
     // **********************************************************************
-    public void serverNewProperty(final Activity activity, final Fragment fragment, final Property property, final User user) {
+    // create new property
+    public void serverNewProperty(final Fragment fragment, final Property property, final User user) {
         Log.i(TAG, "serverNewProperty");
         Map<String, String> paramValues = new HashMap<>();
         paramValues.put(KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
@@ -153,15 +157,15 @@ public class PropertyCtrl {
         paramValues.put(KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount());
         paramValues.put(KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());
 
-        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_NEWPROPERTY, paramValues, activity, new AsyncTaskResponse() {
+        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_NEWPROPERTY, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
             @Override
             public void onAsyncTaskResponse(String response) {
 
                 try {
-                    JSONObject propertyObj = JSONHandler.getResultAsObject(activity, response);
+                    JSONObject propertyObj = JSONHandler.getResultAsObject(fragment.getActivity(), response);
                     if (propertyObj != null) {
                         // server side created property
-                        Toast.makeText(activity, propertyObj.toString(), Toast.LENGTH_LONG);
+                        Toast.makeText(fragment.getActivity(), "Property successfully created!", Toast.LENGTH_LONG).show();
                         Log.i(TAG, "Property successfully created!");
                         Property property = new Property(
                                 propertyObj.getString(KEY_PROPERTY_PROPERTYID),
@@ -185,12 +189,62 @@ public class PropertyCtrl {
                         // save to local DB
                         EstateCtrl.syncUserPropertyToLocalDB(property);
                         FragmentHandler.loadFragment(fragment, new FragmentUserListings());
+                    } else {
+                        String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
+                        Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException error) {
-                    ErrorHandler.errorHandler(activity, error);
+                    ErrorHandler.errorHandler(fragment.getActivity(), error);
                 }
             }
         }).execute();
     }
 
+    public void serverUpdateProperty(final Fragment fragment, final Property property, final User user) {
+        Log.i(TAG, "serverUpdateProperty");
+        Map<String, String> paramValues = new HashMap<>();
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, property.getPropertyID());
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_FLATTYPE, property.getFlatType()); // flattype
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_BLOCK, property.getBlock());    // block
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_STREETNAME, property.getStreetname()); // streentname
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());    // floorarea
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_FLOORAREA, property.getFloorarea());    // floorarea
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_PRICE, property.getPrice());    // price
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_IMAGE, property.getImage());    // photo
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_STATUS, property.getStatus()); // status
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_DEALTYPE, property.getDealType());    // dealtype
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_TITLE, property.getTitle()); // title
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_DESC, property.getDescription());    // description
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel()); // furnishlevel
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount()); // noofbedrooms
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount()); // noofbathrooms
+        paramValues.put(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());    // wholeapartment
+
+        Log.i(TAG, "Param size: " + String.valueOf(paramValues.size()));
+        for (String val : paramValues.values()) {
+            Log.i(TAG, "Param value: " + val);
+        }
+        // save to remote server
+        if (paramValues != null) {
+            new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_UPDATEUSERPROPERTY, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
+                @Override
+                public void onAsyncTaskResponse(String response) {
+                    JSONObject jsonObject = JSONHandler.getResultAsObject(fragment.getActivity(), response);
+                    if (jsonObject != null) {
+                        // save to local db
+                        EstateCtrl.syncUserUpdatedPropertyToLocalDB(property);
+                        fragment.getFragmentManager().popBackStack();
+                        fragment.getFragmentManager().popBackStack();
+                        FragmentHandler.loadFragment(fragment, new FragmentUserListings());
+                    } else {
+                        String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
+                        Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }).execute();
+        }
+    }
+
+
 }
+

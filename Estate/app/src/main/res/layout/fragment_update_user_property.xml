@@ -171,7 +171,9 @@
                 android:id="@+id/IMGVEditImage"
                 app:srcCompat="@drawable/ic_menu_gallery"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true" />
 
             <Button
                 android:text="Select Photo"

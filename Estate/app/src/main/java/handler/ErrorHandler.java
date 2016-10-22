@@ -60,21 +60,5 @@ public class ErrorHandler {
                 Toast.LENGTH_LONG).show();
 
     }
-
-    public static void errorHandler(Context context, String errorMsg) {
-        Log.e(TAG, "ErrorHandler: " + errorMsg);
-        Toast.makeText(context,
-                errorMsg,
-                Toast.LENGTH_LONG).show();
-
-    }
-
-    public static void errorHandler(String errorMsg) {
-        Log.e(TAG, "ErrorHandler: " + errorMsg);
-    }
-
-    public static void errorHandler(JSONException error) {
-        Log.e(TAG, "ErrorHandler: " + error.getMessage());
-        error.printStackTrace();
-    }
+//
 }

@@ -6,10 +6,17 @@
             android:id="@+id/nav_allistings"
             android:icon="@drawable/ic_action_home"
             android:title="All Listings" />
+
         <item
             android:id="@+id/nav_userlistings"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="My Listings" />
+
+        <item
+            android:id="@+id/nav_userfavourites"
+            android:icon="@drawable/ic_action_start_outline"
+            android:title="Favourite Listings" />
+
         <item
             android:id="@+id/nav_myoffers"
             android:icon="@drawable/ic_menu_myoffers"
@@ -24,16 +31,12 @@
             android:title="Tools" />
     </group>
 
-    <item android:title="Communicate">
+    <item>
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_menu_exit"
+                android:title="Log Out" />
         </menu>
     </item>
 

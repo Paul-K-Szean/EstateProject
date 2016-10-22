@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="?attr/actionBarSize"
     tools:context="estateco.estate.FragmentPropertyDetails">
 
     <!-- TODO: Update blank fragment layout -->
@@ -91,6 +92,13 @@
                 android:textAlignment="center"
                 android:textSize="20sp" />
 
+            <ImageView
+                android:id="@+id/IMGVPropDetImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_menu_camera" />
+
             <TextView
                 android:id="@+id/textView20"
                 android:layout_width="match_parent"
@@ -99,13 +107,6 @@
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="normal|bold" />
-
-            <ImageView
-                android:id="@+id/IMGVPropDetImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_menu_gallery"
-                android:scaleType="fitCenter" />
 
             <TextView
                 android:id="@+id/TVPropDet_FlatType"

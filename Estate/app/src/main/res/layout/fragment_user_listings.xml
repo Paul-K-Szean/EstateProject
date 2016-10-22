@@ -16,24 +16,19 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:id="@+id/textView16"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        android:text="Your Listings" />
-
-    <TextView
-        android:id="@+id/TVUserMsg"
+        android:id="@+id/TVUserListingsCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="normal|bold" />
 
-    <GridView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycleView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/GVUserListings" />
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
 
 </LinearLayout>

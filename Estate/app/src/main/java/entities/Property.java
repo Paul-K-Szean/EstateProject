@@ -6,6 +6,72 @@ package entities;
 
 public class Property {
 
+    private String propertyID;
+    private User owner;
+    private String flatType;
+    private String block;
+    private String streetname;
+    private String floorlevel;
+    private String floorarea;
+    private String price;
+    private String image;
+    private String status;
+    private String dealType;
+    private String title;
+    private String description;
+    private String furnishLevel;
+    private String bedroomcount;
+    private String bathroomcount;
+    private String wholeapartment;
+    private String createddate;
+
+    public Property(User owner, String flatType, String block, String streetname, String floorlevel, String floorarea, String price,
+                    String image, String status, String dealType, String title, String description, String furnishLevel,
+                    String bedroomcount, String bathroomcount, String wholeapartment) {
+        this.owner = owner;
+        this.flatType = flatType;
+        this.block = block;
+        this.streetname = streetname;
+        this.floorlevel = floorlevel;
+        this.floorarea = floorarea;
+        this.price = price;
+        this.image = image;
+        this.status = status;
+        this.dealType = dealType;
+        this.title = title;
+        this.description = description;
+        this.furnishLevel = furnishLevel;
+        this.bedroomcount = bedroomcount;
+        this.bathroomcount = bathroomcount;
+        this.wholeapartment = wholeapartment;
+
+    }
+
+    public Property(String propertyID, User owner, String flatType, String block, String streetname, String floorlevel,
+                    String floorarea, String price, String image, String status, String dealType, String title, String description,
+                    String furnishLevel, String bedroomcount, String bathroomcount, String wholeapartment, String createddate) {
+
+        this.propertyID = propertyID;
+        this.owner = owner;
+        this.flatType = flatType;
+        this.block = block;
+        this.streetname = streetname;
+        this.floorlevel = floorlevel;
+        this.floorarea = floorarea;
+        this.price = price;
+        this.image = image;
+        this.status = status;
+        this.dealType = dealType;
+        this.title = title;
+        this.description = description;
+        this.furnishLevel = furnishLevel;
+        this.bedroomcount = bedroomcount;
+        this.bathroomcount = bathroomcount;
+        this.wholeapartment = wholeapartment;
+        this.createddate = createddate;
+    }
+
+
     public String getPropertyID() {
         return propertyID;
     }
@@ -142,77 +208,13 @@ public class Property {
         this.wholeapartment = wholeapartment;
     }
 
-    public String getCreatedate() {
-        return createdate;
+    public String getCreateddate() {
+        return createddate;
     }
 
-    public void setCreatedate(String createdate) {
-        this.createdate = createdate;
+    public void setCreateddate(String createddate) {
+        this.createddate = createddate;
     }
 
-    public Property(User owner, String flatType, String block, String streetname, String floorlevel, String floorarea, String price,
-                    String image, String status, String dealType, String title, String description, String furnishLevel,
-                    String bedroomcount, String bathroomcount, String wholeapartment) {
-        this.owner = owner;
-        this.flatType = flatType;
-        this.block = block;
-        this.streetname = streetname;
-        this.floorlevel = floorlevel;
-        this.floorarea = floorarea;
-        this.price = price;
-        this.image = image;
-        this.status = status;
-        this.dealType = dealType;
-        this.title = title;
-        this.description = description;
-        this.furnishLevel = furnishLevel;
-        this.bedroomcount = bedroomcount;
-        this.bathroomcount = bathroomcount;
-        this.wholeapartment = wholeapartment;
-
-    }
-
-    public Property(String propertyID, User owner, String flatType, String block, String streetname, String floorlevel,
-                    String floorarea, String price, String image, String status, String dealType, String title, String description,
-                    String furnishLevel, String bedroomcount, String bathroomcount, String wholeapartment, String createdate) {
-
-        this.propertyID = propertyID;
-        this.owner = owner;
-        this.flatType = flatType;
-        this.block = block;
-        this.streetname = streetname;
-        this.floorlevel = floorlevel;
-        this.floorarea = floorarea;
-        this.price = price;
-        this.image = image;
-        this.status = status;
-        this.dealType = dealType;
-        this.title = title;
-        this.description = description;
-        this.furnishLevel = furnishLevel;
-        this.bedroomcount = bedroomcount;
-        this.bathroomcount = bathroomcount;
-        this.wholeapartment = wholeapartment;
-        this.createdate = createdate;
-    }
-
-    private String propertyID;
-    private User owner;
-    private String flatType;
-    private String block;
-    private String streetname;
-    private String floorlevel;
-    private String floorarea;
-    private String price;
-    private String image;
-    private String status;
-    private String dealType;
-    private String title;
-    private String description;
-    private String furnishLevel;
-    private String bedroomcount;
-    private String bathroomcount;
-    private String wholeapartment;
-    private String createdate;
 
 }

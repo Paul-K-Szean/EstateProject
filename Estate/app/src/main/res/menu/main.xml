@@ -3,28 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
-        android:id="@+id/action_favorite"
-        android:icon="@drawable/ic_action_home"
-        android:title="favourite"
-        app:showAsAction="always"
-        android:visible="false" />
+        android:id="@+id/menu_action_searchQuery"
+        android:icon="@drawable/ic_action_search"
+        android:title="search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always" />
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_logout"
-        android:orderInCategory="100"
-        android:title="Logout"
-        app:showAsAction="never" />
-
-
-    <!--<item-->
-    <!--android:id="@+id/search_button"-->
-    <!--android:title="search"-->
-    <!--android:icon="@drawable/ic_action_search"-->
-    <!--app:showAsAction="ifRoom|collapseActionView"-->
-    <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
-    <!--/>-->
+        android:id="@+id/menu_action_inbox"
+        android:icon="@drawable/ic_action_chat"
+        android:title="Inbox"
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>

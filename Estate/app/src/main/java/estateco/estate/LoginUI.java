@@ -12,7 +12,7 @@ import android.widget.TextView;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.User;
-import handler.SQLiteHandler;
+import handler.JSONHandler;
 import handler.SessionHandler;
 import handler.Utility;
 
@@ -20,7 +20,7 @@ public class LoginUI extends Activity {
     private static final String TAG = LoginUI.class.getSimpleName();
 
     private SessionHandler session;
-    private SQLiteHandler db;
+    private JSONHandler.SQLiteHandler db;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private User user;
@@ -52,7 +52,7 @@ public class LoginUI extends Activity {
 
         // setup ctrl objects
         session = new SessionHandler(getApplicationContext());
-        db = new SQLiteHandler(getApplicationContext());
+        db = new JSONHandler.SQLiteHandler(getApplicationContext());
         userCtrl = new UserCtrl(getApplicationContext(), session);
         propertyCtrl = new PropertyCtrl(getApplicationContext());
 
@@ -64,8 +64,8 @@ public class LoginUI extends Activity {
             finish();
         } else {
             // remove any existing data in local db.
-            userCtrl.deleteUserDetails();
-            propertyCtrl.deletePropertyDetails();
+            userCtrl.deleteUserTable();
+            propertyCtrl.deletePropertyTable();
             session.setLogin(false);
         }
 

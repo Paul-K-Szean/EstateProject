@@ -10,49 +10,56 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
-import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import controllers.EstateConfig;
+import controllers.FavouriteCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
+import entities.Favourite;
 import entities.Property;
 import entities.User;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
 import handler.ImageHandler;
-import handler.SQLiteHandler;
-import handler.SessionHandler;
+import handler.JSONHandler;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentPropertyDetails extends Fragment implements View.OnClickListener {
+public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuItemClickListener {
     private static final String TAG = FragmentPropertyDetails.class.getSimpleName();
+    private static final String TAG_FARVOURITE = "favourite";
     private static final String TAG_PHONECALL = "phonecall";
     private static final String TAG_PHONEMESSAGE = "phonemessage";
-    private SessionHandler session;
-    private SQLiteHandler db;
+
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
+    private FavouriteCtrl favouriteCtrl;
 
     private User user;
     private User owner;
-    private Property property;
+    private static Property property;
+    private static Favourite favourite;
+    ArrayList<Favourite> favouriteArrayList;
+    static Boolean isFavourited = false;
 
     TextView tvPropDetTitle, tvPropDetDesc, tvPropDetFlatType, tvPropDetDealType, tvPropDetFurnishLevel, tvPropDetPrice, tvPropDetBedroomCount,
             tvPropDetBathroomCount, tvPropDetFloorArea, tvPropDetStreetName, tvPropDetFloorLevel, tvPropDetBlock, tvPropDetWholeApartment,
@@ -62,7 +69,8 @@ public class FragmentPropertyDetails extends Fragment implements View.OnClickLis
             valProDetDealType, valProDetTitle, valProDetDescription, valProDetFurnishLevel, valProDetPrice,
             valProDetBlock, valProDetStreetName, valProDetImage, valProDetStatus, valProDetBedroomCount, valProDetBathroomCount,
             valProDetFloorLevel, valProDetFloorArea, valProDetWholeApartment, valProDetCreatedDate;
-    Toolbar toolbar;
+    Toolbar toolBarTop, toolBarBottom;
+    MenuItem menuItemFavourite, menuItemFavouriteCount;
 
 
     public FragmentPropertyDetails() {
@@ -75,31 +83,34 @@ public class FragmentPropertyDetails extends Fragment implements View.OnClickLis
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_property_details, container, false);
-        savedInstanceState = getArguments();
-        setControls(view, savedInstanceState);
+        savedInstanceState = getActivity().getIntent().getExtras();
+
 
         // setup ctrl objects
-        db = new SQLiteHandler(getActivity());
         userCtrl = new UserCtrl(getActivity());
-        user = userCtrl.getUserDetails();
         propertyCtrl = new PropertyCtrl(getActivity());
+        favouriteCtrl = new FavouriteCtrl(getActivity());
+        user = userCtrl.getUserDetails();
 
-
+        // set controls to user property
+        setPropertyDetails(view, savedInstanceState);
+        setControls(view, savedInstanceState);
         return view;
     }
 
     private void setControls(View view, Bundle savedInstanceState) {
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Property Details");
-        // TODO SHOW FAVOURITE ICON
-        //        Log.i(TAG, toolbar.getMenu().getItem(0).toString());
-        //        Log.i(TAG, toolbar.getMenu().getItem(1).toString());
-        //        Log.i(TAG, toolbar.getMenu().getItem(2).toString());
+        toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
+        toolBarTop.setTitle("Property Details");
 
-        //
-
-        // create icons for floating action bar
-        setFloatingAction();
+        toolBarBottom = (Toolbar) getActivity().findViewById(R.id.toolbar_bottom);
+        toolBarBottom.setVisibility(View.VISIBLE);
+        toolBarBottom.setOnMenuItemClickListener(this);
+        if ((menuItemFavourite = toolBarBottom.getMenu().findItem(R.id.action_favourite)) != null) {
+            menuItemFavourite.setIcon(R.drawable.ic_action_favourite_outline);
+        } else {
+            Log.i(TAG, "Unable to find favourite icon.");
+        }
+        menuItemFavouriteCount = toolBarBottom.getMenu().findItem(R.id.action_favouritecount);
 
 
         imgvPropDetImage = (ImageView) view.findViewById(R.id.IMGVPropDetImage);
@@ -121,6 +132,9 @@ public class FragmentPropertyDetails extends Fragment implements View.OnClickLis
         tvPropDetOwnerContact = (TextView) view.findViewById(R.id.TVPropDet_OwnerContact);
 
 
+    }
+
+    private void setPropertyDetails(View view, final Bundle savedInstanceState) {
         // get property details from server
         Map<String, String> paramValues = new HashMap<>();
         paramValues.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, savedInstanceState.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID).toString());
@@ -157,6 +171,9 @@ public class FragmentPropertyDetails extends Fragment implements View.OnClickLis
                                 valProDetWholeApartment = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT),
                                 valProDetCreatedDate = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
 
+                    } else {
+                        String result = JSONHandler.getResultAsString(getActivity(), response);
+                        Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException error) {
                     error.printStackTrace();
@@ -187,49 +204,78 @@ public class FragmentPropertyDetails extends Fragment implements View.OnClickLis
                 tvPropDetOwnerEmail.setText(valProDetOwnerEmail);
                 tvPropDetOwnerContact.setText(valProDetOwnerContact);
 
-
+                // set favourite icon
+                setFavouritedIcon(property);
             }
         }).execute();
 
+    }
+
+    private void setFavouritedIcon(Property property) {
+        // set isFavourited initially to false as default display.;
+        isFavourited = false;
+        favouriteArrayList = favouriteCtrl.getUserFavouriteProperties(user);
+        for (Favourite favourite : favouriteArrayList) {
+            Log.i(TAG, "propertyID(" + property.getPropertyID().toString() +
+                    ") == favourite.getPropertyID(" +
+                    favourite.getPropertyID().toString() + ") == " +
+                    (property.getPropertyID().toString().equals(favourite.getPropertyID().toString())));
+            // display favourite or un-favourite
+            if (property.getPropertyID().toString().equals(favourite.getPropertyID().toString())) {
+                isFavourited = true;
+                this.favourite = favourite;
+                menuItemFavourite.setIcon(R.drawable.ic_action_favourite);
+                break;
+            }
+        }
+        // display favourite count
+        favouriteCtrl.serverGetFavouriteCount(FragmentPropertyDetails.this, new Favourite(user.getUserID(), property.getPropertyID()));
 
     }
 
-    private void setFloatingAction() {
-
-
-        // in Activity Context
-        ImageView icon = new ImageView(getActivity()); // Create an icon
-
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(getActivity())
-                .setContentView(icon)
-                .setBackgroundDrawable(R.drawable.selector_mainfab)
-                .build();
-
-
-        // icons
-        ImageView itemIconPhoneCall = new ImageView(getActivity());
-        itemIconPhoneCall.setImageResource(R.drawable.ic_action_phonecall_white);
-        ImageView itemIconMessage = new ImageView(getActivity());
-        itemIconMessage.setImageResource(R.drawable.ic_action_message_white);
-
-        // sub buttons
-        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(getActivity())
-                .setBackgroundDrawable(getResources().getDrawable(R.drawable.selector_subfab));
-
-        SubActionButton btnPhoneCall = itemBuilder.setContentView(itemIconPhoneCall).build();
-        SubActionButton btnMessage = itemBuilder.setContentView(itemIconMessage).build();
-        btnPhoneCall.setOnClickListener(this);
-        btnMessage.setOnClickListener(this);
-        btnPhoneCall.setTag(TAG_PHONECALL);
-        btnMessage.setTag(TAG_PHONEMESSAGE);
-
-        // create fab
-        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(getActivity())
-                .addSubActionView(btnPhoneCall)
-                .addSubActionView(btnMessage)
-                .attachTo(actionButton)
-                .build();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getActivity().startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:" + property.getOwner().getContact())));
+        } else {
+            return;
+        }
     }
+
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_favourite) {
+            Log.i(TAG, TAG_FARVOURITE + " action clicked. isFavourite value was = " + isFavourited);
+            if (isFavourited) {
+                isFavourited = false;
+                Log.i(TAG, "Trying to un-favourite this property. isFavourite value is = " + isFavourited);
+                item.setIcon(R.drawable.ic_action_favourite_outline);
+                // un-favourite property
+                favouriteCtrl.serverDeleteFavouriteProperty(FragmentPropertyDetails.this, favourite);
+            } else {
+                isFavourited = true;
+                Log.i(TAG, "Trying to favourite this property. isFavourite value is = " + isFavourited);
+                item.setIcon(R.drawable.ic_action_favourite);
+                favourite = new Favourite(user.getUserID(), property.getPropertyID());
+                // favourite property
+                favouriteCtrl.serverNewFavouriteProperty(FragmentPropertyDetails.this, favourite);
+            }
+        }
+        if (id == R.id.action_phone_call) {
+            Toast.makeText(getActivity(), TAG_PHONECALL, LENGTH_SHORT).show();
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
+            Log.i(TAG, TAG_PHONECALL + " action clicked");
+        }
+        if (id == R.id.action_phone_message) {
+            Toast.makeText(getActivity(), TAG_PHONEMESSAGE, LENGTH_SHORT).show();
+            Log.i(TAG, TAG_PHONEMESSAGE + " action clicked");
+        }
+        return false;
+    }
+
 
     @Override
     public void onStart() {
@@ -253,7 +299,6 @@ public class FragmentPropertyDetails extends Fragment implements View.OnClickLis
             userCtrl.updateUserDetails(user);
         } else
             Log.e(TAG, "No user to retain");
-
     }
 
     @Override
@@ -263,31 +308,15 @@ public class FragmentPropertyDetails extends Fragment implements View.OnClickLis
     }
 
     @Override
+    public void onDestroyView() {
+        Log.w(TAG, "onDestroyView");
+        super.onDestroyView();
+        toolBarBottom.setVisibility(View.GONE);
+    }
+
+    @Override
     public void onDestroy() {
         Log.w(TAG, "onDestroy");
         super.onDestroy();
     }
-
-
-    @Override
-    public void onClick(View v) {
-        if (v.getTag().equals(TAG_PHONECALL)) {
-            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
-        }
-        if (v.getTag().equals(TAG_PHONEMESSAGE)) {
-
-        }
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getActivity().startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:" + property.getOwner().getContact())));
-        }
-    }
-
-
 }

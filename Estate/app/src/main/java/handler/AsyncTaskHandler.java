@@ -51,7 +51,11 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
         Log.w("onPreExecute", "onPreExecute()");
         IsInternetConnected = EstateCtrl.CheckInternetConnection(activity);
         // disable dialog for searching function
-        if (URLAddress.toLowerCase().equals(EstateConfig.URL_SEARCHLISTINGS)) {
+        if (URLAddress.toLowerCase().equals(EstateConfig.URL_SEARCHLISTINGS) ||
+                URLAddress.toLowerCase().equals(EstateConfig.URL_LEASELISTINGS) ||
+                URLAddress.toLowerCase().equals(EstateConfig.URL_SALELISTINGS) ||
+                URLAddress.toLowerCase().equals(EstateConfig.URL_NEWFAVOURITEPROPERTY) ||
+                URLAddress.toLowerCase().equals(EstateConfig.URL_DELETEFAVOURITEPROPERTY)) {
             // disable loading dialog
             pDialog.setIndeterminate(false);
             pDialog.setMessage("");

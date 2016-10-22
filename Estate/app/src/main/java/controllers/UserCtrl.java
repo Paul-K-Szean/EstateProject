@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 
@@ -14,12 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import entities.User;
-import estateco.estate.JSONHandler;
 import estateco.estate.LoginUI;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
-import handler.SQLiteHandler;
+import handler.JSONHandler;
 import handler.SessionHandler;
 
 /**
@@ -30,7 +30,7 @@ public class UserCtrl {
     private static final String TAG = UserCtrl.class.getSimpleName();
 
     private SessionHandler session;
-    private SQLiteHandler db;
+    private JSONHandler.SQLiteHandler db;
     private User user;
 
     // table name
@@ -46,12 +46,12 @@ public class UserCtrl {
 
     public UserCtrl(Context context) {
         // SQLite database handler
-        db = new SQLiteHandler(context);
+        db = new JSONHandler.SQLiteHandler(context);
     }
 
     public UserCtrl(Context context, SessionHandler session) {
         // SQLite database handler
-        db = new SQLiteHandler(context);
+        db = new JSONHandler.SQLiteHandler(context);
         this.session = session;
     }
 
@@ -90,8 +90,8 @@ public class UserCtrl {
     }
 
     // remove user details from local db
-    public void deleteUserDetails() {
-        db.deleteUsers();
+    public void deleteUserTable() {
+        db.deleteUserTable();
     }
 
     // **********************************************************************
@@ -121,7 +121,8 @@ public class UserCtrl {
                         activity.startActivity(new Intent(activity, LoginUI.class));
                         activity.finish();
                     } else {
-
+                        String result = JSONHandler.getResultAsString(activity, response);
+                        Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException error) {
                     ErrorHandler.errorHandler(activity, error);
@@ -139,12 +140,12 @@ public class UserCtrl {
         paramValues.put(UserCtrl.KEY_CONTACT, valRegContact);
         new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_REGISTER, paramValues, activity, new AsyncTaskResponse() {
             @Override
+            // server side created account
             public void onAsyncTaskResponse(String response) {
                 String result = JSONHandler.getResultAsString(activity, response);
                 Log.i(TAG, "serverUserRegister: " + result.toString());
-
-                if (result.equals("true")) {
-                    // server side created account
+                Toast.makeText(activity, result, Toast.LENGTH_LONG).show();
+                if (result.contains("successfully")) {
                     activity.startActivity(new Intent(activity, LoginUI.class));
                     activity.finish();
                 }

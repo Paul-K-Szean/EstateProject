@@ -12,7 +12,7 @@ import android.widget.TextView;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.User;
-import handler.SQLiteHandler;
+import handler.JSONHandler;
 import handler.SessionHandler;
 import handler.Utility;
 
@@ -20,7 +20,7 @@ public class RegisterUI extends Activity {
     private static final String TAG = RegisterUI.class.getSimpleName();
 
     private SessionHandler session;
-    private SQLiteHandler db;
+    private JSONHandler.SQLiteHandler db;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private User user;
@@ -46,7 +46,7 @@ public class RegisterUI extends Activity {
 
         // setup ctrl objects
         session = new SessionHandler(getApplicationContext());
-        db = new SQLiteHandler(getApplicationContext());
+        db = new JSONHandler.SQLiteHandler(getApplicationContext());
         userCtrl = new UserCtrl(getApplicationContext(), session);
         propertyCtrl = new PropertyCtrl(getApplicationContext());
 
@@ -56,8 +56,8 @@ public class RegisterUI extends Activity {
             startActivity(new Intent(RegisterUI.this, MainUI.class));
             finish();
         } else {
-            userCtrl.deleteUserDetails();
-            propertyCtrl.deletePropertyDetails();
+            userCtrl.deleteUserTable();
+            propertyCtrl.deletePropertyTable();
             session.setLogin(false);
         }
 

@@ -1,17 +1,17 @@
 package estateco.estate;
 
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -21,9 +21,10 @@ import controllers.UserCtrl;
 import entities.Property;
 import entities.User;
 import handler.FragmentHandler;
-import handler.SQLiteHandler;
-import handler.SessionHandler;
-import handler.ViewAdapterAllProperties;
+import handler.ViewAdapter;
+import tabs.SlidingTabLayout;
+
+import static android.view.View.GONE;
 
 
 /**
@@ -31,18 +32,19 @@ import handler.ViewAdapterAllProperties;
  */
 public class FragmentUserListings extends Fragment {
     private static final String TAG = FragmentUserListings.class.getSimpleName();
-    private ProgressDialog pDialog;
-    private SessionHandler session;
-    private SQLiteHandler db;
+
     private UserCtrl userCtrl;
     private User user;
     private PropertyCtrl propertyCtrl;
-    private ArrayList<Property> userProperties;
 
+    private RecyclerView recycler;
+    private ViewAdapter viewAdapter;
+    private ArrayList<Property> propertyArrayList;
     Button btnNewListing;
-    GridView gvUserListings;
     TextView tvUserMsg, itemDataID;
-    Toolbar toolbar;
+    Toolbar toolBarTop;
+    private SlidingTabLayout slidingTabLayout;
+    private ViewPager viewPager;
 
     public FragmentUserListings() {
         // Required empty public constructor
@@ -56,36 +58,26 @@ public class FragmentUserListings extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_listings, container, false);
 
         // setup ctrl objects
-        db = new SQLiteHandler(getActivity());
         userCtrl = new UserCtrl(getActivity());
         user = userCtrl.getUserDetails();
         propertyCtrl = new PropertyCtrl(getActivity());
 
+        viewPager = (ViewPager) getActivity().findViewById(R.id.ViewPagerMain);
+        viewPager.setVisibility(GONE);
+        slidingTabLayout = (SlidingTabLayout) getActivity().findViewById(R.id.TabLayoutMain);
+        slidingTabLayout.setVisibility(GONE);
 
-        // check if user is already logged in or not
-        session = new SessionHandler(getActivity());
-        if (session.isLoggedIn()) {
-            // User is already logged in. Take him to main activity
-
-        } else {
-            userCtrl.deleteUserDetails();
-            session.setLogin(false);
-            // getActivity().finish();
-        }
 
         setControls(view);
-
-
         return view;
     }
 
     public void setControls(View view) {
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("My Lisings");
+        toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
+        toolBarTop.setTitle("My Listings");
+        toolBarTop.getMenu().findItem(R.id.menu_action_searchQuery).setVisible(false);
         // error msg
-        tvUserMsg = (TextView) view.findViewById(R.id.TVUserMsg);
-
-        gvUserListings = (GridView) view.findViewById(R.id.GVUserListings);
+        tvUserMsg = (TextView) view.findViewById(R.id.TVUserListingsCount);
 
         // new property listing
         btnNewListing = (Button) view.findViewById(R.id.BTNNewListing);
@@ -99,26 +91,20 @@ public class FragmentUserListings extends Fragment {
 
 
         // retrieves data from local db
-        userProperties = propertyCtrl.getUserProperties(user);
-        // displays into grid view
-        gvUserListings.setAdapter(new ViewAdapterAllProperties(getActivity(), userProperties));
+        propertyArrayList = propertyCtrl.getUserProperties(user);
+        // displays into recycler view
+        recycler = (RecyclerView) view.findViewById(R.id.recycleView);
+        viewAdapter = new ViewAdapter(FragmentUserListings.this, propertyArrayList);
+        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recycler.setAdapter(viewAdapter);
 
-        if (userProperties.size() > 1)
-            tvUserMsg.setText("You have a total of " + userProperties.size() + " properties");
+
+        if (propertyArrayList.size() > 1)
+            tvUserMsg.setText("You have a total of " + propertyArrayList.size() + " properties");
         else
-            tvUserMsg.setText("You have a total of " + userProperties.size() + " property");
+            tvUserMsg.setText("You have a total of " + propertyArrayList.size() + " property");
 
-        // item selected behaviour
-        gvUserListings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // retrieve property id
-                itemDataID = (TextView) view.findViewById(R.id.TVLblPropertyID);
-                Bundle bundlePropertyDetails = new Bundle();
-                bundlePropertyDetails.putString(PropertyCtrl.KEY_PROPERTY_PROPERTYID, itemDataID.getText().toString());
-                FragmentHandler.loadFragment(FragmentUserListings.this, new FragmentUpdateUserProperty(), bundlePropertyDetails);
-            }
-        });
+
     }
 
     @Override
@@ -150,6 +136,13 @@ public class FragmentUserListings extends Fragment {
     public void onStop() {
         Log.w(TAG, "onStop");
         super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.w(TAG, "onDestroyView");
+        super.onDestroyView();
+
     }
 
     @Override

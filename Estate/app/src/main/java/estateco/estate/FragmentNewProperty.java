@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,8 +47,7 @@ import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
 import handler.ImageHandler;
-import handler.SQLiteHandler;
-import handler.SessionHandler;
+import handler.JSONHandler;
 import handler.Utility;
 
 import static controllers.EstateConfig.URL_GOVDATA_RESALEFLATPRICES;
@@ -61,12 +61,11 @@ import static controllers.PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
 public class FragmentNewProperty extends Fragment {
     private static final String TAG = FragmentNewProperty.class.getSimpleName();
 
-    private SessionHandler session;
-    private SQLiteHandler db;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private User user;
     private Property property;
+    Toolbar toolBarTop;
 
     public FragmentNewProperty() {
         // Required empty public constructor
@@ -77,25 +76,14 @@ public class FragmentNewProperty extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_new_property, container, false);
-        setControls(view);
+
 
         // setup ctrl objects
-        session = new SessionHandler(getActivity());
-        db = new SQLiteHandler(getActivity());
-        userCtrl = new UserCtrl(getActivity(), session);
-        propertyCtrl = new PropertyCtrl(getActivity(), session);
+        userCtrl = new UserCtrl(getActivity());
+        propertyCtrl = new PropertyCtrl(getActivity());
         user = userCtrl.getUserDetails();
 
-        // check if user is already logged in or not
-        if (session.isLoggedIn()) {
-            // User is already logged in. Take him to main activity
-        } else {
-            db.deleteUsers();
-            session.setLogin(false);
-            // getActivity().finish();
-        }
-
-
+        setControls(view);
         return view;
     }
 
@@ -113,6 +101,11 @@ public class FragmentNewProperty extends Fragment {
 
 
     public void setControls(View view) {
+        toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
+        toolBarTop.setTitle("My Listings");
+        toolBarTop.getMenu().findItem(R.id.menu_action_searchQuery).setVisible(false);
+
+
         // check box
         chkbxNewWholeApartment = (CheckBox) view.findViewById(R.id.CHKBXNewWholeApartment);
         chkbxNewWholeApartment.setChecked(false);
@@ -188,7 +181,7 @@ public class FragmentNewProperty extends Fragment {
                                                                 if (jsonArray instanceof JSONArray) {
 
                                                                     int resultArrSize = jsonArray.length();
-                                                                    int randomIndex = Utility.generateNumber(0, resultArrSize);
+                                                                    int randomIndex = Utility.generateNumber(0, resultArrSize - 1);
                                                                     JSONObject jsonRandomObject = (JSONObject) jsonArray.get(randomIndex);
                                                                     Log.i(TAG, jsonArray.get(randomIndex).toString());
                                                                     Log.i(TAG, jsonRandomObject.getString("flat_type").toString());
@@ -320,6 +313,10 @@ public class FragmentNewProperty extends Fragment {
                                                              etNewFloorArea.setError("Required field!");
                                                      } else {
                                                          valNewStatus = "open";
+
+                                                         if(valNewDealType.equals(DealType.ForLease.toString()) && valNewWholeApartment.equals(KEY_PROPERTY_ROOM))
+                                                            valNewPrice = String.valueOf((Double.valueOf(valNewPrice)) / 1000);
+
                                                          // create property to server
                                                          property = new Property(
                                                                  user,
@@ -339,7 +336,7 @@ public class FragmentNewProperty extends Fragment {
                                                                  valNewBathroomCount,
                                                                  valNewWholeApartment);
 
-                                                         propertyCtrl.serverNewProperty(getActivity(), FragmentNewProperty.this, property, user);
+                                                         propertyCtrl.serverNewProperty(FragmentNewProperty.this, property, user);
                                                      }
                                                  }
                                              }
@@ -423,6 +420,13 @@ public class FragmentNewProperty extends Fragment {
     public void onStop() {
         Log.w(TAG, "onStop");
         super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.w(TAG, "onDestroyView");
+        super.onDestroyView();
+
     }
 
     @Override
