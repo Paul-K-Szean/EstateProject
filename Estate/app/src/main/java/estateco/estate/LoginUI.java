@@ -12,7 +12,7 @@ import android.widget.TextView;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.User;
-import handler.JSONHandler;
+import handler.SQLiteHandler;
 import handler.SessionHandler;
 import handler.Utility;
 
@@ -20,7 +20,7 @@ public class LoginUI extends Activity {
     private static final String TAG = LoginUI.class.getSimpleName();
 
     private SessionHandler session;
-    private JSONHandler.SQLiteHandler db;
+    private SQLiteHandler db;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private User user;
@@ -37,26 +37,14 @@ public class LoginUI extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.w(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Log.w(TAG, "onCreate");
-        etLoginEmail = (EditText) findViewById(R.id.ETLoginEmail);
-        etLoginPassword = (EditText) findViewById(R.id.ETLoginPassword);
-        btnLogin = (Button) findViewById(R.id.BTNLogin);
-        tvErrorMsgLogin = (TextView) findViewById(R.id.TVErrorMsgLogin);
-        tvRegisterLink = (TextView) findViewById(R.id.TVRegisterLink);
-
-        etLoginEmail.setText("user01@gmail.com");
-        etLoginPassword.setText("user01");
-
-
         // setup ctrl objects
         session = new SessionHandler(getApplicationContext());
-        db = new JSONHandler.SQLiteHandler(getApplicationContext());
+        db = new SQLiteHandler(getApplicationContext());
         userCtrl = new UserCtrl(getApplicationContext(), session);
         propertyCtrl = new PropertyCtrl(getApplicationContext());
-
-
         // check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
@@ -68,6 +56,15 @@ public class LoginUI extends Activity {
             propertyCtrl.deletePropertyTable();
             session.setLogin(false);
         }
+        etLoginEmail = (EditText) findViewById(R.id.ETLoginEmail);
+        etLoginPassword = (EditText) findViewById(R.id.ETLoginPassword);
+        btnLogin = (Button) findViewById(R.id.BTNLogin);
+        tvErrorMsgLogin = (TextView) findViewById(R.id.TVErrorMsgLogin);
+        tvRegisterLink = (TextView) findViewById(R.id.TVRegisterLink);
+
+        etLoginEmail.setText("user01@gmail.com");
+        etLoginPassword.setText("user01");
+
 
         // login button click
         btnLogin.setOnClickListener(new View.OnClickListener() {

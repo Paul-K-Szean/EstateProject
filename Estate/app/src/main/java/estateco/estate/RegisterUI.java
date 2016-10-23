@@ -12,7 +12,7 @@ import android.widget.TextView;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.User;
-import handler.JSONHandler;
+import handler.SQLiteHandler;
 import handler.SessionHandler;
 import handler.Utility;
 
@@ -20,7 +20,7 @@ public class RegisterUI extends Activity {
     private static final String TAG = RegisterUI.class.getSimpleName();
 
     private SessionHandler session;
-    private JSONHandler.SQLiteHandler db;
+    private SQLiteHandler db;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private User user;
@@ -32,24 +32,14 @@ public class RegisterUI extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.w(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        etRegName = (EditText) findViewById(R.id.ETRegName);
-        etRegEmail = (EditText) findViewById(R.id.ETRegEmail);
-        etRegPassword01 = (EditText) findViewById(R.id.ETRegPassword01);
-        etRegPassword02 = (EditText) findViewById(R.id.ETRegPassword02);
-        btnRegister = (Button) findViewById(R.id.BTNRegister);
-        btnRegRandom = (Button) findViewById(R.id.BTNRegRandom);
-
-        tvLoginLink = (TextView) findViewById(R.id.TVLoginLink);
-
-
         // setup ctrl objects
         session = new SessionHandler(getApplicationContext());
-        db = new JSONHandler.SQLiteHandler(getApplicationContext());
+        db = new SQLiteHandler(getApplicationContext());
         userCtrl = new UserCtrl(getApplicationContext(), session);
         propertyCtrl = new PropertyCtrl(getApplicationContext());
-
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
@@ -60,6 +50,15 @@ public class RegisterUI extends Activity {
             propertyCtrl.deletePropertyTable();
             session.setLogin(false);
         }
+
+        etRegName = (EditText) findViewById(R.id.ETRegName);
+        etRegEmail = (EditText) findViewById(R.id.ETRegEmail);
+        etRegPassword01 = (EditText) findViewById(R.id.ETRegPassword01);
+        etRegPassword02 = (EditText) findViewById(R.id.ETRegPassword02);
+        btnRegister = (Button) findViewById(R.id.BTNRegister);
+        btnRegRandom = (Button) findViewById(R.id.BTNRegRandom);
+
+        tvLoginLink = (TextView) findViewById(R.id.TVLoginLink);
 
         btnRegRandom.setOnClickListener(new View.OnClickListener() {
             @Override

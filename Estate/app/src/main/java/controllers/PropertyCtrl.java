@@ -23,6 +23,7 @@ import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
 import handler.FragmentHandler;
 import handler.JSONHandler;
+import handler.SQLiteHandler;
 import handler.SessionHandler;
 
 /**
@@ -33,7 +34,7 @@ public class PropertyCtrl {
     private static final String TAG = PropertyCtrl.class.getSimpleName();
 
     private SessionHandler session;
-    private JSONHandler.SQLiteHandler db;
+    private SQLiteHandler db;
     private Property property;
     private View view;
 
@@ -66,12 +67,12 @@ public class PropertyCtrl {
 
     public PropertyCtrl(Context context) {
         // SQLite database handler
-        db = new JSONHandler.SQLiteHandler(context);
+        db = new SQLiteHandler(context);
     }
 
     public PropertyCtrl(Context context, SessionHandler session) {
         // SQLite database handler
-        db = new JSONHandler.SQLiteHandler(context);
+        db = new SQLiteHandler(context);
         this.session = session;
     }
 
@@ -122,9 +123,13 @@ public class PropertyCtrl {
     }
 
     // update user property from local db
-
     public void updateUserPropertyDetails(Property property) {
         db.updateUserProperty(property);
+    }
+
+
+    public int getUserPropertyCountDetails(){
+        return db.getUserPropertyCount();
     }
 
     // remove all property from local db

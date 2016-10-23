@@ -13,14 +13,14 @@ import controllers.FavouriteCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.User;
-import handler.JSONHandler;
+import handler.SQLiteHandler;
 import handler.SessionHandler;
 
 public class PropertyDetailsUI extends AppCompatActivity {
     private static final String TAG = PropertyDetailsUI.class.getSimpleName();
 
     private SessionHandler session;
-    private JSONHandler.SQLiteHandler db;
+    private SQLiteHandler db;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
@@ -29,27 +29,13 @@ public class PropertyDetailsUI extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.w(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub);
-
-        // sets the initial fragment to load for this activity
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new FragmentPropertyDetails());
-        fragmentTransaction.commit();
-
-
-        // tool bars
-        toolBarTop = (Toolbar) findViewById(R.id.toolbar_top);
-        toolBarTop.setTitle("Property Details");
-        setSupportActionBar(toolBarTop);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toolBarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
-        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
-
+        savedInstanceState = getIntent().getExtras();
         // setup ctrl objects
         session = new SessionHandler(getApplicationContext());
-        db = new JSONHandler.SQLiteHandler(getApplicationContext());
+        db = new SQLiteHandler(getApplicationContext());
         userCtrl = new UserCtrl(getApplicationContext(), session);
         propertyCtrl = new PropertyCtrl(getApplicationContext());
         favouriteCtrl = new FavouriteCtrl(getApplicationContext());
@@ -64,6 +50,25 @@ public class PropertyDetailsUI extends AppCompatActivity {
             favouriteCtrl.deleteFavouritePropertyTable();
             session.setLogin(false);
         }
+        // sets the initial fragment to load for this activity
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new FragmentPropertyDetails());
+        fragmentTransaction.commit();
+        // tool bars
+        toolBarTop = (Toolbar) findViewById(R.id.toolbar_top);
+        toolBarTop.setTitle("Property Details");
+        setSupportActionBar(toolBarTop);
+
+
+        if (savedInstanceState.get("previousfragment").toString().equals(FragmentUserFavouriteListings.class.getSimpleName())) {
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        } else
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        toolBarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
+        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
 
 
     }

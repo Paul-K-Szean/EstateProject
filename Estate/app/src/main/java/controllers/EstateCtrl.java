@@ -165,7 +165,6 @@ public class EstateCtrl extends Application {
                             propertyCtrl.addPropertyDetails(property);
                         }// end of for loop
 
-                        EstateCtrl.syncUserFavouritePropertiesToLocalDB(activity, user);
                     }
                 } catch (JSONException error) {
                     // JSON error

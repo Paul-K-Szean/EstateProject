@@ -10,6 +10,7 @@ import entities.Favourite;
 import entities.Inbox;
 import entities.User;
 import handler.JSONHandler;
+import handler.SQLiteHandler;
 import handler.SessionHandler;
 
 /**
@@ -20,7 +21,7 @@ public class InboxCtrl {
     private static final String TAG = InboxCtrl.class.getSimpleName();
 
     private SessionHandler session;
-    private JSONHandler.SQLiteHandler db;
+    private SQLiteHandler db;
     private Inbox inbox;
     // table name
     public static final String TABLE_INBOX = "estate_inbox";
@@ -37,12 +38,12 @@ public class InboxCtrl {
 
     public InboxCtrl(Context context) {
         // SQLite database handler
-        db = new JSONHandler.SQLiteHandler(context);
+        db = new SQLiteHandler(context);
     }
 
     public InboxCtrl(Context context, SessionHandler session) {
         // SQLite database handler
-        db = new JSONHandler.SQLiteHandler(context);
+        db = new SQLiteHandler(context);
         this.session = session;
     }
 

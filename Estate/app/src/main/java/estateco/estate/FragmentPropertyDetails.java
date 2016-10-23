@@ -110,7 +110,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
         } else {
             Log.i(TAG, "Unable to find favourite icon.");
         }
-        menuItemFavouriteCount = toolBarBottom.getMenu().findItem(R.id.action_favouritecount);
+        menuItemFavouriteCount = toolBarBottom.getMenu().findItem(R.id.action_propertyfavouritecount);
 
 
         imgvPropDetImage = (ImageView) view.findViewById(R.id.IMGVPropDetImage);
@@ -229,7 +229,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
             }
         }
         // display favourite count
-        favouriteCtrl.serverGetFavouriteCount(FragmentPropertyDetails.this, new Favourite(user.getUserID(), property.getPropertyID()));
+        favouriteCtrl.serverGetPropertyFavouriteCount(FragmentPropertyDetails.this, new Favourite(user.getUserID(), property.getPropertyID()));
 
     }
 

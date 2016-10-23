@@ -13,12 +13,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import controllers.FavouriteCtrl;
+import controllers.UserCtrl;
+import entities.Favourite;
 import entities.Property;
 import entities.User;
 import estateco.estate.FragmentUpdateUserProperty;
 import estateco.estate.FragmentUserListings;
-import estateco.estate.R;
 import estateco.estate.PropertyDetailsUI;
+import estateco.estate.R;
 
 import static android.view.View.GONE;
 import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
@@ -33,11 +36,19 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.MyViewHolder> 
     private Fragment fragment;
     private ArrayList<Property> propertyArrayList;
     private final LayoutInflater inflator;
+    private FavouriteCtrl favouriteCtrl;
+    private UserCtrl userCtrl;
+    private User user;
+    private Favourite favourite;
+    boolean isFavourited = false;
+    ArrayList<Favourite> favouriteArrayList;
 
     public ViewAdapter(Fragment fragment, ArrayList<Property> property) {
         this.fragment = fragment;
         inflator = LayoutInflater.from(fragment.getContext());
         propertyArrayList = property;
+        favouriteCtrl = new FavouriteCtrl(fragment.getActivity());
+        userCtrl = new UserCtrl(fragment.getActivity());
     }
 
     @Override
@@ -48,8 +59,9 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.MyViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        Property property = propertyArrayList.get(position);
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
+        user = userCtrl.getUserDetails();
+        final Property property = propertyArrayList.get(position);
         User owner = new User(property.getOwner().getUserID(), property.getOwner().getName(), property.getOwner().getEmail(), property.getOwner().getContact());
         // deal details
         holder.tvProDetDealType.setText(property.getDealType());
@@ -75,6 +87,40 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.MyViewHolder> 
         // owner details
         holder.tvProDetOwnerName.setText(owner.getName());
 
+//        favouriteArrayList = favouriteCtrl.getUserFavouriteProperties(user);
+//        for (Favourite favourite : favouriteArrayList) {
+//            Log.i(TAG, "propertyID(" + property.getPropertyID().toString() +
+//                    ") == favourite.getPropertyID(" +
+//                    favourite.getPropertyID().toString() + ") == " +
+//                    (property.getPropertyID().toString().equals(favourite.getPropertyID().toString())));
+//            // display favourite or un-favourite
+//            if (property.getPropertyID().toString().equals(favourite.getPropertyID().toString())) {
+//                isFavourited = true;
+//                this.favourite = favourite;
+//                holder.imgvLblFavouriteIcon.setImageResource(R.drawable.ic_action_favourite);
+//                break;
+//            }
+//        }
+
+        holder.imgvLblFavouriteIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFavourited) {
+                    isFavourited = false;
+                    Log.i(TAG, "Trying to un-favourite this property. isFavourite value is = " + isFavourited);
+                    holder.imgvLblFavouriteIcon.setImageResource(R.drawable.ic_action_favourite_outline);
+                    // un-favourite property
+                    // favouriteCtrl.serverDeleteFavouriteProperty(fragment, favourite);
+                } else {
+                    isFavourited = true;
+                    Log.i(TAG, "Trying to favourite this property. isFavourite value is = " + isFavourited);
+                    holder.imgvLblFavouriteIcon.setImageResource(R.drawable.ic_action_favourite);
+                    favourite = new Favourite(user.getUserID(), property.getPropertyID());
+                    // favourite property
+                    // favouriteCtrl.serverNewFavouriteProperty(fragment, favourite);
+                }
+            }
+        });
     }
 
 
@@ -85,10 +131,11 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.MyViewHolder> 
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView imgvProDetImage;
+        ImageView imgvProDetImage, imgvLblFavouriteIcon;
         TextView tvProDetPropertyID, tvProDetTitle, tvProDetDesc, tvProDetFlatType, tvProDetDealType, tvProDetFurnishLevel, tvProDetPrice,
                 tvProDetBedroomCount, tvProDetBathroomCount, tvProDetFloorArea, tvProDetStreetName, tvProDetFloorLevel, tvProDetBlock,
-                tvProDetStatus, tvProDetWholeApartment, tvProDetOwnerName, tvProDetOwnerEmail, tvProDetOwnerContact, tvHeaderAddress;
+                tvProDetStatus, tvProDetWholeApartment, tvProDetOwnerName, tvProDetOwnerEmail, tvProDetOwnerContact, tvHeaderAddress,
+                tvLblPropertyFavouriteCount;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -99,6 +146,9 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.MyViewHolder> 
             // general details
             tvProDetPropertyID = (TextView) itemView.findViewById(R.id.TVLblPropertyID);
             tvProDetStatus = (TextView) itemView.findViewById(R.id.TVLblStatus);
+            tvLblPropertyFavouriteCount = (TextView) itemView.findViewById(R.id.TVLblPropertyFavouriteCount);
+            imgvLblFavouriteIcon = (ImageView) itemView.findViewById(R.id.IMGVLblFavouriteIcon);
+
             // address details
             tvHeaderAddress = (TextView) itemView.findViewById(R.id.TVHderAddress);
             tvProDetFloorLevel = (TextView) itemView.findViewById(R.id.TVLblFloorLevel);
@@ -110,6 +160,7 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.MyViewHolder> 
             tvProDetFloorArea = (TextView) itemView.findViewById(R.id.TVLblFloorArea);
             // owner details
             tvProDetOwnerName = (TextView) itemView.findViewById(R.id.TVLblOwnerName);
+
 
             itemView.setOnClickListener(this);
 
@@ -125,8 +176,10 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.MyViewHolder> 
             // check for action
             if (fragment.getClass().getSimpleName().contains(FragmentUserListings.class.getSimpleName()))
                 FragmentHandler.loadFragment(fragment, new FragmentUpdateUserProperty(), args);
-            else
+            else {
+                args.putString("previousfragment", fragment.getClass().getSimpleName());
                 fragment.startActivity(new Intent(fragment.getActivity(), PropertyDetailsUI.class).putExtras(args));
+            }
 
         }
     }

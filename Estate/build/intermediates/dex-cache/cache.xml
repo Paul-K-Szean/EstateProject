@@ -25,7 +25,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
-        sha1="fa3f61b82bf94a8f3fb9bb337c47e4a25d05a804">
+        sha1="cd9f38d098d5807baaf434d8411bcb25eeda8f43">
         <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_ff93e1a4e828ba9d3816a821672aebe65e190f04\classes.dex" />
     </item>
     <item
@@ -178,7 +178,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.2"
-        sha1="33b46b5fe186863ece3ee74c59f36ea7158a145d">
+        sha1="13b94615f37eae8c2eac81324103d07ba539201e">
         <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_6420df76ff0c5206da22949c3768f5f66a7b0e95\classes.dex" />
     </item>
     <item

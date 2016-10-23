@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -19,11 +20,14 @@ import java.util.Map;
 
 import entities.Favourite;
 import entities.User;
+import estateco.estate.FragmentMainListings;
+import estateco.estate.FragmentPropertyDetails;
 import estateco.estate.R;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
 import handler.JSONHandler;
+import handler.SQLiteHandler;
 import handler.SessionHandler;
 
 /**
@@ -34,7 +38,7 @@ public class FavouriteCtrl {
     private static final String TAG = FavouriteCtrl.class.getSimpleName();
 
     private SessionHandler session;
-    private JSONHandler.SQLiteHandler db;
+    private SQLiteHandler db;
 
     private View view;
     private Favourite favourite;
@@ -51,12 +55,12 @@ public class FavouriteCtrl {
 
     public FavouriteCtrl(Context context) {
         // SQLite database handler
-        db = new JSONHandler.SQLiteHandler(context);
+        db = new SQLiteHandler(context);
     }
 
     public FavouriteCtrl(Context context, SessionHandler session) {
         // SQLite database handler
-        db = new JSONHandler.SQLiteHandler(context);
+        db = new SQLiteHandler(context);
         this.session = session;
     }
 
@@ -90,6 +94,12 @@ public class FavouriteCtrl {
     public ArrayList<Favourite> getUserFavouriteProperties(User owner) {
         return db.getUserFavouriteProperties(owner);
     }
+
+
+    public int getUserFarvouriteCountDetails() {
+        return db.getUserFavouriteCount();
+    }
+
 
     // delete a favourite property from local db
     public void deleteFavouriteProperty(Favourite favourite) {
@@ -131,7 +141,7 @@ public class FavouriteCtrl {
                         // save to local DB
                         EstateCtrl.syncUserFavouritePropertyToLocalDB(favourite);
                         // display total count
-                        serverGetFavouriteCount(fragment, favourite);
+                        serverGetPropertyFavouriteCount(fragment, favourite);
                     } else {
                         String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
                         Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_SHORT).show();
@@ -161,27 +171,35 @@ public class FavouriteCtrl {
                 // delete from local DB
                 EstateCtrl.syncUserDeletedFavouritePropertyToLocalDB(favourite);
                 // display total count
-                serverGetFavouriteCount(fragment, favourite);
+                serverGetPropertyFavouriteCount(fragment, favourite);
             }
         }).execute();
 
     }
 
     // get favourite count of a property
-    public void serverGetFavouriteCount(final Fragment fragment, final Favourite favourite) {
-        Log.i(TAG, "serverGetFavouriteCount");
+    public void serverGetPropertyFavouriteCount(final Fragment fragment, final Favourite favourite) {
+        Log.i(TAG, "serverGetPropertyFavouriteCount");
         Map<String, String> paramValues = new HashMap<>();
         paramValues.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, favourite.getPropertyID());
 
         if (paramValues != null) {
-            new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_FAVOURITECOUNT, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
+            new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_PROPERTYFAVOURITECOUNT, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
                 @Override
                 public void onAsyncTaskResponse(String response) {
                     String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
                     if (result != null) {
-                        Toolbar toolBarBottom = (Toolbar) fragment.getActivity().findViewById(R.id.toolbar_bottom);
-                        MenuItem menuItemFavouriteCount = toolBarBottom.getMenu().findItem(R.id.action_favouritecount);
-                        menuItemFavouriteCount.setTitle(result);
+                        Log.i(TAG, fragment.getClass().getSimpleName());
+                        if (fragment.getClass().getSimpleName().equals(FragmentPropertyDetails.class.getSimpleName())) {
+                            Toolbar toolBarBottom = (Toolbar) fragment.getActivity().findViewById(R.id.toolbar_bottom);
+                            MenuItem menuItemFavouriteCount = toolBarBottom.getMenu().findItem(R.id.action_propertyfavouritecount);
+                            menuItemFavouriteCount.setTitle(result);
+                        }
+                        if (fragment.getClass().getSimpleName().equals(FragmentMainListings.class.getSimpleName())) {
+                            TextView textView = (TextView) fragment.getView().findViewById(R.id.TVLblPropertyFavouriteCount);
+                            textView.setText(result);
+                        }
+
                     }
                 }
             }).execute();

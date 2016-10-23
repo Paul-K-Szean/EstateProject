@@ -24,8 +24,6 @@
                 android:id="@+id/TVLblPropertyID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/IMGVLblImage"
                 android:text="PropertyID"
                 android:textSize="16sp" />
 
@@ -33,10 +31,8 @@
                 android:id="@+id/TVLblStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-
+                android:layoutDirection="ltr"
                 android:text="Status"
-                android:textAlignment="textEnd"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -51,14 +47,34 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/IMGVLblFavouriteIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_action_favourite_outline" />
+
+                    <TextView
+                        android:id="@+id/TVLblPropertyFavouriteCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/textView9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Deal Details"
                     android:textAlignment="center"
-                    android:textStyle="normal|bold"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="normal|bold" />
 
                 <TextView
                     android:id="@+id/TVLblDealType"
@@ -82,8 +98,8 @@
                     android:layout_height="wrap_content"
                     android:text="House Details"
                     android:textAlignment="center"
-                    android:textStyle="normal|bold"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="normal|bold" />
 
                 <TextView
                     android:id="@+id/TVLblFlatType"
@@ -115,8 +131,8 @@
                     android:layout_height="wrap_content"
                     android:text="Owner"
                     android:textAlignment="center"
-                    android:textStyle="normal|bold"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="normal|bold" />
 
                 <TextView
                     android:id="@+id/TVLblOwnerName"
@@ -130,10 +146,10 @@
                     android:id="@+id/TVHderAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textStyle="normal|bold"
                     android:text="Address"
-                    android:textSize="16sp" />
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:textStyle="normal|bold" />
 
                 <TextView
                     android:id="@+id/TVLblFloorLevel"

@@ -20,6 +20,7 @@ import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
 import handler.JSONHandler;
+import handler.SQLiteHandler;
 import handler.SessionHandler;
 
 /**
@@ -30,7 +31,7 @@ public class UserCtrl {
     private static final String TAG = UserCtrl.class.getSimpleName();
 
     private SessionHandler session;
-    private JSONHandler.SQLiteHandler db;
+    private SQLiteHandler db;
     private User user;
 
     // table name
@@ -46,12 +47,12 @@ public class UserCtrl {
 
     public UserCtrl(Context context) {
         // SQLite database handler
-        db = new JSONHandler.SQLiteHandler(context);
+        db = new SQLiteHandler(context);
     }
 
     public UserCtrl(Context context, SessionHandler session) {
         // SQLite database handler
-        db = new JSONHandler.SQLiteHandler(context);
+        db = new SQLiteHandler(context);
         this.session = session;
     }
 
@@ -118,6 +119,7 @@ public class UserCtrl {
                         );
                         EstateCtrl.syncUserAccountToLocalDB(user);
                         EstateCtrl.syncUserPropertiesToLocalDB(activity, user);
+                        EstateCtrl.syncUserFavouritePropertiesToLocalDB(activity, user);
                         activity.startActivity(new Intent(activity, LoginUI.class));
                         activity.finish();
                     } else {

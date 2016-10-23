@@ -23,7 +23,7 @@ import controllers.FavouriteCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.User;
-import handler.JSONHandler;
+import handler.SQLiteHandler;
 import handler.SessionHandler;
 import tabs.SlidingTabLayout;
 
@@ -39,7 +39,7 @@ public class MainUI extends AppCompatActivity
     private static final String TAG = MainUI.class.getSimpleName();
 
     private SessionHandler session;
-    private JSONHandler.SQLiteHandler db;
+    private SQLiteHandler db;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
@@ -53,8 +53,26 @@ public class MainUI extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.w(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // setup ctrl objects
+        session = new SessionHandler(getApplicationContext());
+        db = new SQLiteHandler(getApplicationContext());
+        userCtrl = new UserCtrl(getApplicationContext(), session);
+        propertyCtrl = new PropertyCtrl(getApplicationContext());
+        favouriteCtrl = new FavouriteCtrl(getApplicationContext());
+        user = userCtrl.getUserDetails();
+        // check if user is already logged in or not
+        if (session.isLoggedIn()) {
+            // User is already logged in. Take him to main activity
+        } else {
+            // remove any existing data in local db.
+            userCtrl.deleteUserTable();
+            propertyCtrl.deletePropertyTable();
+            favouriteCtrl.deleteFavouritePropertyTable();
+            session.setLogin(false);
+        }
 
         // tool bars
         toolBarTop = (Toolbar) findViewById(R.id.toolbar_top);
@@ -76,43 +94,26 @@ public class MainUI extends AppCompatActivity
         });
         slidingTabLayout.setViewPager(viewPager);
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolBarTop, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
+        // navigation
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(1).setTitle("My listings (" + propertyCtrl.getUserPropertyCountDetails() + ")");
+        navigationView.getMenu().getItem(2).setTitle("Favourite Listings (" + favouriteCtrl.getUserFarvouriteCountDetails() + ")");
 
-        // setup ctrl objects
-        session = new SessionHandler(getApplicationContext());
-        db = new JSONHandler.SQLiteHandler(getApplicationContext());
-        userCtrl = new UserCtrl(getApplicationContext(), session);
-        propertyCtrl = new PropertyCtrl(getApplicationContext());
-        favouriteCtrl = new FavouriteCtrl(getApplicationContext());
-        user = userCtrl.getUserDetails();
-        // check if user is already logged in or not
-        if (session.isLoggedIn()) {
-            // User is already logged in. Take him to main activity
-        } else {
-            // remove any existing data in local db.
-            userCtrl.deleteUserTable();
-            propertyCtrl.deletePropertyTable();
-            favouriteCtrl.deleteFavouritePropertyTable();
-            session.setLogin(false);
-        }
-
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        // drawer header
         View header = navigationView.getHeaderView(0);
         // sets the header use user information
         tvHderName = (TextView) header.findViewById(R.id.TVHderName);
         tvHderEmail = (TextView) header.findViewById(R.id.TVHderEmail);
         tvHderName.setText(user.getName());
         tvHderEmail.setText(user.getEmail());
+
+        // drawers items
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolBarTop, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
     }
 
@@ -124,7 +125,6 @@ public class MainUI extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-
     }
 
     @Override
@@ -133,6 +133,8 @@ public class MainUI extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         menu.findItem(R.id.menu_action_searchQuery).setVisible(false);
+
+
         return true;
     }
 
@@ -147,8 +149,6 @@ public class MainUI extends AppCompatActivity
         if (id == R.id.menu_action_inbox) {
             startActivity(new Intent(MainUI.this, InboxUI.class));
             return true;
-        } else {
-
         }
 
         return super.onOptionsItemSelected(item);

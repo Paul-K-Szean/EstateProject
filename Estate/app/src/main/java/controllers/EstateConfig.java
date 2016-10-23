@@ -26,7 +26,7 @@ public class EstateConfig {
     public static String URL_NEWFAVOURITEPROPERTY = "http://10.0.2.2/estatenewfavouriteproperty.php";
     public static String URL_DELETEFAVOURITEPROPERTY = "http://10.0.2.2/estatedeletefavouriteproperty.php";
     public static String URL_USERFAVOURITELISTINGS = "http://10.0.2.2/estateuserfavouritedlistings.php";
-    public static String URL_FAVOURITECOUNT = "http://10.0.2.2/estatefavouritecount.php";
+    public static String URL_PROPERTYFAVOURITECOUNT = "http://10.0.2.2/estatepropertyfavouritecount.php";
 
     // GOV DATA
     public static String URL_GOVDATA_RESALEFLATPRICES = "https://data.gov.sg/api/action/datastore_search?resource_id=83b2fc37-ce8c-4df4-968b-370fd818138b";

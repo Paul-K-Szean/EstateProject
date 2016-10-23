@@ -106,6 +106,7 @@ public class FragmentUserFavouriteListings extends Fragment {
         new AsyncTaskHandler(Request.Method.POST, URL_USERFAVOURITELISTINGS, paramValues, getActivity(), new AsyncTaskResponse() {
             @Override
             public void onAsyncTaskResponse(String response) {
+
                 displayListings(view, response);
             }
         }).execute();
@@ -160,6 +161,7 @@ public class FragmentUserFavouriteListings extends Fragment {
                 viewAdapter = new ViewAdapter(FragmentUserFavouriteListings.this, propertyArrayList);
                 recycler.setAdapter(viewAdapter);
                 recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                tvUserFavouriteListingsCount.setText("You have " + propertyArrayList.size() + " favourite properties.");
             } else {
                 String result = JSONHandler.getResultAsString(getActivity(), response);
                 tvUserFavouriteListingsCount.setText(result);
