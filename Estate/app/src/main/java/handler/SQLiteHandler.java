@@ -13,7 +13,6 @@ import java.util.HashMap;
 
 import controllers.FavouriteCtrl;
 import controllers.InboxCtrl;
-import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.Favourite;
 import entities.Inbox;
@@ -31,6 +30,26 @@ import static controllers.InboxCtrl.KEY_INBOXTITLE;
 import static controllers.InboxCtrl.KEY_INBOXTYPE;
 import static controllers.InboxCtrl.KEY_RECIPIENTID;
 import static controllers.InboxCtrl.KEY_SENDERID;
+import static controllers.PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT;
+import static controllers.PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT;
+import static controllers.PropertyCtrl.KEY_PROPERTY_BLOCK;
+import static controllers.PropertyCtrl.KEY_PROPERTY_CREATEDDATE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_DEALTYPE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_DESC;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FAVOURITECOUNT;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FLATTYPE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORAREA;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORLEVEL;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL;
+import static controllers.PropertyCtrl.KEY_PROPERTY_IMAGE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_OWNERID;
+import static controllers.PropertyCtrl.KEY_PROPERTY_PRICE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
+import static controllers.PropertyCtrl.KEY_PROPERTY_STATUS;
+import static controllers.PropertyCtrl.KEY_PROPERTY_STREETNAME;
+import static controllers.PropertyCtrl.KEY_PROPERTY_TITLE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_VIEWCOUNT;
+import static controllers.PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
 import static controllers.PropertyCtrl.TABLE_PROPERTY;
 
 /**
@@ -46,7 +65,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Estate";
 
     // Database Version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 10;
 
     // user data table
     private static final String CREATE_USER_TABLE = "CREATE TABLE " + UserCtrl.TABLE_USER + "("
@@ -59,24 +78,26 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
     // property data table
     private static final String CREATE_PROPERTY_TABLE = "CREATE TABLE " + TABLE_PROPERTY + "("
-            + PropertyCtrl.KEY_PROPERTY_PROPERTYID + " INTEGER, "
-            + PropertyCtrl.KEY_PROPERTY_OWNERID + " INTEGER, "
-            + PropertyCtrl.KEY_PROPERTY_FLATTYPE + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_BLOCK + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_STREETNAME + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_FLOORLEVEL + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_FLOORAREA + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_PRICE + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_IMAGE + " BLOB, "
-            + PropertyCtrl.KEY_PROPERTY_STATUS + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_DEALTYPE + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_TITLE + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_DESC + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT + " TEXT,"
-            + PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT + " TEXT,"
-            + PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT + " TEXT, "
-            + PropertyCtrl.KEY_PROPERTY_CREATEDDATE + " TEXT "
+            + KEY_PROPERTY_PROPERTYID + " INTEGER, "
+            + KEY_PROPERTY_OWNERID + " INTEGER, "
+            + KEY_PROPERTY_FLATTYPE + " TEXT, "
+            + KEY_PROPERTY_BLOCK + " TEXT, "
+            + KEY_PROPERTY_STREETNAME + " TEXT, "
+            + KEY_PROPERTY_FLOORLEVEL + " TEXT, "
+            + KEY_PROPERTY_FLOORAREA + " TEXT, "
+            + KEY_PROPERTY_PRICE + " TEXT, "
+            + KEY_PROPERTY_IMAGE + " BLOB, "
+            + KEY_PROPERTY_STATUS + " TEXT, "
+            + KEY_PROPERTY_DEALTYPE + " TEXT, "
+            + KEY_PROPERTY_TITLE + " TEXT, "
+            + KEY_PROPERTY_DESC + " TEXT, "
+            + KEY_PROPERTY_FURNISHLEVEL + " TEXT, "
+            + KEY_PROPERTY_BEDROOMCOUNT + " TEXT,"
+            + KEY_PROPERTY_BATHROOMCOUNT + " TEXT,"
+            + KEY_PROPERTY_FAVOURITECOUNT + " TEXT,"
+            + KEY_PROPERTY_VIEWCOUNT + " TEXT,"
+            + KEY_PROPERTY_WHOLEAPARTMENT + " TEXT, "
+            + KEY_PROPERTY_CREATEDDATE + " TEXT "
             + ");";
 
     // user data table
@@ -145,6 +166,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      * Getting user data from database
      */
     public HashMap<String, String> getUserDetails() {
+        Log.d(TAG, "getUserDetails");
         HashMap<String, String> userHashMap = new HashMap<>();
         String selectQuery = "SELECT  * FROM " + UserCtrl.TABLE_USER;
 
@@ -230,26 +252,28 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, property.getPropertyID());
-        values.put(PropertyCtrl.KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
-        values.put(PropertyCtrl.KEY_PROPERTY_FLATTYPE, property.getFlatType());
-        values.put(PropertyCtrl.KEY_PROPERTY_BLOCK, property.getBlock());
-        values.put(PropertyCtrl.KEY_PROPERTY_STREETNAME, property.getStreetname());
-        values.put(PropertyCtrl.KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());
-        values.put(PropertyCtrl.KEY_PROPERTY_FLOORAREA, property.getFloorarea());
-        values.put(PropertyCtrl.KEY_PROPERTY_PRICE, property.getPrice());
-        values.put(PropertyCtrl.KEY_PROPERTY_IMAGE, property.getImage());
-        values.put(PropertyCtrl.KEY_PROPERTY_STATUS, property.getStatus());
-        values.put(PropertyCtrl.KEY_PROPERTY_DEALTYPE, property.getDealType());
-        values.put(PropertyCtrl.KEY_PROPERTY_TITLE, property.getTitle());
-        values.put(PropertyCtrl.KEY_PROPERTY_DESC, property.getDescription());
-        values.put(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel());
-        values.put(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount());
-        values.put(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount());
-        values.put(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());
-        values.put(PropertyCtrl.KEY_PROPERTY_CREATEDDATE, property.getCreateddate());
+        values.put(KEY_PROPERTY_PROPERTYID, property.getPropertyID());
+        values.put(KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
+        values.put(KEY_PROPERTY_FLATTYPE, property.getFlatType());
+        values.put(KEY_PROPERTY_BLOCK, property.getBlock());
+        values.put(KEY_PROPERTY_STREETNAME, property.getStreetname());
+        values.put(KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());
+        values.put(KEY_PROPERTY_FLOORAREA, property.getFloorarea());
+        values.put(KEY_PROPERTY_PRICE, property.getPrice());
+        values.put(KEY_PROPERTY_IMAGE, property.getImage());
+        values.put(KEY_PROPERTY_STATUS, property.getStatus());
+        values.put(KEY_PROPERTY_DEALTYPE, property.getDealType());
+        values.put(KEY_PROPERTY_TITLE, property.getTitle());
+        values.put(KEY_PROPERTY_DESC, property.getDescription());
+        values.put(KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel());
+        values.put(KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount());
+        values.put(KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount());
+        values.put(KEY_PROPERTY_FAVOURITECOUNT, property.getFavouritecount());
+        values.put(KEY_PROPERTY_VIEWCOUNT, property.getViewcount());
+        values.put(KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());
+        values.put(KEY_PROPERTY_CREATEDDATE, property.getCreateddate());
 
-        Log.i(TAG, values.toString());
+        //   Log.i(TAG, values.toString());
 
         // inserting a new row
         long id = db.insert(TABLE_PROPERTY, null, values);
@@ -273,25 +297,27 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         Log.i(TAG, "getUserProperty count: " + cursor.getCount());
         // Move to first row
         if (cursor.moveToFirst()) {
-            Log.d(TAG, "Fetching property from sqlite: " + cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_PROPERTYID)));
-            cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_OWNERID, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_OWNERID)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_FLATTYPE, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_FLATTYPE)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_BLOCK, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_BLOCK)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_STREETNAME, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_STREETNAME)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_FLOORLEVEL, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_FLOORLEVEL)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_FLOORAREA, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_FLOORAREA)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_PRICE, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_PRICE)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_IMAGE, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_IMAGE)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_STATUS, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_STATUS)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_DEALTYPE, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_DEALTYPE)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_TITLE, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_TITLE)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_DESC, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_DESC)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT)));
-            userPropertyHashMap.put(PropertyCtrl.KEY_PROPERTY_CREATEDDATE, cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_CREATEDDATE)));
+            Log.d(TAG, "Fetching property from sqlite: " + cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID)));
+            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID));
+            userPropertyHashMap.put(KEY_PROPERTY_OWNERID, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_OWNERID)));
+            userPropertyHashMap.put(KEY_PROPERTY_FLATTYPE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLATTYPE)));
+            userPropertyHashMap.put(KEY_PROPERTY_BLOCK, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BLOCK)));
+            userPropertyHashMap.put(KEY_PROPERTY_STREETNAME, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STREETNAME)));
+            userPropertyHashMap.put(KEY_PROPERTY_FLOORLEVEL, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORLEVEL)));
+            userPropertyHashMap.put(KEY_PROPERTY_FLOORAREA, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORAREA)));
+            userPropertyHashMap.put(KEY_PROPERTY_PRICE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PRICE)));
+            userPropertyHashMap.put(KEY_PROPERTY_IMAGE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_IMAGE)));
+            userPropertyHashMap.put(KEY_PROPERTY_STATUS, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STATUS)));
+            userPropertyHashMap.put(KEY_PROPERTY_DEALTYPE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DEALTYPE)));
+            userPropertyHashMap.put(KEY_PROPERTY_TITLE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_TITLE)));
+            userPropertyHashMap.put(KEY_PROPERTY_DESC, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DESC)));
+            userPropertyHashMap.put(KEY_PROPERTY_FURNISHLEVEL, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FURNISHLEVEL)));
+            userPropertyHashMap.put(KEY_PROPERTY_BEDROOMCOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BEDROOMCOUNT)));
+            userPropertyHashMap.put(KEY_PROPERTY_BATHROOMCOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BATHROOMCOUNT)));
+            userPropertyHashMap.put(KEY_PROPERTY_FAVOURITECOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FAVOURITECOUNT)));
+            userPropertyHashMap.put(KEY_PROPERTY_VIEWCOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_VIEWCOUNT)));
+            userPropertyHashMap.put(KEY_PROPERTY_WHOLEAPARTMENT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_WHOLEAPARTMENT)));
+            userPropertyHashMap.put(KEY_PROPERTY_CREATEDDATE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_CREATEDDATE)));
 
         } else {
             Log.d(TAG, "No property data to fetch from Sqlite.");
@@ -316,24 +342,26 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
             do {
                 Property property = new Property(
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_PROPERTYID)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID)),
                         owner,
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_FLATTYPE)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_BLOCK)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_STREETNAME)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_FLOORLEVEL)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_FLOORAREA)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_PRICE)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_IMAGE)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_STATUS)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_DEALTYPE)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_TITLE)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_DESC)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT)),
-                        cursor.getString(cursor.getColumnIndex(PropertyCtrl.KEY_PROPERTY_CREATEDDATE)));
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLATTYPE)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BLOCK)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STREETNAME)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORLEVEL)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORAREA)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PRICE)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_IMAGE)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STATUS)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DEALTYPE)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DESC)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FURNISHLEVEL)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BEDROOMCOUNT)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BATHROOMCOUNT)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FAVOURITECOUNT)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_VIEWCOUNT)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_WHOLEAPARTMENT)),
+                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_CREATEDDATE)));
                 userPropertyList.add(property);
 
             } while (cursor.moveToNext());
@@ -357,24 +385,24 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, property.getPropertyID());
-        values.put(PropertyCtrl.KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
-        values.put(PropertyCtrl.KEY_PROPERTY_FLATTYPE, property.getFlatType());
-        values.put(PropertyCtrl.KEY_PROPERTY_BLOCK, property.getBlock());
-        values.put(PropertyCtrl.KEY_PROPERTY_STREETNAME, property.getStreetname());
-        values.put(PropertyCtrl.KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());
-        values.put(PropertyCtrl.KEY_PROPERTY_FLOORAREA, property.getFloorarea());
-        values.put(PropertyCtrl.KEY_PROPERTY_PRICE, property.getPrice());
-        values.put(PropertyCtrl.KEY_PROPERTY_IMAGE, property.getImage());
-        values.put(PropertyCtrl.KEY_PROPERTY_STATUS, property.getStatus());
-        values.put(PropertyCtrl.KEY_PROPERTY_DEALTYPE, property.getDealType());
-        values.put(PropertyCtrl.KEY_PROPERTY_TITLE, property.getTitle());
-        values.put(PropertyCtrl.KEY_PROPERTY_DESC, property.getDescription());
-        values.put(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel());
-        values.put(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount());
-        values.put(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount());
-        values.put(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());
-        values.put(PropertyCtrl.KEY_PROPERTY_CREATEDDATE, property.getCreateddate());
+        values.put(KEY_PROPERTY_PROPERTYID, property.getPropertyID());
+        values.put(KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
+        values.put(KEY_PROPERTY_FLATTYPE, property.getFlatType());
+        values.put(KEY_PROPERTY_BLOCK, property.getBlock());
+        values.put(KEY_PROPERTY_STREETNAME, property.getStreetname());
+        values.put(KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());
+        values.put(KEY_PROPERTY_FLOORAREA, property.getFloorarea());
+        values.put(KEY_PROPERTY_PRICE, property.getPrice());
+        values.put(KEY_PROPERTY_IMAGE, property.getImage());
+        values.put(KEY_PROPERTY_STATUS, property.getStatus());
+        values.put(KEY_PROPERTY_DEALTYPE, property.getDealType());
+        values.put(KEY_PROPERTY_TITLE, property.getTitle());
+        values.put(KEY_PROPERTY_DESC, property.getDescription());
+        values.put(KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel());
+        values.put(KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount());
+        values.put(KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount());
+        values.put(KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());
+        values.put(KEY_PROPERTY_CREATEDDATE, property.getCreateddate());
 
         // updating a existing row
         long id = db.update(TABLE_PROPERTY, values, "PROPERTYID = ?", new String[]{property.getPropertyID()});
@@ -401,7 +429,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         cursor.close();
         db.close();
-        Log.i(TAG, "Fetching user propertiess count from sqlite. Count = " + count);
+        Log.i(TAG, "Fetching user properties count from sqlite. Count = " + count);
         return count;
     }
 
@@ -433,8 +461,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_FAVOURITEID, favourite.getFavouriteID());
-        values.put(KEY_FAVOURITE_OWNERID, favourite.getOwnerID());
-        values.put(KEY_FAVOURITE_PROPERTYID, favourite.getPropertyID());
+        values.put(KEY_FAVOURITE_OWNERID, favourite.getOwner().getUserID());
+        values.put(KEY_FAVOURITE_PROPERTYID, favourite.getProperty().getPropertyID());
         values.put(KEY_FAVOURITE_CREATEDDATE, favourite.getCreateddate());
 
         Log.i(TAG, values.toString());
@@ -450,18 +478,18 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * get user favourite property from local db
      */
-    public HashMap<String, String> getUserFavouriteProperty(String propertyID) {
+    public HashMap<String, String> getUserFavouriteProperty(String ownerID, String propertyID) {
         Log.i(TAG, "getUserFavouriteProperty()");
-        HashMap<String, String> favoruiteHashMap = new HashMap<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_FAVOURITE + " WHERE propertyID = ?";
-
+        HashMap<String, String> favoruiteHashMap = null;
+        String selectQuery = "SELECT  * FROM " + TABLE_FAVOURITE + " WHERE " + KEY_FAVOURITE_OWNERID + " = ? AND " + KEY_FAVOURITE_PROPERTYID + " = ?";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, new String[]{propertyID});
-        cursor.getColumnCount();
-        Log.i(TAG, "getUserFavouriteProperty count: " + cursor.getCount());
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{ownerID, propertyID});
         // Move to first row
         if (cursor.moveToFirst()) {
-            Log.d(TAG, "Fetching favourite property from sqlite: " + cursor.getString(cursor.getColumnIndex(KEY_FAVOURITEID)));
+            Log.d(TAG, "Fetching favourite property from sqlite: " + cursor.getString(cursor.getColumnIndex(KEY_FAVOURITEID)) + ", ownerID: " +
+                    cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_OWNERID)) + ", propertyID: " +
+                    cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_PROPERTYID)));
+            favoruiteHashMap = new HashMap<>();
             favoruiteHashMap.put(KEY_FAVOURITEID, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITEID)));
             favoruiteHashMap.put(KEY_FAVOURITE_OWNERID, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_OWNERID)));
             favoruiteHashMap.put(KEY_FAVOURITE_PROPERTYID, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_PROPERTYID)));
@@ -477,30 +505,29 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * get user favourite properties from local db
      */
-    public ArrayList<Favourite> getUserFavouriteProperties(User owner) {
+    public ArrayList<Favourite> getUserFavouriteProperties(User user, Property property) {
         Log.i(TAG, "getUserProperties()");
         ArrayList<Favourite> userFavouritePropertyList = new ArrayList<>();
         String selectQuery = "SELECT  * FROM " + TABLE_FAVOURITE + " WHERE OWNERID = ?";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, new String[]{owner.getUserID()});
+        Cursor cursor = db.rawQuery(selectQuery, new String[]{user.getUserID()});
         // Move to first row
         if (cursor.moveToFirst()) {
             Log.d(TAG, "Fetching user favourite properties from sqlite. Total count: " + cursor.getCount());
             do {
-
                 Favourite favourite = new Favourite(
                         cursor.getString(cursor.getColumnIndex(KEY_FAVOURITEID)),
-                        cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_OWNERID)),
-                        cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_PROPERTYID)),
+                        user,
+                        property,
                         cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_CREATEDDATE)));
                 userFavouritePropertyList.add(favourite);
             } while (cursor.moveToNext());
-
         } else {
             Log.d(TAG, "No user favourite properties to fetch from Sqlite.");
         }
         cursor.close();
         db.close();
+
         return userFavouritePropertyList;
     }
 
@@ -533,7 +560,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         // Delete All Rows
         db.delete(TABLE_FAVOURITE, "FAVOURITEID = ?", new String[]{favourite.getFavouriteID()});
         db.close();
-        Log.d(TAG, "Deleted all user favourite property info from sqlite");
+        Log.d(TAG, "Deleted user favourite property info from sqlite");
     }
 
 

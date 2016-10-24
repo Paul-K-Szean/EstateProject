@@ -1,8 +1,10 @@
 package controllers;
 
 import android.content.Context;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,9 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import entities.Favourite;
+import entities.Property;
 import entities.User;
-import estateco.estate.FragmentMainListings;
-import estateco.estate.FragmentPropertyDetails;
+import estateco.estate.FragmentUserFavouriteListings;
 import estateco.estate.R;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
@@ -29,6 +32,36 @@ import handler.ErrorHandler;
 import handler.JSONHandler;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
+import handler.ViewAdapterRecycler;
+
+import static android.view.View.VISIBLE;
+import static controllers.EstateConfig.URL_USERFAVOURITELISTINGS;
+import static controllers.PropertyCtrl.KEY_ACTION_DECREASEFAVOURITE;
+import static controllers.PropertyCtrl.KEY_ACTION_INCREASEFAVOURITE;
+import static controllers.PropertyCtrl.KEY_ACTION_INCREASEVIEW;
+import static controllers.PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT;
+import static controllers.PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT;
+import static controllers.PropertyCtrl.KEY_PROPERTY_BLOCK;
+import static controllers.PropertyCtrl.KEY_PROPERTY_CREATEDDATE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_DEALTYPE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_DESC;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FAVOURITECOUNT;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FLATTYPE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORAREA;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORLEVEL;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL;
+import static controllers.PropertyCtrl.KEY_PROPERTY_IMAGE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_PRICE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
+import static controllers.PropertyCtrl.KEY_PROPERTY_STATUS;
+import static controllers.PropertyCtrl.KEY_PROPERTY_STREETNAME;
+import static controllers.PropertyCtrl.KEY_PROPERTY_TITLE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_VIEWCOUNT;
+import static controllers.PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
+import static controllers.UserCtrl.KEY_CONTACT;
+import static controllers.UserCtrl.KEY_EMAIL;
+import static controllers.UserCtrl.KEY_NAME;
+import static controllers.UserCtrl.KEY_USERID;
 
 /**
  * Created by Paul K Szean on 21/10/2016.
@@ -41,8 +74,10 @@ public class FavouriteCtrl {
     private SQLiteHandler db;
 
     private View view;
+    private User user;
     private Favourite favourite;
-
+    private UserCtrl userCtrl;
+    private PropertyCtrl propertyCtrl;
     // table name
     public static final String TABLE_FAVOURITE = "estate_favourite";
 
@@ -56,12 +91,16 @@ public class FavouriteCtrl {
     public FavouriteCtrl(Context context) {
         // SQLite database handler
         db = new SQLiteHandler(context);
+        userCtrl = new UserCtrl(context);
+        propertyCtrl = new PropertyCtrl(context);
     }
 
     public FavouriteCtrl(Context context, SessionHandler session) {
         // SQLite database handler
         db = new SQLiteHandler(context);
         this.session = session;
+        userCtrl = new UserCtrl(context);
+        propertyCtrl = new PropertyCtrl(context);
     }
 
     // **********************************************************************
@@ -73,26 +112,25 @@ public class FavouriteCtrl {
     }
 
     // get user favourite property details from local db
-    public Favourite getUserFavouritePropertyDetails(String propertyID) {
+    public Favourite getUserFavouritePropertyDetails(User user, Property property) {
         // Fetching user details from sqlite
-        HashMap<String, String> savedFavouriteProperty = db.getUserFavouriteProperty(propertyID);
+        HashMap<String, String> savedFavouriteProperty = db.getUserFavouriteProperty(user.getUserID(), property.getPropertyID());
         if (savedFavouriteProperty != null) {
             Log.i(TAG, "Retrieving propertyID: " + savedFavouriteProperty.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
             favourite = new Favourite(
                     savedFavouriteProperty.get(KEY_FAVOURITEID),
-                    savedFavouriteProperty.get(KEY_FAVOURITE_OWNERID),
-                    savedFavouriteProperty.get(KEY_FAVOURITE_PROPERTYID),
+                    user,
+                    property,
                     savedFavouriteProperty.get(KEY_FAVOURITE_CREATEDDATE));
             return favourite;
         } else {
-            Log.e(TAG, "No favourite property data from local database.");
             return null;
         }
     }
 
     // get user favourite properties from local db
-    public ArrayList<Favourite> getUserFavouriteProperties(User owner) {
-        return db.getUserFavouriteProperties(owner);
+    public ArrayList<Favourite> getUserFavouriteProperties(User user, Property property) {
+        return db.getUserFavouriteProperties(user, property);
     }
 
 
@@ -116,11 +154,11 @@ public class FavouriteCtrl {
     // **********************************************************************
 
     // create new favourite property
-    public void serverNewFavouriteProperty(final Fragment fragment, final Favourite favourite) {
+    public void serverNewFavouriteProperty(final Fragment fragment, final User user, final Property property) {
         Log.i(TAG, "serverNewFavouriteProperty");
         Map<String, String> paramValues = new HashMap<>();
-        paramValues.put(KEY_FAVOURITE_OWNERID, favourite.getOwnerID());
-        paramValues.put(KEY_FAVOURITE_PROPERTYID, favourite.getPropertyID());
+        paramValues.put(KEY_FAVOURITE_OWNERID, user.getUserID());
+        paramValues.put(KEY_FAVOURITE_PROPERTYID, property.getPropertyID());
 
         new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_NEWFAVOURITEPROPERTY, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
             @Override
@@ -134,14 +172,14 @@ public class FavouriteCtrl {
                         Log.i(TAG, "Favourited your property!");
                         Favourite favourite = new Favourite(
                                 jsonObject.getString(KEY_FAVOURITEID),
-                                jsonObject.getString(KEY_FAVOURITE_OWNERID),
-                                jsonObject.getString(KEY_FAVOURITE_PROPERTYID),
+                                user,
+                                property,
                                 jsonObject.getString(KEY_FAVOURITE_CREATEDDATE)
                         );
                         // save to local DB
-                        EstateCtrl.syncUserFavouritePropertyToLocalDB(favourite);
-                        // display total count
-                        serverGetPropertyFavouriteCount(fragment, favourite);
+                        EstateCtrl.syncUserNewFavouritePropertyToLocalDB(favourite);
+                        // update drawer values
+                        new EstateCtrl().updateDisplayValues(fragment);
                     } else {
                         String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
                         Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_SHORT).show();
@@ -155,57 +193,175 @@ public class FavouriteCtrl {
     }
 
     // delete favourite property
-    public void serverDeleteFavouriteProperty(final Fragment fragment, final Favourite favourite) {
+    public void serverDeleteFavouriteProperty(final Fragment fragment, final User user, final Property property) {
         Log.i(TAG, "serverDeleteFavouriteProperty");
         Map<String, String> paramValues = new HashMap<>();
-        paramValues.put(KEY_FAVOURITE_OWNERID, favourite.getOwnerID());
-        paramValues.put(KEY_FAVOURITE_PROPERTYID, favourite.getPropertyID());
+        paramValues.put(KEY_FAVOURITE_OWNERID, user.getUserID());
+        paramValues.put(KEY_FAVOURITE_PROPERTYID, property.getPropertyID());
 
         new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_DELETEFAVOURITEPROPERTY, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
             @Override
             // server side deleted favourite property
             public void onAsyncTaskResponse(String response) {
                 String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
-                Log.i(TAG, "serverDeleteFavouriteProperty: " + result);
                 Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_LONG).show();
+                favourite = getUserFavouritePropertyDetails(user, property);
                 // delete from local DB
                 EstateCtrl.syncUserDeletedFavouritePropertyToLocalDB(favourite);
-                // display total count
-                serverGetPropertyFavouriteCount(fragment, favourite);
+                // update drawer values
+                new EstateCtrl().updateDisplayValues(fragment);
             }
         }).execute();
 
     }
 
-    // get favourite count of a property
-    public void serverGetPropertyFavouriteCount(final Fragment fragment, final Favourite favourite) {
-        Log.i(TAG, "serverGetPropertyFavouriteCount");
+
+    public void serverUpdatePropertyCount(final Fragment fragment, final Property property, final String action, final MenuItem menuItem) {
+        Log.i(TAG, "serverUpdatePropertyCount");
         Map<String, String> paramValues = new HashMap<>();
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, favourite.getPropertyID());
+        paramValues.put(KEY_FAVOURITE_PROPERTYID, property.getPropertyID());
+        paramValues.put("action", action);
+        Log.i(TAG, paramValues.toString());
+        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_UPDATEPROPERTYCOUNT, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
+            @Override
+            // server side deleted favourite property
+            public void onAsyncTaskResponse(String response) {
+                try {
+                    JSONObject jsonObject = JSONHandler.getResultAsObject(fragment.getActivity(), response);
+                    if (jsonObject != null) {
 
-        if (paramValues != null) {
-            new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_PROPERTYFAVOURITECOUNT, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
-                @Override
-                public void onAsyncTaskResponse(String response) {
-                    String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
-                    if (result != null) {
-                        Log.i(TAG, fragment.getClass().getSimpleName());
-                        if (fragment.getClass().getSimpleName().equals(FragmentPropertyDetails.class.getSimpleName())) {
-                            Toolbar toolBarBottom = (Toolbar) fragment.getActivity().findViewById(R.id.toolbar_bottom);
-                            MenuItem menuItemFavouriteCount = toolBarBottom.getMenu().findItem(R.id.action_propertyfavouritecount);
-                            menuItemFavouriteCount.setTitle(result);
+                        String count = "";
+                        if (action.toString().equals(KEY_ACTION_INCREASEVIEW.toString())) {
+                            count = jsonObject.getString(KEY_PROPERTY_VIEWCOUNT);
+                        } else {
+                            count = jsonObject.getString(KEY_PROPERTY_FAVOURITECOUNT);
                         }
-                        if (fragment.getClass().getSimpleName().equals(FragmentMainListings.class.getSimpleName())) {
-                            TextView textView = (TextView) fragment.getView().findViewById(R.id.TVLblPropertyFavouriteCount);
-                            textView.setText(result);
-                        }
-
+                        menuItem.setTitle(count);
+                    } else {
+                        String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
+                        Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_LONG).show();
                     }
-                }
-            }).execute();
-        }
 
+                    user = userCtrl.getUserDetails();
+                    if (action.equals(KEY_ACTION_INCREASEFAVOURITE)) {
+                        // add property to favourite list
+                        serverNewFavouriteProperty(fragment, user, property);
+                    }
+                    if (action.equals(KEY_ACTION_DECREASEFAVOURITE)) {
+                        // remove property from favourite list
+                        serverDeleteFavouriteProperty(fragment, user, property);
+                    }
+
+                } catch (JSONException error) {
+                }
+            }
+        }).execute();
     }
 
+    public void serverUpdatePropertyCount(final Fragment fragment, final Property property, final String action, final TextView textView) {
+        Log.i(TAG, "serverUpdatePropertyCount");
+        Map<String, String> paramValues = new HashMap<>();
+        paramValues.put(KEY_FAVOURITE_PROPERTYID, property.getPropertyID());
+        paramValues.put("action", action);
+        Log.i(TAG, paramValues.toString());
+        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_UPDATEPROPERTYCOUNT, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
+            @Override
+            // server side deleted favourite property
+            public void onAsyncTaskResponse(String response) {
+                try {
+                    JSONObject jsonObject = JSONHandler.getResultAsObject(fragment.getActivity(), response);
+                    if (jsonObject != null) {
+                        String count = jsonObject.getString(KEY_PROPERTY_FAVOURITECOUNT);
+                        textView.setText(count);
+                    } else {
+                        String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
+                        Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_LONG).show();
+                    }
+
+                    user = userCtrl.getUserDetails();
+                    if (action.equals(KEY_ACTION_INCREASEFAVOURITE)) {
+                        // add property to favourite list
+                        serverNewFavouriteProperty(fragment, user, property);
+                    }
+                    if (action.equals(KEY_ACTION_DECREASEFAVOURITE)) {
+                        // remove property from favourite list
+                        serverDeleteFavouriteProperty(fragment, user, property);
+                    }
+
+                } catch (JSONException error) {
+                }
+            }
+        }).execute();
+    }
+
+    // get user favourite listings
+    public void serverGetUserFavouriteListings(final Fragment fragment, User user) {
+        Log.i(TAG, "serverGetUserFavouriteListings");
+        Map<String, String> paramValues = new HashMap<>();
+        paramValues.put(KEY_FAVOURITE_OWNERID, user.getUserID());
+        // get user favourite listings from server
+        new AsyncTaskHandler(Request.Method.POST, URL_USERFAVOURITELISTINGS, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
+            @Override
+            public void onAsyncTaskResponse(String response) {
+                displayListings(fragment, response);
+            }
+        }).execute();
+    }
+
+
+    private void displayListings(final Fragment fragment, String response) {
+        try {
+            Log.i(TAG, "displayListings");
+            RecyclerView recyclerView = (RecyclerView) fragment.getView().findViewById(R.id.recycleView);
+            TextView tvUserFavouriteListingsCount = (TextView) fragment.getView().findViewById(R.id.TVUserFavouriteListingsCount);
+            ArrayList<Property> propertyArrayList = new ArrayList<>();
+            JSONArray jsonArray = JSONHandler.getResultAsArray(fragment.getActivity(), response);
+            if (jsonArray != null) {
+                for (int index = 0; index < jsonArray.length(); index++) {
+                    JSONObject jsonRecordObject = jsonArray.getJSONObject(index);
+                    User owner = new User(
+                            jsonRecordObject.getString(KEY_USERID),
+                            jsonRecordObject.getString(KEY_NAME),
+                            jsonRecordObject.getString(KEY_EMAIL),
+                            jsonRecordObject.getString(KEY_CONTACT));
+
+                    Property property = new Property(
+                            jsonRecordObject.getString(KEY_PROPERTY_PROPERTYID),
+                            owner,
+                            jsonRecordObject.getString(KEY_PROPERTY_FLATTYPE),
+                            jsonRecordObject.getString(KEY_PROPERTY_BLOCK),
+                            jsonRecordObject.getString(KEY_PROPERTY_STREETNAME),
+                            jsonRecordObject.getString(KEY_PROPERTY_FLOORLEVEL),
+                            jsonRecordObject.getString(KEY_PROPERTY_FLOORAREA),
+                            jsonRecordObject.getString(KEY_PROPERTY_PRICE),
+                            jsonRecordObject.getString(KEY_PROPERTY_IMAGE),
+                            jsonRecordObject.getString(KEY_PROPERTY_STATUS),
+                            jsonRecordObject.getString(KEY_PROPERTY_DEALTYPE),
+                            jsonRecordObject.getString(KEY_PROPERTY_TITLE),
+                            jsonRecordObject.getString(KEY_PROPERTY_DESC),
+                            jsonRecordObject.getString(KEY_PROPERTY_FURNISHLEVEL),
+                            jsonRecordObject.getString(KEY_PROPERTY_BEDROOMCOUNT),
+                            jsonRecordObject.getString(KEY_PROPERTY_BATHROOMCOUNT),
+                            jsonRecordObject.getString(KEY_PROPERTY_FAVOURITECOUNT),
+                            jsonRecordObject.getString(KEY_PROPERTY_VIEWCOUNT),
+                            jsonRecordObject.getString(KEY_PROPERTY_WHOLEAPARTMENT),
+                            jsonRecordObject.getString(KEY_PROPERTY_CREATEDDATE));
+                    propertyArrayList.add(property);
+                }
+
+                ViewAdapterRecycler viewAdapter = new ViewAdapterRecycler(fragment, propertyArrayList);
+                recyclerView.setLayoutManager(new LinearLayoutManager(fragment.getActivity()));
+                recyclerView.setVisibility(VISIBLE);
+                recyclerView.setAdapter(viewAdapter);
+                tvUserFavouriteListingsCount.setText("You have " + propertyArrayList.size() + " favourite properties.");
+            } else {
+                String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
+                tvUserFavouriteListingsCount.setText(result);
+            }
+
+        } catch (JSONException error) {
+
+        }
+    }
 
 }

@@ -50,7 +50,7 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
     protected void onPreExecute() {
         Log.w("onPreExecute", "onPreExecute()");
         IsInternetConnected = EstateCtrl.CheckInternetConnection(activity);
-        // disable dialog for searching function
+        // disable dialog for some request
         if (URLAddress.toLowerCase().equals(EstateConfig.URL_SEARCHLISTINGS) ||
                 URLAddress.toLowerCase().equals(EstateConfig.URL_LEASELISTINGS) ||
                 URLAddress.toLowerCase().equals(EstateConfig.URL_SALELISTINGS) ||
@@ -59,18 +59,19 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
             // disable loading dialog
             pDialog.setIndeterminate(false);
             pDialog.setMessage("");
-            hideDialog();
+            pDialog.dismiss();
         } else {
             pDialog.setIndeterminate(true);
             pDialog.setMessage("Loading ...");
-            showDialog();
+            pDialog.show();
         }
+
+        EstateCtrl.hideSoftKeyboard(activity);
     }
 
     @Override
     protected String doInBackground(final String... params) {
         Log.w("doInBackground", "doInBackground()");
-        EstateCtrl.hideSoftKeyboard(activity);
 
 
         if (IsInternetConnected) {
@@ -90,7 +91,7 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
                 public void onErrorResponse(VolleyError error) {
                     // volley error
                     ErrorHandler.errorHandler(activity.getApplicationContext(), error);
-                    hideDialog();
+                    pDialog.dismiss();
                 }
             }) {
                 @Override
@@ -111,7 +112,7 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
     protected void onProgressUpdate(String... progress) {
         Log.w("onProgressUpdate", "onProgressUpdate()");
         asyncTaskResponse.onAsyncTaskResponse(progress[0]);
-        hideDialog();
+        pDialog.dismiss();
     }
 
     @Override
@@ -120,13 +121,4 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
         // asyncTaskResponse.onAsyncTaskResponse(response);
     }
 
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
 }

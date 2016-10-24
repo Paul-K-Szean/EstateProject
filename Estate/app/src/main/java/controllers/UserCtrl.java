@@ -69,7 +69,6 @@ public class UserCtrl {
     public User getUserDetails() {
         // Fetching user details from sqlite
         HashMap<String, String> savedUser = db.getUserDetails();
-
         if (savedUser != null) {
             user = new User(
                     savedUser.get(KEY_USERID),
@@ -98,7 +97,7 @@ public class UserCtrl {
     // **********************************************************************
     // ********************* REMOTE WAMP SERVER ACCESS **********************
     // **********************************************************************
-    public void serverUserLogin(final Activity activity, String valLoginEmail, String valLoginPassword) {
+    public void serverUserLogin(final Activity activity, final SessionHandler session, String valLoginEmail, String valLoginPassword) {
         Log.i(TAG, "serverUserLogin");
         Map<String, String> paramValues = new HashMap<>();
         paramValues.put(UserCtrl.KEY_EMAIL, valLoginEmail);
@@ -109,6 +108,7 @@ public class UserCtrl {
                 try {
                     JSONObject jsonObject = JSONHandler.getResultAsObject(activity, response);
                     if (jsonObject != null) {
+
                         session.setLogin(true);
                         // server side created account
                         user = new User(
@@ -119,9 +119,8 @@ public class UserCtrl {
                         );
                         EstateCtrl.syncUserAccountToLocalDB(user);
                         EstateCtrl.syncUserPropertiesToLocalDB(activity, user);
-                        EstateCtrl.syncUserFavouritePropertiesToLocalDB(activity, user);
-                        activity.startActivity(new Intent(activity, LoginUI.class));
-                        activity.finish();
+
+
                     } else {
                         String result = JSONHandler.getResultAsString(activity, response);
                         Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();

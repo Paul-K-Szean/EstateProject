@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import controllers.FavouriteCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.User;
@@ -23,6 +24,7 @@ public class LoginUI extends Activity {
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
+    private FavouriteCtrl favouriteCtrl;
     private User user;
 
 
@@ -43,8 +45,11 @@ public class LoginUI extends Activity {
         // setup ctrl objects
         session = new SessionHandler(getApplicationContext());
         db = new SQLiteHandler(getApplicationContext());
-        userCtrl = new UserCtrl(getApplicationContext(), session);
+        userCtrl = new UserCtrl(getApplicationContext());
         propertyCtrl = new PropertyCtrl(getApplicationContext());
+        favouriteCtrl = new FavouriteCtrl(getApplicationContext());
+        user = userCtrl.getUserDetails();
+
         // check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
@@ -54,6 +59,7 @@ public class LoginUI extends Activity {
             // remove any existing data in local db.
             userCtrl.deleteUserTable();
             propertyCtrl.deletePropertyTable();
+            favouriteCtrl.deleteFavouritePropertyTable();
             session.setLogin(false);
         }
         etLoginEmail = (EditText) findViewById(R.id.ETLoginEmail);
@@ -77,7 +83,7 @@ public class LoginUI extends Activity {
                                             // Check for empty data in the form
                                             if (!valLoginEmail.isEmpty() && !valLoginPassword.isEmpty()) {
                                                 // login user from server
-                                                userCtrl.serverUserLogin(LoginUI.this, valLoginEmail, valLoginPassword);
+                                                userCtrl.serverUserLogin(LoginUI.this, session, valLoginEmail, valLoginPassword);
 
                                             } else {
                                                 // prompt user to enter credentials

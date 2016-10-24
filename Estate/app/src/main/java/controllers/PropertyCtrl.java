@@ -35,6 +35,7 @@ public class PropertyCtrl {
 
     private SessionHandler session;
     private SQLiteHandler db;
+    private ArrayList<Property> propertyArrayList;
     private Property property;
     private View view;
 
@@ -59,11 +60,17 @@ public class PropertyCtrl {
     public static String KEY_PROPERTY_FURNISHLEVEL = "furnishlevel";
     public static String KEY_PROPERTY_BEDROOMCOUNT = "bedroomcount";
     public static String KEY_PROPERTY_BATHROOMCOUNT = "bathroomcount";
+    public static String KEY_PROPERTY_FAVOURITECOUNT = "favouritecount";
+    public static String KEY_PROPERTY_VIEWCOUNT = "viewcount";
     public static String KEY_PROPERTY_WHOLEAPARTMENT = "wholeapartment";
     public static String KEY_PROPERTY_CREATEDDATE = "createddate";
     // extras
     public static String KEY_PROPERTY_SEARCH = "searchvalue";
     public static String KEY_PROPERTY_ROOM = "room";
+    public static String KEY_ACTION_INCREASEFAVOURITE = "increasefavourite";
+    public static String KEY_ACTION_DECREASEFAVOURITE = "decreasefavourite";
+    public static String KEY_ACTION_INCREASEVIEW = "increaseview";
+    public static String KEY_ACTION_DECREASEVIEW = "decreaseview";
 
     public PropertyCtrl(Context context) {
         // SQLite database handler
@@ -108,6 +115,8 @@ public class PropertyCtrl {
                     savedProperty.get(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
                     savedProperty.get(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT),
                     savedProperty.get(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT),
+                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_FAVOURITECOUNT),
+                    savedProperty.get(PropertyCtrl.KEY_PROPERTY_VIEWCOUNT),
                     savedProperty.get(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT),
                     savedProperty.get(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
             return property;
@@ -127,8 +136,8 @@ public class PropertyCtrl {
         db.updateUserProperty(property);
     }
 
-
-    public int getUserPropertyCountDetails(){
+    // get user property count details from local db
+    public int getUserPropertyCountDetails() {
         return db.getUserPropertyCount();
     }
 
@@ -160,6 +169,8 @@ public class PropertyCtrl {
         paramValues.put(KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel());
         paramValues.put(KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount());
         paramValues.put(KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount());
+        paramValues.put(KEY_PROPERTY_FAVOURITECOUNT, property.getFavouritecount());
+        paramValues.put(KEY_PROPERTY_VIEWCOUNT, property.getViewcount());
         paramValues.put(KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());
 
         new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_NEWPROPERTY, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
@@ -189,6 +200,8 @@ public class PropertyCtrl {
                                 propertyObj.getString(KEY_PROPERTY_FURNISHLEVEL),
                                 propertyObj.getString(KEY_PROPERTY_BEDROOMCOUNT),
                                 propertyObj.getString(KEY_PROPERTY_BATHROOMCOUNT),
+                                propertyObj.getString(KEY_PROPERTY_FAVOURITECOUNT),
+                                propertyObj.getString(KEY_PROPERTY_VIEWCOUNT),
                                 propertyObj.getString(KEY_PROPERTY_WHOLEAPARTMENT),
                                 propertyObj.getString(KEY_PROPERTY_CREATEDDATE));
                         // save to local DB
@@ -205,8 +218,8 @@ public class PropertyCtrl {
         }).execute();
     }
 
-    public void serverUpdateProperty(final Fragment fragment, final Property property, final User user) {
-        Log.i(TAG, "serverUpdateProperty");
+    public void serverUpdateUserProperty(final Fragment fragment, final Property property, final User user) {
+        Log.i(TAG, "serverUpdateUserProperty");
         Map<String, String> paramValues = new HashMap<>();
         paramValues.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, property.getPropertyID());
         paramValues.put(PropertyCtrl.KEY_PROPERTY_FLATTYPE, property.getFlatType()); // flattype

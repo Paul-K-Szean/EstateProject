@@ -3,8 +3,11 @@ package controllers;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +28,9 @@ import java.util.Map;
 import entities.Favourite;
 import entities.Property;
 import entities.User;
+import estateco.estate.FragmentUserFavouriteListings;
+import estateco.estate.MainUI;
+import estateco.estate.R;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
@@ -37,6 +43,7 @@ import static controllers.PropertyCtrl.KEY_PROPERTY_BLOCK;
 import static controllers.PropertyCtrl.KEY_PROPERTY_CREATEDDATE;
 import static controllers.PropertyCtrl.KEY_PROPERTY_DEALTYPE;
 import static controllers.PropertyCtrl.KEY_PROPERTY_DESC;
+import static controllers.PropertyCtrl.KEY_PROPERTY_FAVOURITECOUNT;
 import static controllers.PropertyCtrl.KEY_PROPERTY_FLATTYPE;
 import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORAREA;
 import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORLEVEL;
@@ -47,6 +54,7 @@ import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
 import static controllers.PropertyCtrl.KEY_PROPERTY_STATUS;
 import static controllers.PropertyCtrl.KEY_PROPERTY_STREETNAME;
 import static controllers.PropertyCtrl.KEY_PROPERTY_TITLE;
+import static controllers.PropertyCtrl.KEY_PROPERTY_VIEWCOUNT;
 import static controllers.PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
 
 /**
@@ -83,7 +91,6 @@ public class EstateCtrl extends Application {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(getApplicationContext());
         }
-
         return requestQueue;
     }
 
@@ -126,7 +133,6 @@ public class EstateCtrl extends Application {
         userCtrl.addUserDetails(user);
     }
 
-
     // add user properties into local db (from server)
     public static void syncUserPropertiesToLocalDB(final Activity activity, final User user) {
         Log.i(TAG, "syncUserPropertiesToLocalDB");
@@ -159,17 +165,21 @@ public class EstateCtrl extends Application {
                                     propertyObj.getString(KEY_PROPERTY_FURNISHLEVEL),
                                     propertyObj.getString(KEY_PROPERTY_BEDROOMCOUNT),
                                     propertyObj.getString(KEY_PROPERTY_BATHROOMCOUNT),
+                                    propertyObj.getString(KEY_PROPERTY_FAVOURITECOUNT),
+                                    propertyObj.getString(KEY_PROPERTY_VIEWCOUNT),
                                     propertyObj.getString(KEY_PROPERTY_WHOLEAPARTMENT),
                                     propertyObj.getString(KEY_PROPERTY_CREATEDDATE));
                             // add into local db
                             propertyCtrl.addPropertyDetails(property);
                         }// end of for loop
-
                     }
                 } catch (JSONException error) {
                     // JSON error
                     ErrorHandler.errorHandler(activity, error);
                 }
+
+                EstateCtrl.syncUserFavouritePropertiesToLocalDB(activity, user);
+
             }
         }
 
@@ -192,7 +202,6 @@ public class EstateCtrl extends Application {
         // insert user property into local DB
         propertyCtrl.updateUserPropertyDetails(property);
     }
-
 
     // add user favourite properties into local db (from server)
     public static void syncUserFavouritePropertiesToLocalDB(final Activity activity, final User user) {
@@ -226,22 +235,30 @@ public class EstateCtrl extends Application {
                                     jsonObject.getString(KEY_PROPERTY_FURNISHLEVEL),
                                     jsonObject.getString(KEY_PROPERTY_BEDROOMCOUNT),
                                     jsonObject.getString(KEY_PROPERTY_BATHROOMCOUNT),
+                                    jsonObject.getString(KEY_PROPERTY_FAVOURITECOUNT),
+                                    jsonObject.getString(KEY_PROPERTY_VIEWCOUNT),
                                     jsonObject.getString(KEY_PROPERTY_WHOLEAPARTMENT),
                                     jsonObject.getString(KEY_PROPERTY_CREATEDDATE));
 
                             favourite = new Favourite(
                                     jsonObject.getString(KEY_FAVOURITEID),
-                                    user.getUserID(),
-                                    property.getPropertyID(),
+                                    user,
+                                    property,
                                     jsonObject.getString(KEY_PROPERTY_CREATEDDATE));
                             // add into local db
                             favouriteCtrl.addFavouritePropertyDetails(favourite);
                         }// end of for loop
                     }
+
+
                 } catch (JSONException error) {
                     // JSON error
                     ErrorHandler.errorHandler(activity, error);
                 }
+
+
+                activity.startActivity(new Intent(activity, MainUI.class));
+                activity.finish();
             }
         }
 
@@ -250,8 +267,8 @@ public class EstateCtrl extends Application {
     }
 
     // add user favourite property into local db
-    public static void syncUserFavouritePropertyToLocalDB(Favourite favourite) {
-        Log.i(TAG, "syncUserFavouritePropertyToLocalDB");
+    public static void syncUserNewFavouritePropertyToLocalDB(Favourite favourite) {
+        Log.i(TAG, "syncUserNewFavouritePropertyToLocalDB");
         favouriteCtrl = new FavouriteCtrl(getInstance());
         // insert user property into local DB
         favouriteCtrl.addFavouritePropertyDetails(favourite);
@@ -263,6 +280,25 @@ public class EstateCtrl extends Application {
         favouriteCtrl = new FavouriteCtrl(getInstance());
         // insert user property into local DB
         favouriteCtrl.deleteFavouriteProperty(favourite);
+    }
+
+    // sync drawer values
+    public void updateDisplayValues(Fragment fragment) {
+        userCtrl = new UserCtrl(getInstance());
+        propertyCtrl = new PropertyCtrl(getInstance());
+        favouriteCtrl = new FavouriteCtrl(getInstance());
+        // update value at drawer
+        NavigationView navigationView = (NavigationView) fragment.getActivity().findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(1).setTitle("My listings (" + propertyCtrl.getUserPropertyCountDetails() + ")");
+        navigationView.getMenu().getItem(2).setTitle("Favourite Listings (" + favouriteCtrl.getUserFarvouriteCountDetails() + ")");
+
+        // check from which fragment
+        // refresh user favourite list if fragment was from FragmentUserFavouriteListings
+        if (fragment.getClass().getSimpleName().equals(FragmentUserFavouriteListings.class.getSimpleName())) {
+            Log.i(TAG, "Reset User Favourite Listing page recycleview");
+            // get user favourite listings from server
+            favouriteCtrl.serverGetUserFavouriteListings(fragment, userCtrl.getUserDetails());
+        }
     }
 
 

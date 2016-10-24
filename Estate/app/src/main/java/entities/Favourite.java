@@ -7,21 +7,9 @@ package entities;
 public class Favourite {
 
     private String favouriteID;
-    private String ownerID;
-    private String propertyID;
+    private User ownerID;
+    private Property propertyID;
     private String createddate;
-
-    public Favourite(String ownerID, String propertyID) {
-        this.ownerID = ownerID;
-        this.propertyID = propertyID;
-    }
-
-    public Favourite(String favouriteID, String ownerID, String propertyID, String createddate) {
-        this.favouriteID = favouriteID;
-        this.ownerID = ownerID;
-        this.propertyID = propertyID;
-        this.createddate = createddate;
-    }
 
     public String getFavouriteID() {
         return favouriteID;
@@ -31,19 +19,19 @@ public class Favourite {
         this.favouriteID = favouriteID;
     }
 
-    public String getOwnerID() {
+    public User getOwner() {
         return ownerID;
     }
 
-    public void setOwnerID(String ownerID) {
+    public void setOwnerID(User ownerID) {
         this.ownerID = ownerID;
     }
 
-    public String getPropertyID() {
+    public Property getProperty() {
         return propertyID;
     }
 
-    public void setPropertyID(String propertyID) {
+    public void setPropertyID(Property propertyID) {
         this.propertyID = propertyID;
     }
 
@@ -53,6 +41,19 @@ public class Favourite {
 
     public void setCreateddate(String createddate) {
         this.createddate = createddate;
+    }
+
+    public Favourite(String favouriteID, User owner, Property property, String createddate) {
+
+        this.ownerID = owner;
+        this.favouriteID = favouriteID;
+        this.propertyID = property;
+        this.createddate = createddate;
+    }
+
+    public Favourite(User owner, Property property) {
+        this.ownerID = owner;
+        this.propertyID = property;
     }
 }
 

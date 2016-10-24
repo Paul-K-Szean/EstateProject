@@ -48,9 +48,10 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/IMGVLblFavouriteIcon"
@@ -60,9 +61,29 @@
                         app:srcCompat="@drawable/ic_action_favourite_outline" />
 
                     <TextView
-                        android:id="@+id/TVLblPropertyFavouriteCount"
+                        android:id="@+id/TVLblFavouriteCount"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/IMGVLblViewIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_action_remove_red_eye" />
+
+                    <TextView
+                        android:id="@+id/TVLblViewCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -181,7 +202,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         </RelativeLayout>
 

@@ -21,7 +21,7 @@ import controllers.UserCtrl;
 import entities.Property;
 import entities.User;
 import handler.FragmentHandler;
-import handler.ViewAdapter;
+import handler.ViewAdapterRecycler;
 import tabs.SlidingTabLayout;
 
 import static android.view.View.GONE;
@@ -38,7 +38,7 @@ public class FragmentUserListings extends Fragment {
     private PropertyCtrl propertyCtrl;
 
     private RecyclerView recycler;
-    private ViewAdapter viewAdapter;
+    private ViewAdapterRecycler viewAdapter;
     private ArrayList<Property> propertyArrayList;
     Button btnNewListing;
     TextView tvUserMsg, itemDataID;
@@ -94,7 +94,7 @@ public class FragmentUserListings extends Fragment {
         propertyArrayList = propertyCtrl.getUserProperties(user);
         // displays into recycler view
         recycler = (RecyclerView) view.findViewById(R.id.recycleView);
-        viewAdapter = new ViewAdapter(FragmentUserListings.this, propertyArrayList);
+        viewAdapter = new ViewAdapterRecycler(FragmentUserListings.this, propertyArrayList);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycler.setAdapter(viewAdapter);
 
@@ -117,18 +117,13 @@ public class FragmentUserListings extends Fragment {
     public void onResume() {
         Log.w(TAG, "onResume");
         super.onResume();
-        // Fetching user details from sqlite
-        user = userCtrl.getUserDetails();
+
     }
 
     @Override
     public void onPause() {
         Log.w(TAG, "onPause");
         super.onPause();
-        if (user != null) {
-            userCtrl.updateUserDetails(user);
-        } else
-            Log.e(TAG, "No user to retain");
 
     }
 
@@ -142,7 +137,6 @@ public class FragmentUserListings extends Fragment {
     public void onDestroyView() {
         Log.w(TAG, "onDestroyView");
         super.onDestroyView();
-
     }
 
     @Override
@@ -150,6 +144,4 @@ public class FragmentUserListings extends Fragment {
         Log.w(TAG, "onDestroy");
         super.onDestroy();
     }
-
-
 }

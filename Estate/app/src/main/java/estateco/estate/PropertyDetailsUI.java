@@ -61,7 +61,6 @@ public class PropertyDetailsUI extends AppCompatActivity {
 
 
         if (savedInstanceState.get("previousfragment").toString().equals(FragmentUserFavouriteListings.class.getSimpleName())) {
-
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         } else
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -109,6 +108,7 @@ public class PropertyDetailsUI extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onStart() {
         Log.w(TAG, "onStart");
@@ -139,10 +139,10 @@ public class PropertyDetailsUI extends AppCompatActivity {
         super.onStop();
     }
 
-
     @Override
     public void onDestroy() {
         Log.w(TAG, "onDestroy");
         super.onDestroy();
     }
+
 }

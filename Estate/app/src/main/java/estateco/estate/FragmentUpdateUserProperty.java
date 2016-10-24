@@ -87,7 +87,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
     String valEditPropertyID, valEditFlatType, valEditBlock = "000", valEditStreetName, valEditFloorLevel,
             valEditFloorArea, valEditPrice, valEditImage, valEditStatus,
             valEditDealType, valEditTitle, valEditDesc, valEditFurnishLevel, valEditBedroomCount,
-            valEditBathroomCount, valEditWholeApartment, valEditCreatedDate;
+            valEditBathroomCount, valEditFavouriteCount, valEditViewCount, valEditWholeApartment, valEditCreatedDate;
     TextView tvLblCreatedDate, tvLblFloorArea;
     Toolbar toolbar;
     private SlidingTabLayout slidingTabLayout;
@@ -214,7 +214,8 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                        valEditFurnishLevel = spEditFurnishLevel.getSelectedItem().toString();
                                                        valEditBedroomCount = spEditBedroomCount.getSelectedItem().toString();
                                                        valEditBathroomCount = spEditBathroomCount.getSelectedItem().toString();
-                                                       valEditWholeApartment = chkbxEditWholeApartment.isChecked() ? PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT : PropertyCtrl.KEY_PROPERTY_ROOM;
+                                                       valEditFavouriteCount =
+                                                               valEditWholeApartment = chkbxEditWholeApartment.isChecked() ? PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT : PropertyCtrl.KEY_PROPERTY_ROOM;
                                                        valEditCreatedDate = tvLblCreatedDate.getText().toString();
 
 
@@ -251,8 +252,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                                    valEditFurnishLevel,
                                                                    valEditBedroomCount,
                                                                    valEditBathroomCount,
-                                                                   valEditWholeApartment,
-                                                                   valEditCreatedDate);
+                                                                   valEditWholeApartment);
 
 
                                                            Log.i(TAG, valEditFloorLevel);
@@ -451,7 +451,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
     // alert dialog response
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        propertyCtrl.serverUpdateProperty(FragmentUpdateUserProperty.this, property, user);
+        propertyCtrl.serverUpdateUserProperty(FragmentUpdateUserProperty.this, property, user);
 
     }
 
@@ -460,6 +460,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
         // btnEditPropertySave.setText("Cancelled");
         Toast.makeText(getActivity(), "Update was cancelled.", Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void onStart() {
@@ -471,18 +472,14 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
     public void onResume() {
         Log.w(TAG, "onResume");
         super.onResume();
-        // Fetching user details from sqlite
-        user = userCtrl.getUserDetails();
+
     }
 
     @Override
     public void onPause() {
         Log.w(TAG, "onPause");
         super.onPause();
-        if (user != null) {
-            userCtrl.updateUserDetails(user);
-        } else
-            Log.e(TAG, "No user to retain");
+
     }
 
     @Override

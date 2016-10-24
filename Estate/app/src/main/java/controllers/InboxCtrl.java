@@ -50,46 +50,46 @@ public class InboxCtrl {
     // **********************************************************************
     // ********************* LOCAL SQLITE DATABASE ACCESS *******************
     // **********************************************************************
-    // add favourite property details into local db
-    public void addInbox(Inbox inbox) {
-        db.addInbox(inbox);
-    }
-
-    // get user favourite property details from local db
-    public Inbox getUserInbox(String propertyID) {
-        // Fetching user details from sqlite
-        HashMap<String, String> savedInbox = db.getUserFavouriteProperty(propertyID);
-        if (savedInbox != null) {
-            Log.i(TAG, "Retrieving propertyID: " + savedInbox.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
-            inbox = new Inbox(
-                    savedInbox.get(KEY_INBOXID),
-                    savedInbox.get(KEY_SENDERID),
-                    savedInbox.get(KEY_RECIPIENTID),
-                    savedInbox.get(KEY_INBOXTYPE),
-                    savedInbox.get(KEY_INBOXTITLE),
-                    savedInbox.get(KEY_INBOXMESSAGE),
-                    savedInbox.get(KEY_CREATEDDATE));
-            return inbox;
-        } else {
-            Log.e(TAG, "No favourite property data from local database.");
-            return null;
-        }
-    }
-
-    // get user favourite properties from local db
-    public ArrayList<Favourite> getInboxs(User owner) {
-        return db.getUserFavouriteProperties(owner);
-    }
-
-    // delete a favourite property from local db
-    public void deleteFavouriteProperty(Favourite favourite) {
-        db.deleteFavouriteProperty(favourite);
-    }
-
-    // remove all favourite property from local db
-    public void deleteFavouritePropertyTable() {
-        db.deleteFavouritePropertyTable();
-    }
+//    // add favourite property details into local db
+//    public void addInbox(Inbox inbox) {
+//        db.addInbox(inbox);
+//    }
+//
+//    // get user favourite property details from local db
+//    public Inbox getUserInbox(String propertyID) {
+//        // Fetching user details from sqlite
+//        HashMap<String, String> savedInbox = db.getUserFavouriteProperty(user.getUserID(), propertyID);
+//        if (savedInbox != null) {
+//            Log.i(TAG, "Retrieving propertyID: " + savedInbox.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
+//            inbox = new Inbox(
+//                    savedInbox.get(KEY_INBOXID),
+//                    savedInbox.get(KEY_SENDERID),
+//                    savedInbox.get(KEY_RECIPIENTID),
+//                    savedInbox.get(KEY_INBOXTYPE),
+//                    savedInbox.get(KEY_INBOXTITLE),
+//                    savedInbox.get(KEY_INBOXMESSAGE),
+//                    savedInbox.get(KEY_CREATEDDATE));
+//            return inbox;
+//        } else {
+//            Log.e(TAG, "No favourite property data from local database.");
+//            return null;
+//        }
+//    }
+//
+//    // get user favourite properties from local db
+//    public ArrayList<Favourite> getInboxs(User owner) {
+//        return db.getUserFavouriteProperties(owner);
+//    }
+//
+//    // delete a favourite property from local db
+//    public void deleteFavouriteProperty(Favourite favourite) {
+//        db.deleteFavouriteProperty(favourite);
+//    }
+//
+//    // remove all favourite property from local db
+//    public void deleteFavouritePropertyTable() {
+//        db.deleteFavouritePropertyTable();
+//    }
 
     // **********************************************************************
     // ********************* REMOTE WAMP SERVER ACCESS **********************

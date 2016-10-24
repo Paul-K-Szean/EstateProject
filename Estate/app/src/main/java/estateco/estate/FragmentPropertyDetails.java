@@ -40,6 +40,9 @@ import handler.ImageHandler;
 import handler.JSONHandler;
 
 import static android.widget.Toast.LENGTH_SHORT;
+import static controllers.PropertyCtrl.KEY_ACTION_DECREASEFAVOURITE;
+import static controllers.PropertyCtrl.KEY_ACTION_INCREASEFAVOURITE;
+import static controllers.PropertyCtrl.KEY_ACTION_INCREASEVIEW;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +50,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuItemClickListener {
     private static final String TAG = FragmentPropertyDetails.class.getSimpleName();
     private static final String TAG_FARVOURITE = "favourite";
+    private static final String TAG_VIEW = "view";
     private static final String TAG_PHONECALL = "phonecall";
     private static final String TAG_PHONEMESSAGE = "phonemessage";
 
@@ -56,8 +60,8 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
 
     private User user;
     private User owner;
-    private static Property property;
-    private static Favourite favourite;
+    private Property property;
+    private Favourite favourite;
     ArrayList<Favourite> favouriteArrayList;
     static Boolean isFavourited = false;
 
@@ -67,14 +71,16 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
     ImageView imgvPropDetImage;
     String valProDetPropertyID, valProDetOwnerID, valProDetOwnerName, valProDetOwnerEmail, valProDetOwnerContact, valProDetFlatType,
             valProDetDealType, valProDetTitle, valProDetDescription, valProDetFurnishLevel, valProDetPrice,
-            valProDetBlock, valProDetStreetName, valProDetImage, valProDetStatus, valProDetBedroomCount, valProDetBathroomCount,
+            valProDetBlock, valProDetStreetName, valProDetImage, valProDetStatus, valProDetBedroomCount, valProDetFavouriteCount, valProDetViewCount, valProDetBathroomCount,
             valProDetFloorLevel, valProDetFloorArea, valProDetWholeApartment, valProDetCreatedDate;
     Toolbar toolBarTop, toolBarBottom;
-    MenuItem menuItemFavourite, menuItemFavouriteCount;
+    MenuItem menuItemFavouriteIcon, menuItemFavouriteCount, menuItemViewIcon, menuItemViewCount;
 
 
     public FragmentPropertyDetails() {
         // Required empty public constructor
+        // increase view count
+
     }
 
 
@@ -105,12 +111,19 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
         toolBarBottom = (Toolbar) getActivity().findViewById(R.id.toolbar_bottom);
         toolBarBottom.setVisibility(View.VISIBLE);
         toolBarBottom.setOnMenuItemClickListener(this);
-        if ((menuItemFavourite = toolBarBottom.getMenu().findItem(R.id.action_favourite)) != null) {
-            menuItemFavourite.setIcon(R.drawable.ic_action_favourite_outline);
+        if ((menuItemFavouriteIcon = toolBarBottom.getMenu().findItem(R.id.action_favouriteicon)) != null) {
+            menuItemFavouriteIcon.setIcon(R.drawable.ic_action_favourite_outline);
         } else {
             Log.i(TAG, "Unable to find favourite icon.");
         }
-        menuItemFavouriteCount = toolBarBottom.getMenu().findItem(R.id.action_propertyfavouritecount);
+        menuItemFavouriteCount = toolBarBottom.getMenu().findItem(R.id.action_favouritecount);
+
+        if ((menuItemViewIcon = toolBarBottom.getMenu().findItem(R.id.action_viewicon)) != null) {
+            menuItemViewIcon.setIcon(R.drawable.ic_action_remove_red_eye);
+        } else {
+            Log.i(TAG, "Unable to find view icon.");
+        }
+        menuItemViewCount = toolBarBottom.getMenu().findItem(R.id.action_viewcount);
 
 
         imgvPropDetImage = (ImageView) view.findViewById(R.id.IMGVPropDetImage);
@@ -168,6 +181,8 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                                 valProDetFurnishLevel = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL),
                                 valProDetBedroomCount = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT),
                                 valProDetBathroomCount = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT),
+                                valProDetFavouriteCount = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_FAVOURITECOUNT),
+                                valProDetViewCount = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_VIEWCOUNT),
                                 valProDetWholeApartment = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT),
                                 valProDetCreatedDate = propertyObj.getString(PropertyCtrl.KEY_PROPERTY_CREATEDDATE));
 
@@ -182,9 +197,13 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
 
                 // deal details
                 tvPropDetDealType.setText(valProDetDealType);
+
                 // general details
                 tvPropDetTitle.setText(valProDetTitle);
                 tvPropDetDesc.setText(valProDetDescription);
+                menuItemFavouriteCount.setTitle(valProDetFavouriteCount);
+                menuItemViewCount.setTitle(valProDetViewCount);
+
                 // address details
                 tvPropDetFloorLevel.setText("Level " + valProDetFloorLevel);
                 tvPropDetStreetName.setText(valProDetStreetName);
@@ -199,6 +218,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 tvPropDetFurnishLevel.setText(valProDetFurnishLevel);
                 tvPropDetBedroomCount.setText(valProDetBedroomCount + " bedroom(s)");
                 tvPropDetBathroomCount.setText(valProDetBathroomCount + " bathroom(s)");
+
                 // owner details
                 tvPropDetOwnerName.setText(valProDetOwnerName);
                 tvPropDetOwnerEmail.setText(valProDetOwnerEmail);
@@ -206,30 +226,27 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
 
                 // set favourite icon
                 setFavouritedIcon(property);
+
+                // increase view count
+                favouriteCtrl.serverUpdatePropertyCount(FragmentPropertyDetails.this, property, KEY_ACTION_INCREASEVIEW, menuItemViewCount);
+
             }
         }).execute();
 
     }
 
     private void setFavouritedIcon(Property property) {
-        // set isFavourited initially to false as default display.;
+        // set isFavourited initially to false as default display;
         isFavourited = false;
-        favouriteArrayList = favouriteCtrl.getUserFavouriteProperties(user);
-        for (Favourite favourite : favouriteArrayList) {
-            Log.i(TAG, "propertyID(" + property.getPropertyID().toString() +
-                    ") == favourite.getPropertyID(" +
-                    favourite.getPropertyID().toString() + ") == " +
-                    (property.getPropertyID().toString().equals(favourite.getPropertyID().toString())));
-            // display favourite or un-favourite
-            if (property.getPropertyID().toString().equals(favourite.getPropertyID().toString())) {
-                isFavourited = true;
-                this.favourite = favourite;
-                menuItemFavourite.setIcon(R.drawable.ic_action_favourite);
-                break;
-            }
+        Favourite favourite = favouriteCtrl.getUserFavouritePropertyDetails(user, property);
+        // check favourite list from local db and show icon accordingly
+        if (favourite != null) {
+            Log.i(TAG, "This property " + favourite.getProperty().getPropertyID() + " is favourite by user " + favourite.getOwner().getUserID());
+            isFavourited = true;
+            menuItemFavouriteIcon.setIcon(R.drawable.ic_action_favourite);
+        } else {
+            Log.i(TAG, "This property " + property.getPropertyID() + " is not favourite by user " + user.getUserID());
         }
-        // display favourite count
-        favouriteCtrl.serverGetPropertyFavouriteCount(FragmentPropertyDetails.this, new Favourite(user.getUserID(), property.getPropertyID()));
 
     }
 
@@ -247,21 +264,21 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_favourite) {
+        if (id == R.id.action_favouriteicon) {
             Log.i(TAG, TAG_FARVOURITE + " action clicked. isFavourite value was = " + isFavourited);
             if (isFavourited) {
                 isFavourited = false;
                 Log.i(TAG, "Trying to un-favourite this property. isFavourite value is = " + isFavourited);
                 item.setIcon(R.drawable.ic_action_favourite_outline);
-                // un-favourite property
-                favouriteCtrl.serverDeleteFavouriteProperty(FragmentPropertyDetails.this, favourite);
+                // decrease favourite count of this property
+                favouriteCtrl.serverUpdatePropertyCount(FragmentPropertyDetails.this, property, KEY_ACTION_DECREASEFAVOURITE, menuItemFavouriteCount);
+
             } else {
                 isFavourited = true;
                 Log.i(TAG, "Trying to favourite this property. isFavourite value is = " + isFavourited);
                 item.setIcon(R.drawable.ic_action_favourite);
-                favourite = new Favourite(user.getUserID(), property.getPropertyID());
-                // favourite property
-                favouriteCtrl.serverNewFavouriteProperty(FragmentPropertyDetails.this, favourite);
+                // increase favourite count of this property
+                favouriteCtrl.serverUpdatePropertyCount(FragmentPropertyDetails.this, property, KEY_ACTION_INCREASEFAVOURITE, menuItemFavouriteCount);
             }
         }
         if (id == R.id.action_phone_call) {
@@ -287,18 +304,14 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
     public void onResume() {
         Log.w(TAG, "onResume");
         super.onResume();
-        // Fetching user details from sqlite
-        user = userCtrl.getUserDetails();
+
     }
 
     @Override
     public void onPause() {
         Log.w(TAG, "onPause");
         super.onPause();
-        if (user != null) {
-            userCtrl.updateUserDetails(user);
-        } else
-            Log.e(TAG, "No user to retain");
+
     }
 
     @Override

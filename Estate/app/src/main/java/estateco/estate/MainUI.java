@@ -27,10 +27,6 @@ import handler.SQLiteHandler;
 import handler.SessionHandler;
 import tabs.SlidingTabLayout;
 
-import static controllers.EstateConfig.URL_LEASELISTINGS;
-import static controllers.EstateConfig.URL_SALELISTINGS;
-import static controllers.EstateConfig.URL_SEARCHLISTINGS;
-
 // import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 
 public class MainUI extends AppCompatActivity
@@ -51,71 +47,6 @@ public class MainUI extends AppCompatActivity
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        Log.w(TAG, "onCreate");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        // setup ctrl objects
-        session = new SessionHandler(getApplicationContext());
-        db = new SQLiteHandler(getApplicationContext());
-        userCtrl = new UserCtrl(getApplicationContext(), session);
-        propertyCtrl = new PropertyCtrl(getApplicationContext());
-        favouriteCtrl = new FavouriteCtrl(getApplicationContext());
-        user = userCtrl.getUserDetails();
-        // check if user is already logged in or not
-        if (session.isLoggedIn()) {
-            // User is already logged in. Take him to main activity
-        } else {
-            // remove any existing data in local db.
-            userCtrl.deleteUserTable();
-            propertyCtrl.deletePropertyTable();
-            favouriteCtrl.deleteFavouritePropertyTable();
-            session.setLogin(false);
-        }
-
-        // tool bars
-        toolBarTop = (Toolbar) findViewById(R.id.toolbar_top);
-        setSupportActionBar(toolBarTop);
-        toolBarTop.setTitle("All Listings");
-        toolBarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
-        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
-
-        // sliding tabs
-        viewPager = (ViewPager) findViewById(R.id.ViewPagerMain);
-        viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
-        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.TabLayoutMain);
-        slidingTabLayout.setDistributeEvenly(true);
-        slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
-            @Override
-            public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.colorAccent);
-            }
-        });
-        slidingTabLayout.setViewPager(viewPager);
-
-        // navigation
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(1).setTitle("My listings (" + propertyCtrl.getUserPropertyCountDetails() + ")");
-        navigationView.getMenu().getItem(2).setTitle("Favourite Listings (" + favouriteCtrl.getUserFarvouriteCountDetails() + ")");
-
-        // drawer header
-        View header = navigationView.getHeaderView(0);
-        // sets the header use user information
-        tvHderName = (TextView) header.findViewById(R.id.TVHderName);
-        tvHderEmail = (TextView) header.findViewById(R.id.TVHderEmail);
-        tvHderName.setText(user.getName());
-        tvHderEmail.setText(user.getEmail());
-
-        // drawers items
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolBarTop, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -195,108 +126,72 @@ public class MainUI extends AppCompatActivity
         return true;
     }
 
-    //
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View view = inflater.inflate(R.layout.viewstyle_row, container, false);
-//            TextView textView = (TextView) view.findViewById(R.id.section_label);
-//            // textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-//
-//            return view;
-//        }
-//    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        Log.w(TAG, "onCreate");
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        // setup ctrl objects
+        session = new SessionHandler(getApplicationContext());
+        db = new SQLiteHandler(getApplicationContext());
+        userCtrl = new UserCtrl(getApplicationContext());
+        propertyCtrl = new PropertyCtrl(getApplicationContext());
+        favouriteCtrl = new FavouriteCtrl(getApplicationContext());
+        user = userCtrl.getUserDetails();
 
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        String[] tabTitle = {"All", "For Lease", "For Sale"};
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+        Log.i(TAG, "User at main: " + user.getName() + ", Current session: " + session.isLoggedIn());
+        // check if user is already logged in or not
+        if (session.isLoggedIn()) {
+            // User is already logged in. Take him to main activity
+        } else {
+            // remove any existing data in local db.
+            userCtrl.deleteUserTable();
+            propertyCtrl.deletePropertyTable();
+            favouriteCtrl.deleteFavouritePropertyTable();
+            session.setLogin(false);
         }
 
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            FragmentMainListings fragmentMainListings;
-            Bundle args;
-            switch (position) {
-                case 0:
-                    fragmentMainListings = new FragmentMainListings();
-                    args = new Bundle();
-                    args.putString("URL_SEARCHTYPE", URL_SEARCHLISTINGS);
-                    fragmentMainListings.setArguments(args);
-                    return fragmentMainListings;
-                case 1:
-                    fragmentMainListings = new FragmentMainListings();
-                    args = new Bundle();
-                    args.putString("URL_SEARCHTYPE", URL_LEASELISTINGS);
-                    fragmentMainListings.setArguments(args);
-                    return fragmentMainListings;
-                case 2:
-                    fragmentMainListings = new FragmentMainListings();
-                    args = new Bundle();
-                    args.putString("URL_SEARCHTYPE", URL_SALELISTINGS);
-                    fragmentMainListings.setArguments(args);
-                    return fragmentMainListings;
-                default:
-                    fragmentMainListings = new FragmentMainListings();
-                    args = new Bundle();
-                    args.putString("URL_SEARCHTYPE", URL_SEARCHLISTINGS);
-                    fragmentMainListings.setArguments(args);
-                    return fragmentMainListings;
+        // tool bars
+        toolBarTop = (Toolbar) findViewById(R.id.toolbar_top);
+        setSupportActionBar(toolBarTop);
+        toolBarTop.setTitle("All Listings");
+        toolBarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
+        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
+
+        // sliding tabs
+        viewPager = (ViewPager) findViewById(R.id.ViewPagerMain);
+        viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.TabLayoutMain);
+        slidingTabLayout.setDistributeEvenly(true);
+        slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.colorAccent);
             }
-        }
+        });
+        slidingTabLayout.setViewPager(viewPager);
 
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return tabTitle.length;
-        }
+        // navigation
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(1).setTitle("My listings (" + propertyCtrl.getUserPropertyCountDetails() + ")");
+        navigationView.getMenu().getItem(2).setTitle("Favourite Listings (" + favouriteCtrl.getUserFarvouriteCountDetails() + ")");
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return tabTitle[position];
-//            switch (position) {
-//                case 0:
-//                    return "SECTION 1";
-//                case 1:
-//                    return "SECTION 2";
-//                case 2:
-//                    return "SECTION 3";
-//            }
-        }
+        // drawer header
+        View header = navigationView.getHeaderView(0);
+        // sets the header use user information
+        tvHderName = (TextView) header.findViewById(R.id.TVHderName);
+        tvHderEmail = (TextView) header.findViewById(R.id.TVHderEmail);
+        tvHderName.setText(user.getName());
+        tvHderEmail.setText(user.getEmail());
+
+        // drawers items
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolBarTop, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
     }
 
 
@@ -330,11 +225,51 @@ public class MainUI extends AppCompatActivity
         super.onStop();
     }
 
-
     @Override
     public void onDestroy() {
         Log.w(TAG, "onDestroy");
         super.onDestroy();
+    }
+
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        String[] tabTitle = {"All", "For Lease", "For Sale"};
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Log.i(TAG, "getItem " + position);
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            return FragmentMainListings.getInstance(position);
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return tabTitle.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitle[position];
+//            switch (position) {
+//                case 0:
+//                    return "SECTION 1";
+//                case 1:
+//                    return "SECTION 2";
+//                case 2:
+//                    return "SECTION 3";
+//            }
+        }
     }
 
 

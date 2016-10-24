@@ -2,37 +2,42 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_propertyfavouritecount"
+        android:id="@+id/action_favouritecount"
         android:title=""
         app:showAsAction="always"></item>
     <item
-        android:id="@+id/action_favourite"
+        android:id="@+id/action_favouriteicon"
         android:icon="@drawable/ic_action_favourite_outline"
         android:title="Item"
-        app:showAsAction="always" />
+        app:showAsAction="always"></item>
     <item
+        android:id="@+id/action_viewcount"
         android:title=""
+        app:showAsAction="always"></item>
+    <item
+        android:id="@+id/action_viewicon"
+        android:icon="@drawable/ic_action_remove_red_eye"
+        android:title="Item"
         app:showAsAction="always"></item>
     <item
         android:title=""
         app:showAsAction="always"></item>
+
+
+    <item
+        android:title=""
+        app:showAsAction="always"></item>
+
     <item
         android:id="@+id/action_phone_call"
         android:icon="@drawable/ic_action_phonecall"
         android:title="Item"
         app:showAsAction="always" />
-    <item
-        android:title=""
-        app:showAsAction="always"></item>
-    <item
-        android:title=""
-        app:showAsAction="always"></item>
 
     <item
         android:id="@+id/action_phone_message"
         android:icon="@drawable/ic_action_forum"
         android:title="Item"
         app:showAsAction="always" />
-
 
 </menu>

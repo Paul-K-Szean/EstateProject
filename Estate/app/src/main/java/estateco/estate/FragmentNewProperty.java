@@ -96,7 +96,7 @@ public class FragmentNewProperty extends Fragment {
     ImageView imgvNewImage;
     Spinner spNewDealType, spNewFloorLevel, spNewFlatType, spNewFurnishLevel, spNewBedroomCount, spNewBathroomCount;
     String valNewFlatType, valNewBlock, valNewStreetName, valNewFloorLevel, valNewFloorArea, valNewPrice, valNewImage, valNewStatus,
-            valNewDealType, valNewTitle, valNewDesc, valNewFurnishLevel, valNewBedroomCount, valNewBathroomCount, valNewWholeApartment, selectedImagePath;
+            valNewDealType, valNewTitle, valNewDesc, valNewFurnishLevel, valNewBedroomCount, valNewBathroomCount, valNewFavouriteCount, valNewViewCount, valNewWholeApartment, selectedImagePath;
     TextView tvNewBedroomCount;
 
 
@@ -313,9 +313,9 @@ public class FragmentNewProperty extends Fragment {
                                                              etNewFloorArea.setError("Required field!");
                                                      } else {
                                                          valNewStatus = "open";
-
-                                                         if(valNewDealType.equals(DealType.ForLease.toString()) && valNewWholeApartment.equals(KEY_PROPERTY_ROOM))
-                                                            valNewPrice = String.valueOf((Double.valueOf(valNewPrice)) / 1000);
+                                                         valNewFavouriteCount = valNewViewCount = "0";
+                                                         if (valNewDealType.equals(DealType.ForLease.toString()) && valNewWholeApartment.equals(KEY_PROPERTY_ROOM))
+                                                             valNewPrice = String.valueOf((Double.valueOf(valNewPrice)) / 1000);
 
                                                          // create property to server
                                                          property = new Property(
@@ -334,6 +334,8 @@ public class FragmentNewProperty extends Fragment {
                                                                  valNewFurnishLevel,
                                                                  valNewBedroomCount,
                                                                  valNewBathroomCount,
+                                                                 valNewFavouriteCount,
+                                                                 valNewViewCount,
                                                                  valNewWholeApartment);
 
                                                          propertyCtrl.serverNewProperty(FragmentNewProperty.this, property, user);
@@ -401,8 +403,6 @@ public class FragmentNewProperty extends Fragment {
     public void onResume() {
         Log.w(TAG, "onResume");
         super.onResume();
-        // fetching user details from sqlite
-        user = userCtrl.getUserDetails();
 
     }
 
@@ -410,10 +410,7 @@ public class FragmentNewProperty extends Fragment {
     public void onPause() {
         Log.w(TAG, "onPause");
         super.onPause();
-        if (user != null) {
-            userCtrl.updateUserDetails(user);
-        } else
-            Log.e(TAG, "No user to retain");
+
     }
 
     @Override
