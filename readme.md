@@ -58,16 +58,26 @@ WAMP server setup
 		- ignore the error if there is data inside the "estate" db you created.
 		
 **************************************************************************************************************************************************************************************************************************************************************************************************************************
-Android Studios setup
-1. Install Android Studios.
-2. Go to SDK manager and install Android 4.4 API level 19,	Android SDK build tools, cmake, sdk platform tools, sdk tools, and NDK.
-3. Go to ADK manager, choose any phone of your choice, and look for a API level 19 version. DO NOT CHOOSE level 24/25. That is for Android 7.0 and above. You can't use it unless you have the latest Google Pixel phone, which if you do, please let me try it.
-4. Start a new Android project. 
-Project name: Estate
-Company domain: estateco	
-Note: make sure project name and company domain are as above.
-5. Click next, next, select no activity, and click finish.
-6. Now, go to your project directory.
-7. git clone the repo on github, and move the contents of the estate folder into your project directory. select replace for any same filenames.
-8. Close your android studio, and reopen it. 
-9. Rebuild project, debug, and select the emulator you created. or load the apk into your android phone. 
+Android Studios setup  
+1. Install Android Studios.  
+  
+2. Go to SDK manager and install Android 4.4 API level 19,	Android SDK build tools, cmake, sdk platform tools, sdk tools, and NDK.  
+  
+3. Go to ADK manager, choose any phone of your choice, and look for a API level 19 version. DO NOT CHOOSE level 24/25. That is for Android 7.0 and above. You can't use it unless you have the latest Google Pixel phone, which if you do, please let me try it.  
+  
+4. Start a new Android project.  
+Project name: Estate  
+Company domain: estateco  
+Note: make sure project name and company domain are as above.  
+  
+5. Click next, next, select no activity, and click finish.  
+  
+6. Now, go to your project directory.  
+  
+7. git clone the repo on github, and move the contents of the estate folder into your project directory. select replace for any same filenames.  
+  
+8. Close your android studio, and reopen it.  
+  
+9. Rebuild project, debug, and select the emulator you created. or load the apk into your android phone.  
+
+**************************************************************************************************************************************************************************************************************************************************************************************************************************
