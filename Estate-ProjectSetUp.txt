@@ -79,4 +79,5 @@ Note: make sure project name and company domain are as above.
 8. Close your android studio, and reopen it.  
   
 9. Rebuild project, debug, and select the emulator you created. or load the apk into your android phone.  
+
 **************************************************************************************************************************************************************************************************************************************************************************************************************************
