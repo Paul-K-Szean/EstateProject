@@ -20,7 +20,6 @@ import entities.Favourite;
 import entities.Property;
 import entities.User;
 import estateco.estate.FragmentUpdateUserProperty;
-import estateco.estate.FragmentUserFavouriteListings;
 import estateco.estate.FragmentUserListings;
 import estateco.estate.PropertyDetailsUI;
 import estateco.estate.R;
@@ -62,7 +61,7 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflator.inflate(R.layout.viewstyle_row, parent, false);
+        View view = inflator.inflate(R.layout.customview_propertydetails, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
 
         return holder;

@@ -38,6 +38,7 @@ import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
 import handler.ImageHandler;
 import handler.JSONHandler;
+import handler.Utility;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static controllers.PropertyCtrl.KEY_ACTION_DECREASEFAVOURITE;
@@ -91,7 +92,6 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
         View view = inflater.inflate(R.layout.fragment_property_details, container, false);
         savedInstanceState = getActivity().getIntent().getExtras();
 
-
         // setup ctrl objects
         userCtrl = new UserCtrl(getActivity());
         propertyCtrl = new PropertyCtrl(getActivity());
@@ -99,17 +99,19 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
         user = userCtrl.getUserDetails();
 
         // set controls to user property
-        setPropertyDetails(view, savedInstanceState);
-        setControls(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            setPropertyDetails(view, savedInstanceState);
+            setControls(view, savedInstanceState);
+        }
+        
         return view;
     }
 
     private void setControls(View view, Bundle savedInstanceState) {
-        toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
+        toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolBarTopPropertyDetails);
         toolBarTop.setTitle("Property Details");
 
-        toolBarBottom = (Toolbar) getActivity().findViewById(R.id.toolbar_bottom);
-        toolBarBottom.setVisibility(View.VISIBLE);
+        toolBarBottom = (Toolbar) getActivity().findViewById(R.id.toolBarBottomPropertyDetails);
         toolBarBottom.setOnMenuItemClickListener(this);
         if ((menuItemFavouriteIcon = toolBarBottom.getMenu().findItem(R.id.action_favouriteicon)) != null) {
             menuItemFavouriteIcon.setIcon(R.drawable.ic_action_favourite_outline);
@@ -282,13 +284,14 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
             }
         }
         if (id == R.id.action_phone_call) {
+            Log.i(TAG, TAG_PHONECALL + " action clicked");
             Toast.makeText(getActivity(), TAG_PHONECALL, LENGTH_SHORT).show();
             requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
-            Log.i(TAG, TAG_PHONECALL + " action clicked");
+
         }
-        if (id == R.id.action_phone_message) {
-            Toast.makeText(getActivity(), TAG_PHONEMESSAGE, LENGTH_SHORT).show();
+        if (id == R.id.action_phonemessage) {
             Log.i(TAG, TAG_PHONEMESSAGE + " action clicked");
+            Toast.makeText(getActivity(), TAG_PHONEMESSAGE, LENGTH_SHORT).show();
         }
         return false;
     }
@@ -324,7 +327,8 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
     public void onDestroyView() {
         Log.w(TAG, "onDestroyView");
         super.onDestroyView();
-        toolBarBottom.setVisibility(View.GONE);
+        if (toolBarBottom != null)
+            toolBarBottom.setVisibility(View.GONE);
     }
 
     @Override

@@ -1,8 +1,12 @@
 package estateco.estate;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,6 +19,8 @@ import controllers.UserCtrl;
 import entities.User;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
+import handler.Utility;
+import tabs.SlidingTabLayout;
 
 public class PropertyDetailsUI extends AppCompatActivity {
     private static final String TAG = PropertyDetailsUI.class.getSimpleName();
@@ -25,13 +31,16 @@ public class PropertyDetailsUI extends AppCompatActivity {
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
     private User user;
-    Toolbar toolBarTop, toolBarBottom;
+    Toolbar toolBarTopPropertyDetails, toolBarBottom;
+
+    private SlidingTabLayout slidingTabLayout;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.w(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sub);
+        setContentView(R.layout.activity_propertydetails);
         savedInstanceState = getIntent().getExtras();
         // setup ctrl objects
         session = new SessionHandler(getApplicationContext());
@@ -50,14 +59,42 @@ public class PropertyDetailsUI extends AppCompatActivity {
             favouriteCtrl.deleteFavouritePropertyTable();
             session.setLogin(false);
         }
-        // sets the initial fragment to load for this activity
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new FragmentPropertyDetails());
-        fragmentTransaction.commit();
-        // tool bars
-        toolBarTop = (Toolbar) findViewById(R.id.toolbar_top);
-        toolBarTop.setTitle("Property Details");
-        setSupportActionBar(toolBarTop);
+
+        // toolbars
+        toolBarTopPropertyDetails = (Toolbar) findViewById(R.id.toolBarTopPropertyDetails);
+        setSupportActionBar(toolBarTopPropertyDetails);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolBarBottom = (Toolbar) findViewById(R.id.toolBarBottomPropertyDetails);
+        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
+
+        viewPager = (ViewPager) findViewById(R.id.ViewPagerPropertyDetails);
+        viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                Utility.hideSoftKeyboard(PropertyDetailsUI.this);
+
+            }
+        });
+        slidingTabLayout = (SlidingTabLayout) findViewById(R.id.TabLayoutPropertyDetails);
+        slidingTabLayout.setDistributeEvenly(true);
+        slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.colorAccent);
+            }
+        });
+        slidingTabLayout.setViewPager(viewPager);
 
 
         if (savedInstanceState.get("previousfragment").toString().equals(FragmentUserFavouriteListings.class.getSimpleName())) {
@@ -65,17 +102,14 @@ public class PropertyDetailsUI extends AppCompatActivity {
         } else
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        toolBarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
-        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
-
-
     }
 
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        // super.onBackPressed();
+        startActivity(new Intent(this, MainUI.class));
+
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        if (drawer.isDrawerOpen(GravityCompat.START)) {
 //            drawer.closeDrawer(GravityCompat.START);
@@ -106,6 +140,61 @@ public class PropertyDetailsUI extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        String[] tabTitle = {"House Details", "Comments"};
+
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            Fragment fragment = new FragmentPropertyDetails();
+
+            switch (position) {
+                case 0:
+                    // args.putString(KEY_PROPERTY_PROPERTYID, pro);
+                    fragment = new FragmentPropertyDetails();
+                    return fragment;
+                case 1:
+                    fragment = new FragmentComment();
+                    return fragment;
+            }
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return tabTitle.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitle[position];
+//            switch (position) {
+//                case 0:
+//                    return "SECTION 1";
+//                case 1:
+//                    return "SECTION 2";
+//                case 2:
+//                    return "SECTION 3";
+//            }
+
+        }
+
+
     }
 
 

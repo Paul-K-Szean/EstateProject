@@ -79,7 +79,7 @@ public class ViewAdapterListView extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) fragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.viewstyle_row, parent, false);
+        View itemView = inflater.inflate(R.layout.customview_propertydetails, parent, false);
 
         // deal details
         tvProDetDealType = (TextView) itemView.findViewById(R.id.TVLblDealType);

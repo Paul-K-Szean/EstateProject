@@ -28,6 +28,7 @@ import java.util.Map;
 import entities.Favourite;
 import entities.Property;
 import entities.User;
+import estateco.estate.FragmentPropertyDetails;
 import estateco.estate.FragmentUserFavouriteListings;
 import estateco.estate.MainUI;
 import estateco.estate.R;
@@ -97,21 +98,6 @@ public class EstateCtrl extends Application {
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue().add(req);
-    }
-
-    public static void hideSoftKeyboard(Activity activity) {
-        Log.i(TAG, "hideSoftKeyboard()");
-        InputMethodManager inputMethodManager;
-        inputMethodManager = (InputMethodManager) activity.getSystemService(
-                Activity.INPUT_METHOD_SERVICE);
-
-        if (inputMethodManager != null) {
-            View focusedView = activity.getCurrentFocus();
-            if (focusedView != null) {
-                inputMethodManager.hideSoftInputFromWindow(
-                        focusedView.getWindowToken(), 0);
-            }
-        }
     }
 
     public static Boolean CheckInternetConnection(Context context) {
@@ -287,10 +273,7 @@ public class EstateCtrl extends Application {
         userCtrl = new UserCtrl(getInstance());
         propertyCtrl = new PropertyCtrl(getInstance());
         favouriteCtrl = new FavouriteCtrl(getInstance());
-        // update value at drawer
-        NavigationView navigationView = (NavigationView) fragment.getActivity().findViewById(R.id.nav_view);
-        navigationView.getMenu().getItem(1).setTitle("My listings (" + propertyCtrl.getUserPropertyCountDetails() + ")");
-        navigationView.getMenu().getItem(2).setTitle("Favourite Listings (" + favouriteCtrl.getUserFarvouriteCountDetails() + ")");
+
 
         // check from which fragment
         // refresh user favourite list if fragment was from FragmentUserFavouriteListings
@@ -298,6 +281,15 @@ public class EstateCtrl extends Application {
             Log.i(TAG, "Reset User Favourite Listing page recycleview");
             // get user favourite listings from server
             favouriteCtrl.serverGetUserFavouriteListings(fragment, userCtrl.getUserDetails());
+        }
+        // in another activity that does not consists of the draw
+        if (fragment.getClass().getSimpleName().equals(FragmentPropertyDetails.class.getSimpleName())) {
+
+        } else {
+            // update value at drawer
+            NavigationView navigationView = (NavigationView) fragment.getActivity().findViewById(R.id.nav_view);
+            navigationView.getMenu().getItem(1).setTitle("My listings (" + propertyCtrl.getUserPropertyCountDetails() + ")");
+            navigationView.getMenu().getItem(2).setTitle("Favourite Listings (" + favouriteCtrl.getUserFarvouriteCountDetails() + ")");
         }
     }
 

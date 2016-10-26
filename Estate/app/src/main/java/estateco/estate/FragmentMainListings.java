@@ -2,6 +2,7 @@ package estateco.estate;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -83,7 +83,7 @@ public class FragmentMainListings extends Fragment {
     private RecyclerView recycler;
     private ViewAdapterRecycler viewAdapter;
 
-    private ListView listView;
+
     private ViewAdapterListView viewAdapterListView;
 
 
@@ -141,8 +141,8 @@ public class FragmentMainListings extends Fragment {
 
         // tool bars
         toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
-        toolBarBottom = (Toolbar) getActivity().findViewById(R.id.toolbar_bottom);
-        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
+//        toolBarBottom = (Toolbar) getActivity().findViewById(R.id.toolbar_bottom);
+//        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
 
 
 //        // get all property listing from server
@@ -238,6 +238,7 @@ public class FragmentMainListings extends Fragment {
             searchView.setIconifiedByDefault(true);
         }
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -245,14 +246,25 @@ public class FragmentMainListings extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Map<String, String> paramValues = new HashMap<>();
-                paramValues.put(KEY_PROPERTY_SEARCH, newText);
-                new AsyncTaskHandler(Request.Method.POST, URL_ADDRESS, paramValues, getActivity(), new AsyncTaskResponse() {
+
+                final String queryString = newText;
+                Handler mHandler = new Handler();
+                mHandler.removeCallbacksAndMessages(null);
+                mHandler.postDelayed(new Runnable() {
                     @Override
-                    public void onAsyncTaskResponse(String response) {
-                        getAllListings(response);
+                    public void run() {
+                        Map<String, String> paramValues = new HashMap<>();
+                        paramValues.put(KEY_PROPERTY_SEARCH, queryString);
+                        new AsyncTaskHandler(Request.Method.POST, URL_ADDRESS, paramValues, getActivity(), new AsyncTaskResponse() {
+                            @Override
+                            public void onAsyncTaskResponse(String response) {
+                                getAllListings(response);
+                            }
+                        }).execute();
                     }
-                }).execute();
+                }, 1000);
+
+
                 return false;
             }
         });

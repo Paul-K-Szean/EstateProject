@@ -239,8 +239,8 @@ public class PropertyCtrl {
         paramValues.put(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());    // wholeapartment
 
         Log.i(TAG, "Param size: " + String.valueOf(paramValues.size()));
-        for (String val : paramValues.values()) {
-            Log.i(TAG, "Param value: " + val);
+        for (Map.Entry<String, String> val : paramValues.entrySet()) {
+            Log.i(TAG, val.getKey() + " == " + val.getValue());
         }
         // save to remote server
         if (paramValues != null) {

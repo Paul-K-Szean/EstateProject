@@ -35,10 +35,7 @@
 
     <include layout="@layout/content_main" />
 
-    <include
-        layout="@layout/toolbar_bottom"
-        android:gravity="bottom"
-        android:visibility="gone" />
+
 
 
 </android.support.design.widget.CoordinatorLayout>

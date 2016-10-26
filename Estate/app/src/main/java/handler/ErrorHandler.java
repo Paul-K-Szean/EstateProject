@@ -24,10 +24,15 @@ public class ErrorHandler {
     public static void errorHandler(Context context, VolleyError error) {
         Log.e(TAG, "ErrorHandler: " + error.getMessage());
         error.printStackTrace();
-        if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+        if (error instanceof TimeoutError) {
 
             Toast.makeText(context,
-                    "Server Time Out...",
+                    "Server Time out Error...",
+                    Toast.LENGTH_LONG).show();
+        } else if (error instanceof NoConnectionError) {
+
+            Toast.makeText(context,
+                    "Please ensure you are connected to the network!",
                     Toast.LENGTH_LONG).show();
         } else if (error instanceof AuthFailureError) {
 

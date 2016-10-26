@@ -1,41 +1,13 @@
 package handler;
 
 import android.app.Activity;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import controllers.FavouriteCtrl;
-import controllers.InboxCtrl;
-import controllers.PropertyCtrl;
-import controllers.UserCtrl;
-import entities.Favourite;
-import entities.Inbox;
-import entities.Property;
-import entities.User;
-
-import static controllers.FavouriteCtrl.KEY_FAVOURITEID;
-import static controllers.FavouriteCtrl.KEY_FAVOURITE_CREATEDDATE;
-import static controllers.FavouriteCtrl.KEY_FAVOURITE_OWNERID;
-import static controllers.FavouriteCtrl.KEY_FAVOURITE_PROPERTYID;
-import static controllers.FavouriteCtrl.TABLE_FAVOURITE;
-import static controllers.InboxCtrl.KEY_INBOXID;
-import static controllers.InboxCtrl.KEY_INBOXMESSAGE;
-import static controllers.InboxCtrl.KEY_INBOXTITLE;
-import static controllers.InboxCtrl.KEY_INBOXTYPE;
-import static controllers.InboxCtrl.KEY_RECIPIENTID;
-import static controllers.InboxCtrl.KEY_SENDERID;
 
 /**
  * Created by Paul K Szean on 19/10/2016.

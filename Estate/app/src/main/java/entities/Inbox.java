@@ -14,6 +14,22 @@ public class Inbox {
     private String inboxmessage;
     private String createddate;
 
+    // for creating
+    public Inbox(String senderID, String recipientID, String inboxtype, String inboxtitle, String inboxmessage) {
+        this.senderID = senderID;
+        this.recipientID = recipientID;
+        this.inboxtype = inboxtype;
+        this.inboxtitle = inboxtitle;
+        this.inboxmessage = inboxmessage;
+    }
+
+    // for retrieving
+    public Inbox(String recipientID, String inboxtype) {
+        this.recipientID = recipientID;
+        this.inboxtype = inboxtype;
+    }
+
+    // for displaying
     public Inbox(String inboxID, String senderID, String recipientID, String inboxtype, String inboxtitle, String inboxmessage, String createddate) {
         this.inboxID = inboxID;
         this.senderID = senderID;

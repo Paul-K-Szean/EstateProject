@@ -308,7 +308,6 @@ public class FavouriteCtrl {
         }).execute();
     }
 
-
     private void displayListings(final Fragment fragment, String response) {
         try {
             Log.i(TAG, "displayListings");

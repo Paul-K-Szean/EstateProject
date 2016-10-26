@@ -3,6 +3,7 @@ package handler;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -65,15 +66,14 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
             pDialog.setMessage("Loading ...");
             pDialog.show();
         }
+        Utility.hideSoftKeyboard(activity);
 
-        EstateCtrl.hideSoftKeyboard(activity);
+
     }
 
     @Override
     protected String doInBackground(final String... params) {
         Log.w("doInBackground", "doInBackground()");
-
-
         if (IsInternetConnected) {
             // Connect to server
             StringRequest strReq = new StringRequest(methodType,

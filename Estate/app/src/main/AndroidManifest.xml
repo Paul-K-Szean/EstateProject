@@ -30,13 +30,13 @@
         <activity android:name=".Profile" />
         <activity
             android:name=".PropertyDetailsUI"
-            android:label="@string/subactivity"
+            android:label="PropertyDetails"
             android:parentActivityName=".MainUI" />
         <activity
             android:name=".InboxUI"
-            android:label="@string/title_activity_inbox_ui"
-            android:parentActivityName=".MainUI"
-            android:theme="@style/AppTheme" />
+            android:label="Inbox"
+            android:parentActivityName=".MainUI" />
+
     </application>
 
 </manifest>

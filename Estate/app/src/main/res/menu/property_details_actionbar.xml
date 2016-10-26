@@ -25,17 +25,13 @@
 
 
     <item
-        android:title=""
-        app:showAsAction="always"></item>
-
-    <item
         android:id="@+id/action_phone_call"
         android:icon="@drawable/ic_action_phonecall"
         android:title="Item"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_phone_message"
+        android:id="@+id/action_phonemessage"
         android:icon="@drawable/ic_action_forum"
         android:title="Item"
         app:showAsAction="always" />

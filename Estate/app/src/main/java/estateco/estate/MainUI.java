@@ -155,8 +155,8 @@ public class MainUI extends AppCompatActivity
         toolBarTop = (Toolbar) findViewById(R.id.toolbar_top);
         setSupportActionBar(toolBarTop);
         toolBarTop.setTitle("All Listings");
-        toolBarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
-        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
+//        toolBarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
+//        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
 
         // sliding tabs
         viewPager = (ViewPager) findViewById(R.id.ViewPagerMain);

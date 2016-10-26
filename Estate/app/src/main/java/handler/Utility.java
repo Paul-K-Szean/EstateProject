@@ -1,6 +1,8 @@
 package handler;
 
+import android.app.Activity;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 
 import java.text.DecimalFormat;
 import java.util.Random;
@@ -140,4 +142,16 @@ public class Utility {
         return locationValue;
 
     }
+
+    public static void showSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(activity.getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (activity.getCurrentFocus() != null)
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
 }

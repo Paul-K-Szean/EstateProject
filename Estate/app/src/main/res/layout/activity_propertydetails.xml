@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_sub"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="estateco.estate.PropertyDetailsUI">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBarTopPropertyDetails"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways" />
+
+    <tabs.SlidingTabLayout
+        android:id="@+id/TabLayoutPropertyDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolBarTopPropertyDetails"
+        android:background="@color/bg_login" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/ViewPagerPropertyDetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/TabLayoutPropertyDetails"
+        android:layout_marginBottom="56dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <!--<FrameLayout-->
+    <!--android:id="@+id/fragment_container"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/app_bar_main"></FrameLayout>-->
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBarBottomPropertyDetails"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/colorPrimary"
+        android:gravity="bottom"
+        app:layout_scrollFlags="scroll|enterAlways" />
+
+</RelativeLayout>

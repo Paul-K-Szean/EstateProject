@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import controllers.FavouriteCtrl;
-import controllers.InboxCtrl;
 import controllers.UserCtrl;
 import entities.Favourite;
 import entities.Inbox;
@@ -24,12 +23,7 @@ import static controllers.FavouriteCtrl.KEY_FAVOURITE_CREATEDDATE;
 import static controllers.FavouriteCtrl.KEY_FAVOURITE_OWNERID;
 import static controllers.FavouriteCtrl.KEY_FAVOURITE_PROPERTYID;
 import static controllers.FavouriteCtrl.TABLE_FAVOURITE;
-import static controllers.InboxCtrl.KEY_INBOXID;
-import static controllers.InboxCtrl.KEY_INBOXMESSAGE;
-import static controllers.InboxCtrl.KEY_INBOXTITLE;
-import static controllers.InboxCtrl.KEY_INBOXTYPE;
-import static controllers.InboxCtrl.KEY_RECIPIENTID;
-import static controllers.InboxCtrl.KEY_SENDERID;
+
 import static controllers.PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT;
 import static controllers.PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT;
 import static controllers.PropertyCtrl.KEY_PROPERTY_BLOCK;
@@ -589,13 +583,13 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_INBOXID, inbox.getInboxID());
-        values.put(KEY_SENDERID, inbox.getSenderID());
-        values.put(KEY_RECIPIENTID, inbox.getSenderID());
-        values.put(KEY_INBOXTYPE, inbox.getInboxtype());
-        values.put(KEY_INBOXTITLE, inbox.getInboxtitle());
-        values.put(KEY_INBOXMESSAGE, inbox.getInboxmessage());
-        values.put(InboxCtrl.KEY_CREATEDDATE, inbox.getCreateddate());
+//        values.put(KEY_INBOXID, inbox.getInboxID());
+//        values.put(KEY_SENDERID, inbox.getSenderID());
+//        values.put(KEY_RECIPIENTID, inbox.getSenderID());
+//        values.put(KEY_INBOXTYPE, inbox.getInboxtype());
+//        values.put(KEY_INBOXTITLE, inbox.getInboxtitle());
+//        values.put(KEY_INBOXMESSAGE, inbox.getInboxmessage());
+//        values.put(InboxCtrl.KEY_CREATEDDATE, inbox.getCreateddate());
 
         Log.i(TAG, values.toString());
 
