@@ -60,14 +60,9 @@ import static controllers.UserCtrl.KEY_USERID;
  */
 
 public class InboxCtrl {
-    private static final String TAG = InboxCtrl.class.getSimpleName();
-
-    private SessionHandler session;
-    private SQLiteHandler db;
-    private Inbox inbox;
     // table name
     public static final String TABLE_INBOX = "estate_inbox";
-
+    private static final String TAG = InboxCtrl.class.getSimpleName();
     // table columns names
     public static String KEY_INBOXID = "inboxID";
     public static String KEY_SENDERID = "senderID";
@@ -76,6 +71,9 @@ public class InboxCtrl {
     public static String KEY_INBOXTITLE = "inboxtitle";
     public static String KEY_INBOXMESSAGE = "inboxmessage";
     public static String KEY_CREATEDDATE = "createddate";
+    private SessionHandler session;
+    private SQLiteHandler db;
+    private Inbox inbox;
 
 
     public InboxCtrl(Context context) {
@@ -141,7 +139,7 @@ public class InboxCtrl {
     public void serverNewInbox(final Fragment fragment, final Inbox inbox) {
         Log.i(TAG, "serverNewInbox");
         Map<String, String> paramValues = new HashMap<>();
-        paramValues.put(KEY_SENDERID, inbox.getSenderID());
+        paramValues.put(KEY_SENDERID, inbox.getSender().getUserID());
         paramValues.put(KEY_RECIPIENTID, inbox.getRecipientID());
         paramValues.put(KEY_INBOXTYPE, inbox.getInboxtype());
         paramValues.put(KEY_INBOXTITLE, inbox.getInboxtitle());
@@ -177,12 +175,12 @@ public class InboxCtrl {
         new AsyncTaskHandler(Request.Method.POST, URL_GETINBOX, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
             @Override
             public void onAsyncTaskResponse(String response) {
-                displayPropertyComments(fragment, response);
+                displayPropertyComments(fragment, response, inbox);
             }
         }).execute();
     }
 
-    private void displayPropertyComments(final Fragment fragment, String response) {
+    private void displayPropertyComments(final Fragment fragment, String response, Inbox inbox) {
         try {
             Log.i(TAG, "displayPropertyComments");
             RecyclerView recyclerView = (RecyclerView) fragment.getView().findViewById(R.id.recycleView);
@@ -222,7 +220,7 @@ public class InboxCtrl {
 
                     inbox = new Inbox(
                             jsonObject.getString(KEY_INBOXID),
-                            jsonObject.getString(KEY_SENDERID),
+                            inbox.getSender(),
                             jsonObject.getString(KEY_RECIPIENTID),
                             jsonObject.getString(KEY_INBOXTYPE),
                             jsonObject.getString(KEY_INBOXTITLE),

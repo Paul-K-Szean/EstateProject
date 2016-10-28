@@ -23,7 +23,6 @@ import static controllers.FavouriteCtrl.KEY_FAVOURITE_CREATEDDATE;
 import static controllers.FavouriteCtrl.KEY_FAVOURITE_OWNERID;
 import static controllers.FavouriteCtrl.KEY_FAVOURITE_PROPERTYID;
 import static controllers.FavouriteCtrl.TABLE_FAVOURITE;
-
 import static controllers.PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT;
 import static controllers.PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT;
 import static controllers.PropertyCtrl.KEY_PROPERTY_BLOCK;
@@ -52,12 +51,10 @@ import static controllers.PropertyCtrl.TABLE_PROPERTY;
  */
 
 public class SQLiteHandler extends SQLiteOpenHelper {
-    // LogCat tag
-    private static final String TAG = SQLiteHandler.class.getSimpleName();
-
     // local database name
     public static final String DATABASE_NAME = "Estate";
-
+    // LogCat tag
+    private static final String TAG = SQLiteHandler.class.getSimpleName();
     // Database Version
     private static final int DATABASE_VERSION = 10;
 
@@ -584,8 +581,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
 //        values.put(KEY_INBOXID, inbox.getInboxID());
-//        values.put(KEY_SENDERID, inbox.getSenderID());
-//        values.put(KEY_RECIPIENTID, inbox.getSenderID());
+//        values.put(KEY_SENDERID, inbox.getSender());
+//        values.put(KEY_RECIPIENTID, inbox.getSender());
 //        values.put(KEY_INBOXTYPE, inbox.getInboxtype());
 //        values.put(KEY_INBOXTITLE, inbox.getInboxtitle());
 //        values.put(KEY_INBOXMESSAGE, inbox.getInboxmessage());

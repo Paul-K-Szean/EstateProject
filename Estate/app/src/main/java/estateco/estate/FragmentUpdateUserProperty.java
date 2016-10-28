@@ -41,8 +41,8 @@ import java.util.Map;
 import controllers.EstateCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
+import entities.Entity_GovData_ResaleFlat;
 import entities.Property;
-import entities.ResaleFlatPrice;
 import entities.User;
 import enums.DealType;
 import enums.FlatType;
@@ -68,12 +68,6 @@ import static controllers.EstateConfig.URL_GOVDATA_RESALEFLATPRICES;
  */
 public class FragmentUpdateUserProperty extends Fragment implements AlertDialogResponse {
     private static final String TAG = FragmentUpdateUserProperty.class.getSimpleName();
-
-    private UserCtrl userCtrl;
-    private User user;
-    private PropertyCtrl propertyCtrl;
-    private Property propertyLocalDB;
-    private Property property;
     private static final int SELECTED_IMAGE = 1;
     Bitmap bitmap;
     Button btnEditPropertySave, btnEditPhoto, btnEditRandom;
@@ -83,13 +77,17 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
     Map<String, String> paramValues = new HashMap<>();
     Spinner spEditDealType, spEditFloorLevel, spEditFlatType, spEditFurnishLevel, spEditBedroomCount, spEditBathroomCount, spEditStatus;
     String selectedImagePath;
-
     String valEditPropertyID, valEditFlatType, valEditBlock = "000", valEditStreetName, valEditFloorLevel,
             valEditFloorArea, valEditPrice, valEditImage, valEditStatus,
             valEditDealType, valEditTitle, valEditDesc, valEditFurnishLevel, valEditBedroomCount,
             valEditBathroomCount, valEditFavouriteCount, valEditViewCount, valEditWholeApartment, valEditCreatedDate;
     TextView tvLblCreatedDate, tvLblFloorArea;
     Toolbar toolbar;
+    private UserCtrl userCtrl;
+    private User user;
+    private PropertyCtrl propertyCtrl;
+    private Property propertyLocalDB;
+    private Property property;
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
 
@@ -313,7 +311,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                                      Log.i(TAG, jsonArray.get(randomIndex).toString());
                                                                      Log.i(TAG, jsonRandomObject.getString("flat_type").toString());
 
-                                                                     ResaleFlatPrice resaleFlatPrice = new ResaleFlatPrice(
+                                                                     Entity_GovData_ResaleFlat entityGovDataResaleFlat = new Entity_GovData_ResaleFlat(
                                                                              jsonRandomObject.getString("_id"),
                                                                              jsonRandomObject.getString("town"),
                                                                              jsonRandomObject.getString("flat_type"),
@@ -342,13 +340,13 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                                      etEditTitle.setText(Utility.generateTitle());
                                                                      etEditDesc.setText(Utility.generateDesc());
                                                                      // address details
-                                                                     valEditBlock = resaleFlatPrice.getBlock();
-                                                                     spEditFloorLevel.setSelection(EstateCtrl.getSpinnerItemPosition(spEditFloorLevel, resaleFlatPrice.getStorey_range()));
-                                                                     etEditStreetName.setText(resaleFlatPrice.getStreet_name());
+                                                                     valEditBlock = entityGovDataResaleFlat.getBlock();
+                                                                     spEditFloorLevel.setSelection(EstateCtrl.getSpinnerItemPosition(spEditFloorLevel, entityGovDataResaleFlat.getStorey_range()));
+                                                                     etEditStreetName.setText(entityGovDataResaleFlat.getStreet_name());
                                                                      // house details
-                                                                     spEditFlatType.setSelection(EstateCtrl.getSpinnerItemPosition(spEditFlatType, resaleFlatPrice.getFlat_type()));
-                                                                     etEditFloorArea.setText(resaleFlatPrice.getFloor_area_sqm());
-                                                                     etEditPrice.setText(resaleFlatPrice.getResale_price());
+                                                                     spEditFlatType.setSelection(EstateCtrl.getSpinnerItemPosition(spEditFlatType, entityGovDataResaleFlat.getFlat_type()));
+                                                                     etEditFloorArea.setText(entityGovDataResaleFlat.getFloor_area_sqm());
+                                                                     etEditPrice.setText(entityGovDataResaleFlat.getResale_price());
                                                                      spEditFurnishLevel.setSelection(Utility.generateNumber(1, spEditFurnishLevel.getCount() - 1));
                                                                      spEditBedroomCount.setSelection(Utility.generateNumber(1, spEditBedroomCount.getCount() - 1));
                                                                      spEditBathroomCount.setSelection(Utility.generateNumber(1, spEditBathroomCount.getCount() - 1));

@@ -1,7 +1,6 @@
 package controllers;
 
 import android.content.Context;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +23,6 @@ import java.util.Map;
 import entities.Favourite;
 import entities.Property;
 import entities.User;
-import estateco.estate.FragmentUserFavouriteListings;
 import estateco.estate.R;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
@@ -68,24 +66,21 @@ import static controllers.UserCtrl.KEY_USERID;
  */
 
 public class FavouriteCtrl {
-    private static final String TAG = FavouriteCtrl.class.getSimpleName();
-
-    private SessionHandler session;
-    private SQLiteHandler db;
-
-    private View view;
-    private User user;
-    private Favourite favourite;
-    private UserCtrl userCtrl;
-    private PropertyCtrl propertyCtrl;
     // table name
     public static final String TABLE_FAVOURITE = "estate_favourite";
-
+    private static final String TAG = FavouriteCtrl.class.getSimpleName();
     // table columns names
     public static String KEY_FAVOURITEID = "favouriteID";
     public static String KEY_FAVOURITE_PROPERTYID = "propertyID";
     public static String KEY_FAVOURITE_OWNERID = "ownerID";
     public static String KEY_FAVOURITE_CREATEDDATE = "createddate";
+    private SessionHandler session;
+    private SQLiteHandler db;
+    private View view;
+    private User user;
+    private Favourite favourite;
+    private UserCtrl userCtrl;
+    private PropertyCtrl propertyCtrl;
 
 
     public FavouriteCtrl(Context context) {
@@ -224,7 +219,7 @@ public class FavouriteCtrl {
         Log.i(TAG, paramValues.toString());
         new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_UPDATEPROPERTYCOUNT, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
             @Override
-            // server side deleted favourite property
+            // server side update favourite property
             public void onAsyncTaskResponse(String response) {
                 try {
                     JSONObject jsonObject = JSONHandler.getResultAsObject(fragment.getActivity(), response);
@@ -244,11 +239,11 @@ public class FavouriteCtrl {
 
                     user = userCtrl.getUserDetails();
                     if (action.equals(KEY_ACTION_INCREASEFAVOURITE)) {
-                        // add property to favourite list
+                        // add property to favourite 
                         serverNewFavouriteProperty(fragment, user, property);
                     }
                     if (action.equals(KEY_ACTION_DECREASEFAVOURITE)) {
-                        // remove property from favourite list
+                        // remove property from favourite 
                         serverDeleteFavouriteProperty(fragment, user, property);
                     }
 

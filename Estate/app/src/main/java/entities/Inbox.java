@@ -7,7 +7,7 @@ package entities;
 public class Inbox {
 
     private String inboxID;
-    private String senderID;
+    private User sender;
     private String recipientID;
     private String inboxtype;
     private String inboxtitle;
@@ -15,8 +15,8 @@ public class Inbox {
     private String createddate;
 
     // for creating
-    public Inbox(String senderID, String recipientID, String inboxtype, String inboxtitle, String inboxmessage) {
-        this.senderID = senderID;
+    public Inbox(User sender, String recipientID, String inboxtype, String inboxtitle, String inboxmessage) {
+        this.sender = sender;
         this.recipientID = recipientID;
         this.inboxtype = inboxtype;
         this.inboxtitle = inboxtitle;
@@ -30,9 +30,9 @@ public class Inbox {
     }
 
     // for displaying
-    public Inbox(String inboxID, String senderID, String recipientID, String inboxtype, String inboxtitle, String inboxmessage, String createddate) {
+    public Inbox(String inboxID, User sender, String recipientID, String inboxtype, String inboxtitle, String inboxmessage, String createddate) {
         this.inboxID = inboxID;
-        this.senderID = senderID;
+        this.sender = sender;
         this.recipientID = recipientID;
         this.inboxtype = inboxtype;
         this.inboxtitle = inboxtitle;
@@ -48,12 +48,12 @@ public class Inbox {
         this.inboxID = inboxID;
     }
 
-    public String getSenderID() {
-        return senderID;
+    public User getSender() {
+        return sender;
     }
 
-    public void setSenderID(String senderID) {
-        this.senderID = senderID;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
     public String getRecipientID() {

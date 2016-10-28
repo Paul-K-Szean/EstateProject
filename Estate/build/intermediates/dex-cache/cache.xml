@@ -2,175 +2,193 @@
 <items version="2" >
 
     <item
-        is-multidex="false"
-        jar="C:\Users\szean\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\24.2.1\support-annotations-24.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="24.0.2"
-        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\support-annotations-24.2.1_3df10f1fd264ef46c2fc64a6c3f7d251eae8324b.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\libs\internal_impl-24.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="24.0.2"
-        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_dba902cc2641931fdd19982e22411399c389ca52.jar" />
-    </item>
-    <item
-        is-multidex="false"
+        is-multidex="true"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-support-fragment-24.2.1_bd02e57504c3a15eadaf771f2cc4c338cec432e6.jar" />
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-fragment-24.2.1_bd02e57504c3a15eadaf771f2cc4c338cec432e6\classes.dex" />
     </item>
     <item
-        is-multidex="false"
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="0b7db63c2aa6225415b9ab6833b36e478e29ecd5">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_ff93e1a4e828ba9d3816a821672aebe65e190f04\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.2.1\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-24.2.1_5e917f4b3d4260231416683f840efa0e0e82ec48.jar" />
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-24.2.1_5e917f4b3d4260231416683f840efa0e0e82ec48\classes.dex" />
     </item>
     <item
-        is-multidex="false"
+        is-multidex="true"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\24.2.1\jars\libs\internal_impl-24.2.1.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_b39254de39f9b8c4043f5609804bd59c9c36fa33.jar" />
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_b39254de39f9b8c4043f5609804bd59c9c36fa33\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\24.2.1\jars\libs\internal_impl-24.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="24.0.2"
-        sha1="867dad63c33388ff8c7644b236579355036d075f">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_a0891807bd5a9a0512afd58bb66c1dff10140088.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="24.0.2"
-        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_5a6b30ef6b8e5f263e8e07a72f7579d5dc2ef141.jar" />
-    </item>
-    <item
-        is-multidex="false"
+        is-multidex="true"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\24.2.1\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-ui-24.2.1_879eb8560b2a952cc48c8cde088d5d0d4610cf8c.jar" />
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-ui-24.2.1_879eb8560b2a952cc48c8cde088d5d0d4610cf8c\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.oguzdev\CircularFloatingActionMenu\1.0.2\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="24.0.2"
-        sha1="607d961caf1a59b6e782724654c1f3229e036c20">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.oguzdev-CircularFloatingActionMenu-1.0.2_d850eb37f2a66a89d6850d7b11c69011dfa0742d.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\24.2.1\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="24.0.2"
-        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-utils-24.2.1_9b2677c065cb0803977a7b191212de089a1ea7dd.jar" />
-    </item>
-    <item
-        is-multidex="false"
+        is-multidex="true"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\24.2.1\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-24.2.1_2e74581114ce0fd82a7ca6ee13078f03a71c04cd.jar" />
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-24.2.1_2e74581114ce0fd82a7ca6ee13078f03a71c04cd\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
         optimize="true"
         revision="24.0.2"
-        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-support-compat-24.2.1_359eefea044c85746578b872ed75017d064b3a4f.jar" />
+        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_5a6b30ef6b8e5f263e8e07a72f7579d5dc2ef141\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.volley\volley\1.0.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="24.0.2"
-        sha1="2cd4b982617e544728de0782d718a58ce1b06e3f">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.volley-volley-1.0.0_8d702186f3787f9da1f5420002348ffd844625f6.jar" />
-    </item>
-    <item
-        is-multidex="false"
+        is-multidex="true"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\24.2.1\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="d5c731fc64c03dfe04d51134955b483551c35849">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-24.2.1_11ae3ec60b8be213cf926ae420aacc7fc61c1b73.jar" />
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-24.2.1_11ae3ec60b8be213cf926ae420aacc7fc61c1b73\classes.dex" />
     </item>
     <item
-        is-multidex="false"
+        is-multidex="true"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\24.2.1\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="7521486d9bfd2cd9e756e0cf75ed7d97f2ce2d3b">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-24.2.1_f11aab66bfbe6d77a2cf1fb87a15199d8591a9ed.jar" />
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-24.2.1_f11aab66bfbe6d77a2cf1fb87a15199d8591a9ed\classes.dex" />
     </item>
     <item
-        is-multidex="false"
+        is-multidex="true"
+        jar="C:\Users\szean\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\24.2.1\support-annotations-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-24.2.1_3df10f1fd264ef46c2fc64a6c3f7d251eae8324b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-core-utils-24.2.1_9b2677c065cb0803977a7b191212de089a1ea7dd\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="867dad63c33388ff8c7644b236579355036d075f">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_a0891807bd5a9a0512afd58bb66c1dff10140088\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.oguzdev\CircularFloatingActionMenu\1.0.2\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="607d961caf1a59b6e782724654c1f3229e036c20">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.oguzdev-CircularFloatingActionMenu-1.0.2_d850eb37f2a66a89d6850d7b11c69011dfa0742d\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-compat-24.2.1_359eefea044c85746578b872ed75017d064b3a4f\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.volley\volley\1.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="2cd4b982617e544728de0782d718a58ce1b06e3f">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.volley-volley-1.0.0_8d702186f3787f9da1f5420002348ffd844625f6\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\24.2.1\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-support-media-compat-24.2.1_b1d7d8ec3c6b3096a24abb3149ba272e0972f458.jar" />
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-media-compat-24.2.1_b1d7d8ec3c6b3096a24abb3149ba272e0972f458\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\design\24.2.1\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="24.0.2"
-        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-design-24.2.1_da25b9026e6f308b3cd973ff641886ccd4eba513.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="24.0.2"
-        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_8124b2f30b8de36223546ac2a5e88f0798427859.jar" />
-    </item>
-    <item
-        is-multidex="false"
+        is-multidex="true"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.2.1\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="24.0.2"
         sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
-        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-24.2.1_de3d9d89b1b2ace25c27c4bac83b444896e2cb02.jar" />
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-24.2.1_de3d9d89b1b2ace25c27c4bac83b444896e2cb02\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-fragment\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_dba902cc2641931fdd19982e22411399c389ca52\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\design\24.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="e03f47f3d1017a093bb3239d4ec47c3447f40744">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-design-24.2.1_da25b9026e6f308b3cd973ff641886ccd4eba513\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\libs\internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.2.1_8124b2f30b8de36223546ac2a5e88f0798427859\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.2"
+        sha1="a823fb72d8a0d4f6e60acb71c58a87fac1784f1e">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_6420df76ff0c5206da22949c3768f5f66a7b0e95\classes.dex" />
     </item>
 
 </items>

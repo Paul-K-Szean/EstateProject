@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,17 +24,15 @@ import estateco.estate.R;
 
 public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapterRecyclerComments.MyViewHolder> {
     private static final String TAG = ViewAdapterRecyclerComments.class.getSimpleName();
+    private final LayoutInflater inflator;
     private Fragment fragment;
     private ArrayList<Inbox> inboxArrayList;
-
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
     private User user;
     private Property property;
     private Favourite favourite;
-
-    private final LayoutInflater inflator;
 
     public ViewAdapterRecyclerComments(Fragment fragment, ArrayList<Inbox> inboxArrayList) {
         inflator = LayoutInflater.from(fragment.getContext());
@@ -59,7 +56,7 @@ public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapte
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Inbox inbox = inboxArrayList.get(position);
-        holder.tvCmmtUserName.setText(inbox.getSenderID());
+        holder.tvCmmtUserName.setText(inbox.getSender().getName());
         holder.tvCmmtMessage.setText(inbox.getInboxmessage());
         holder.tvCmmtCreateddate.setText(inbox.getCreateddate());
     }

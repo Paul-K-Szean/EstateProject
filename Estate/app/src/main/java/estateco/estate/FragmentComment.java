@@ -37,11 +37,11 @@ public class FragmentComment extends Fragment {
     private static final String TAG_VIEW = "view";
     private static final String TAG_PHONECALL = "phonecall";
     private static final String TAG_COMMENT = "phonemessage";
-
+    Button btnSendComment;
+    EditText etComment;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
-
     private User user;
     private User owner;
     private Property property;
@@ -49,16 +49,12 @@ public class FragmentComment extends Fragment {
     private Inbox inbox;
     private ArrayList<Inbox> inboxArrayList;
     private InboxCtrl inboxCtrl;
-
-    public FragmentComment() {
-        // Required empty public constructor
-    }
-
-    Button btnSendComment;
-    EditText etComment;
     private RecyclerView recycler;
     private ViewAdapterRecycler viewAdapter;
     private String valType, valTitle, valMessage;
+    public FragmentComment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,7 +82,7 @@ public class FragmentComment extends Fragment {
                 if (valMessage.isEmpty()) {
                     Toast.makeText(getActivity(), "Nothing to post.", Toast.LENGTH_SHORT).show();
                 } else {
-                    inbox = new Inbox(user.getUserID(), savedPropertyID, valType, valTitle, valMessage);
+                    inbox = new Inbox(user, savedPropertyID, valType, valTitle, valMessage);
                     inboxCtrl.serverNewInbox(FragmentComment.this, inbox);
                     etComment.setText("");
                 }

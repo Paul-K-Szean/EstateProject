@@ -4,7 +4,7 @@ package entities;
  * Created by Paul K Szean on 18/10/2016.
  */
 
-public class ResaleFlatPrice {
+public class Entity_GovData_ResaleFlat {
     private String resaleflatpriceID;
     private String town;
     private String flat_type;
@@ -16,6 +16,20 @@ public class ResaleFlatPrice {
     private String flat_model;
     private String lease_commence_date;
     private String resale_price;
+
+    public Entity_GovData_ResaleFlat(String resaleflatpriceID, String town, String flat_type, String block, String month, String street_name, String storey_range, String floor_area_sqm, String flat_model, String lease_commence_date, String resale_price) {
+        this.resaleflatpriceID = resaleflatpriceID;
+        this.town = town;
+        this.flat_type = flat_type;
+        this.block = block;
+        this.month = month;
+        this.street_name = street_name;
+        this.storey_range = storey_range;
+        this.floor_area_sqm = floor_area_sqm;
+        this.flat_model = flat_model;
+        this.lease_commence_date = lease_commence_date;
+        this.resale_price = resale_price;
+    }
 
     public String getResaleflatpriceID() {
         return resaleflatpriceID;
@@ -102,20 +116,6 @@ public class ResaleFlatPrice {
     }
 
     public void setResale_price(String resale_price) {
-        this.resale_price = resale_price;
-    }
-
-    public ResaleFlatPrice(String resaleflatpriceID, String town, String flat_type, String block, String month, String street_name, String storey_range, String floor_area_sqm, String flat_model, String lease_commence_date, String resale_price) {
-        this.resaleflatpriceID = resaleflatpriceID;
-        this.town = town;
-        this.flat_type = flat_type;
-        this.block = block;
-        this.month = month;
-        this.street_name = street_name;
-        this.storey_range = storey_range;
-        this.floor_area_sqm = floor_area_sqm;
-        this.flat_model = flat_model;
-        this.lease_commence_date = lease_commence_date;
         this.resale_price = resale_price;
     }
 }

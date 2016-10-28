@@ -36,8 +36,8 @@ import org.json.JSONObject;
 import controllers.EstateCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
+import entities.Entity_GovData_ResaleFlat;
 import entities.Property;
-import entities.ResaleFlatPrice;
 import entities.User;
 import enums.DealType;
 import enums.FlatType;
@@ -60,13 +60,21 @@ import static controllers.PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
  */
 public class FragmentNewProperty extends Fragment {
     private static final String TAG = FragmentNewProperty.class.getSimpleName();
-
+    private static final int SELECTED_IMAGE = 1;
+    Toolbar toolBarTop;
+    Bitmap bitmap;
+    Button btnCreateProperty, btnNewRandom, btnNewImage;
+    CheckBox chkbxNewWholeApartment;
+    EditText etNewTitle, etNewDesc, etNewStreetName, etNewPrice, etNewFloorArea;
+    ImageView imgvNewImage;
+    Spinner spNewDealType, spNewFloorLevel, spNewFlatType, spNewFurnishLevel, spNewBedroomCount, spNewBathroomCount;
+    String valNewFlatType, valNewBlock, valNewStreetName, valNewFloorLevel, valNewFloorArea, valNewPrice, valNewImage, valNewStatus,
+            valNewDealType, valNewTitle, valNewDesc, valNewFurnishLevel, valNewBedroomCount, valNewBathroomCount, valNewFavouriteCount, valNewViewCount, valNewWholeApartment, selectedImagePath;
+    TextView tvNewBedroomCount;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private User user;
     private Property property;
-    Toolbar toolBarTop;
-
     public FragmentNewProperty() {
         // Required empty public constructor
     }
@@ -86,19 +94,6 @@ public class FragmentNewProperty extends Fragment {
         setControls(view);
         return view;
     }
-
-
-    private static final int SELECTED_IMAGE = 1;
-    Bitmap bitmap;
-    Button btnCreateProperty, btnNewRandom, btnNewImage;
-    CheckBox chkbxNewWholeApartment;
-    EditText etNewTitle, etNewDesc, etNewStreetName, etNewPrice, etNewFloorArea;
-    ImageView imgvNewImage;
-    Spinner spNewDealType, spNewFloorLevel, spNewFlatType, spNewFurnishLevel, spNewBedroomCount, spNewBathroomCount;
-    String valNewFlatType, valNewBlock, valNewStreetName, valNewFloorLevel, valNewFloorArea, valNewPrice, valNewImage, valNewStatus,
-            valNewDealType, valNewTitle, valNewDesc, valNewFurnishLevel, valNewBedroomCount, valNewBathroomCount, valNewFavouriteCount, valNewViewCount, valNewWholeApartment, selectedImagePath;
-    TextView tvNewBedroomCount;
-
 
     public void setControls(View view) {
         toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
@@ -186,7 +181,7 @@ public class FragmentNewProperty extends Fragment {
                                                                     Log.i(TAG, jsonArray.get(randomIndex).toString());
                                                                     Log.i(TAG, jsonRandomObject.getString("flat_type").toString());
 
-                                                                    ResaleFlatPrice resaleFlatPrice = new ResaleFlatPrice(
+                                                                    Entity_GovData_ResaleFlat entityGovDataResaleFlat = new Entity_GovData_ResaleFlat(
                                                                             jsonRandomObject.getString("_id"),
                                                                             jsonRandomObject.getString("town"),
                                                                             jsonRandomObject.getString("flat_type"),
@@ -215,13 +210,13 @@ public class FragmentNewProperty extends Fragment {
                                                                     etNewTitle.setText(Utility.generateTitle());
                                                                     etNewDesc.setText(Utility.generateDesc());
                                                                     // address details
-                                                                    valNewBlock = resaleFlatPrice.getBlock();
-                                                                    spNewFloorLevel.setSelection(EstateCtrl.getSpinnerItemPosition(spNewFloorLevel, resaleFlatPrice.getStorey_range()));
-                                                                    etNewStreetName.setText(resaleFlatPrice.getStreet_name());
+                                                                    valNewBlock = entityGovDataResaleFlat.getBlock();
+                                                                    spNewFloorLevel.setSelection(EstateCtrl.getSpinnerItemPosition(spNewFloorLevel, entityGovDataResaleFlat.getStorey_range()));
+                                                                    etNewStreetName.setText(entityGovDataResaleFlat.getStreet_name());
                                                                     // house details
-                                                                    spNewFlatType.setSelection(EstateCtrl.getSpinnerItemPosition(spNewFlatType, resaleFlatPrice.getFlat_type()));
-                                                                    etNewFloorArea.setText(resaleFlatPrice.getFloor_area_sqm());
-                                                                    etNewPrice.setText(resaleFlatPrice.getResale_price());
+                                                                    spNewFlatType.setSelection(EstateCtrl.getSpinnerItemPosition(spNewFlatType, entityGovDataResaleFlat.getFlat_type()));
+                                                                    etNewFloorArea.setText(entityGovDataResaleFlat.getFloor_area_sqm());
+                                                                    etNewPrice.setText(entityGovDataResaleFlat.getResale_price());
                                                                     spNewFurnishLevel.setSelection(Utility.generateNumber(1, spNewFurnishLevel.getCount() - 1));
                                                                     spNewBedroomCount.setSelection(Utility.generateNumber(1, spNewBedroomCount.getCount() - 1));
                                                                     spNewBathroomCount.setSelection(Utility.generateNumber(1, spNewBathroomCount.getCount() - 1));
