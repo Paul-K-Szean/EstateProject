@@ -236,7 +236,6 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                     tvPropDetDealType.setText(valProDetDealType + " - " + valProDetStatus);
                     tvPropDetOwnerContact.setText(valProDetStatus);
                     tvPropDetOwnerEmail.setText(valProDetStatus);
-
                     tvPropDetDealType.setTextColor(RED);
                     tvPropDetOwnerContact.setTextColor(RED);
                     tvPropDetOwnerEmail.setTextColor(RED);

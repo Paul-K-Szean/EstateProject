@@ -82,6 +82,8 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
         String valStatus = property.getStatus();
         if (valStatus.equals("closed")) {
             holder.tvProDetStatus.setTextColor(Color.RED);
+        } else {
+            holder.tvProDetStatus.setTextColor(Color.DKGRAY);
         }
 
         holder.tvProDetFavouriteCount.setText(property.getFavouritecount());
