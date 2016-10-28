@@ -65,6 +65,8 @@ public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapte
             holder.tvCmmtUserTitle.setText("User");
         holder.tvCmmtUserName.setText(inbox.getSender().getName());
         holder.tvCmmtMessage.setText(inbox.getInboxmessage());
+
+
         holder.tvCmmtCreateddate.setText(inbox.getCreateddate());
     }
 

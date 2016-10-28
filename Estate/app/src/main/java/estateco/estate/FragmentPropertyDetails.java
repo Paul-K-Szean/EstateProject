@@ -38,8 +38,8 @@ import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
 import handler.ImageHandler;
 import handler.JSONHandler;
-import handler.Utility;
 
+import static android.graphics.Color.RED;
 import static android.widget.Toast.LENGTH_SHORT;
 import static controllers.PropertyCtrl.KEY_ACTION_DECREASEFAVOURITE;
 import static controllers.PropertyCtrl.KEY_ACTION_INCREASEFAVOURITE;
@@ -54,18 +54,8 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
     private static final String TAG_VIEW = "view";
     private static final String TAG_PHONECALL = "phonecall";
     private static final String TAG_PHONEMESSAGE = "phonemessage";
-
-    private UserCtrl userCtrl;
-    private PropertyCtrl propertyCtrl;
-    private FavouriteCtrl favouriteCtrl;
-
-    private User user;
-    private User owner;
-    private Property property;
-    private Favourite favourite;
-    ArrayList<Favourite> favouriteArrayList;
     static Boolean isFavourited = false;
-
+    ArrayList<Favourite> favouriteArrayList;
     TextView tvPropDetTitle, tvPropDetDesc, tvPropDetFlatType, tvPropDetDealType, tvPropDetFurnishLevel, tvPropDetPrice, tvPropDetBedroomCount,
             tvPropDetBathroomCount, tvPropDetFloorArea, tvPropDetStreetName, tvPropDetFloorLevel, tvPropDetBlock, tvPropDetWholeApartment,
             tvPropDetOwnerName, tvPropDetOwnerEmail, tvPropDetOwnerContact;
@@ -75,7 +65,14 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
             valProDetBlock, valProDetStreetName, valProDetImage, valProDetStatus, valProDetBedroomCount, valProDetFavouriteCount, valProDetViewCount, valProDetBathroomCount,
             valProDetFloorLevel, valProDetFloorArea, valProDetWholeApartment, valProDetCreatedDate;
     Toolbar toolBarTop, toolBarBottom;
-    MenuItem menuItemFavouriteIcon, menuItemFavouriteCount, menuItemViewIcon, menuItemViewCount;
+    MenuItem menuItemFavouriteIcon, menuItemFavouriteCount, menuItemViewIcon, menuItemViewCount, menuItemPhoneCall, menuItemPhoneMessage;
+    private UserCtrl userCtrl;
+    private PropertyCtrl propertyCtrl;
+    private FavouriteCtrl favouriteCtrl;
+    private User user;
+    private User owner;
+    private Property property;
+    private Favourite favourite;
 
 
     public FragmentPropertyDetails() {
@@ -103,7 +100,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
             setPropertyDetails(view, savedInstanceState);
             setControls(view, savedInstanceState);
         }
-        
+
         return view;
     }
 
@@ -126,8 +123,8 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
             Log.i(TAG, "Unable to find view icon.");
         }
         menuItemViewCount = toolBarBottom.getMenu().findItem(R.id.action_viewcount);
-
-
+        menuItemPhoneCall = toolBarBottom.getMenu().findItem(R.id.action_phone_call);
+        menuItemPhoneMessage = toolBarBottom.getMenu().findItem(R.id.action_phonemessage);
         imgvPropDetImage = (ImageView) view.findViewById(R.id.IMGVPropDetImage);
         tvPropDetTitle = (TextView) view.findViewById(R.id.TVPropDet_Title);
         tvPropDetDesc = (TextView) view.findViewById(R.id.TVPropDet_Desc);
@@ -231,6 +228,19 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
 
                 // increase view count
                 favouriteCtrl.serverUpdatePropertyCount(FragmentPropertyDetails.this, property, KEY_ACTION_INCREASEVIEW, menuItemViewCount);
+
+                //
+                if (valProDetStatus.equals("closed")) {
+                    menuItemPhoneCall.setEnabled(false);
+                    menuItemPhoneMessage.setEnabled((false));
+                    tvPropDetDealType.setText(valProDetDealType + " - " + valProDetStatus);
+                    tvPropDetOwnerContact.setText(valProDetStatus);
+                    tvPropDetOwnerEmail.setText(valProDetStatus);
+
+                    tvPropDetDealType.setTextColor(RED);
+                    tvPropDetOwnerContact.setTextColor(RED);
+                    tvPropDetOwnerEmail.setTextColor(RED);
+                }
 
             }
         }).execute();

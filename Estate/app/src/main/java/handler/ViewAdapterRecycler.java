@@ -1,6 +1,7 @@
 package handler;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -35,10 +36,10 @@ import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
 
 public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycler.MyViewHolder> {
     private static final String TAG = ViewAdapterRecycler.class.getSimpleName();
+    private final LayoutInflater inflator;
     private Fragment fragment;
     private ArrayList<Property> propertyArrayList;
     private ArrayList<Favourite> favouriteArrayList;
-
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
@@ -46,7 +47,6 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
     private Property property;
     private Favourite favourite;
 
-    private final LayoutInflater inflator;
 
     public ViewAdapterRecycler(Fragment fragment, ArrayList<Property> propertyArrayList) {
         inflator = LayoutInflater.from(fragment.getContext());
@@ -79,6 +79,11 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
         // general details
         holder.tvProDetPropertyID.setText(property.getPropertyID());
         holder.tvProDetStatus.setText(property.getStatus());
+        String valStatus = property.getStatus();
+        if (valStatus.equals("closed")) {
+            holder.tvProDetStatus.setTextColor(Color.RED);
+        }
+
         holder.tvProDetFavouriteCount.setText(property.getFavouritecount());
         holder.tvProDetViewCount.setText(property.getViewcount());
         // address details
@@ -170,6 +175,7 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
             tvProDetFloorArea = (TextView) itemView.findViewById(R.id.TVLblFloorArea);
             // owner details
             tvProDetOwnerName = (TextView) itemView.findViewById(R.id.TVLblOwnerName);
+
 
             itemView.setOnClickListener(this);
 
