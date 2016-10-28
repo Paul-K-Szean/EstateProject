@@ -52,6 +52,7 @@ public class FragmentComment extends Fragment {
     private RecyclerView recycler;
     private ViewAdapterRecycler viewAdapter;
     private String valType, valTitle, valMessage;
+
     public FragmentComment() {
         // Required empty public constructor
     }

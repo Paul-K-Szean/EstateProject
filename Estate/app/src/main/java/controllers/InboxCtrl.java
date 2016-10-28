@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import entities.Inbox;
-import entities.Property;
 import entities.User;
 import estateco.estate.R;
 import handler.AsyncTaskHandler;
@@ -31,25 +30,6 @@ import handler.ViewAdapterRecyclerComments;
 
 import static android.view.View.VISIBLE;
 import static controllers.EstateConfig.URL_GETINBOX;
-import static controllers.PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT;
-import static controllers.PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT;
-import static controllers.PropertyCtrl.KEY_PROPERTY_BLOCK;
-import static controllers.PropertyCtrl.KEY_PROPERTY_CREATEDDATE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_DEALTYPE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_DESC;
-import static controllers.PropertyCtrl.KEY_PROPERTY_FAVOURITECOUNT;
-import static controllers.PropertyCtrl.KEY_PROPERTY_FLATTYPE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORAREA;
-import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORLEVEL;
-import static controllers.PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL;
-import static controllers.PropertyCtrl.KEY_PROPERTY_IMAGE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_PRICE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
-import static controllers.PropertyCtrl.KEY_PROPERTY_STATUS;
-import static controllers.PropertyCtrl.KEY_PROPERTY_STREETNAME;
-import static controllers.PropertyCtrl.KEY_PROPERTY_TITLE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_VIEWCOUNT;
-import static controllers.PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
 import static controllers.UserCtrl.KEY_CONTACT;
 import static controllers.UserCtrl.KEY_EMAIL;
 import static controllers.UserCtrl.KEY_NAME;
@@ -183,53 +163,41 @@ public class InboxCtrl {
     private void displayPropertyComments(final Fragment fragment, String response, Inbox inbox) {
         try {
             Log.i(TAG, "displayPropertyComments");
+
             RecyclerView recyclerView = (RecyclerView) fragment.getView().findViewById(R.id.recycleView);
 
             ArrayList<Inbox> inboxArrayList = new ArrayList<>();
             JSONArray jsonArray = JSONHandler.getResultAsArray(fragment.getActivity(), response);
             if (jsonArray != null) {
+                User owner = null;
                 for (int index = 0; index < jsonArray.length(); index++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(index);
-                    User owner = new User(
+                    User sender = new User(
                             jsonObject.getString(KEY_USERID),
                             jsonObject.getString(KEY_NAME),
                             jsonObject.getString(KEY_EMAIL),
                             jsonObject.getString(KEY_CONTACT));
 
-                    Property property = new Property(
-                            jsonObject.getString(KEY_PROPERTY_PROPERTYID),
-                            owner,
-                            jsonObject.getString(KEY_PROPERTY_FLATTYPE),
-                            jsonObject.getString(KEY_PROPERTY_BLOCK),
-                            jsonObject.getString(KEY_PROPERTY_STREETNAME),
-                            jsonObject.getString(KEY_PROPERTY_FLOORLEVEL),
-                            jsonObject.getString(KEY_PROPERTY_FLOORAREA),
-                            jsonObject.getString(KEY_PROPERTY_PRICE),
-                            jsonObject.getString(KEY_PROPERTY_IMAGE),
-                            jsonObject.getString(KEY_PROPERTY_STATUS),
-                            jsonObject.getString(KEY_PROPERTY_DEALTYPE),
-                            jsonObject.getString(KEY_PROPERTY_TITLE),
-                            jsonObject.getString(KEY_PROPERTY_DESC),
-                            jsonObject.getString(KEY_PROPERTY_FURNISHLEVEL),
-                            jsonObject.getString(KEY_PROPERTY_BEDROOMCOUNT),
-                            jsonObject.getString(KEY_PROPERTY_BATHROOMCOUNT),
-                            jsonObject.getString(KEY_PROPERTY_FAVOURITECOUNT),
-                            jsonObject.getString(KEY_PROPERTY_VIEWCOUNT),
-                            jsonObject.getString(KEY_PROPERTY_WHOLEAPARTMENT),
-                            jsonObject.getString(KEY_PROPERTY_CREATEDDATE));
+                    owner = new User(
+                            jsonObject.getString("ownerid"),
+                            jsonObject.getString("ownername"),
+                            jsonObject.getString("owneremail"),
+                            jsonObject.getString("ownercontact"));
 
-                    inbox = new Inbox(
+
+                    Inbox inboxToShow = new Inbox(
                             jsonObject.getString(KEY_INBOXID),
-                            inbox.getSender(),
+                            sender,
                             jsonObject.getString(KEY_RECIPIENTID),
                             jsonObject.getString(KEY_INBOXTYPE),
                             jsonObject.getString(KEY_INBOXTITLE),
                             jsonObject.getString(KEY_INBOXMESSAGE),
                             jsonObject.getString(KEY_CREATEDDATE));
-                    inboxArrayList.add(inbox);
+                    inboxArrayList.add(inboxToShow);
+                    Log.i(TAG, "inboxToShow user: " + inboxToShow.getSender().getUserID() + ", " + inboxToShow.getSender().getName());
                 }
 
-                ViewAdapterRecyclerComments viewAdapter = new ViewAdapterRecyclerComments(fragment, inboxArrayList);
+                ViewAdapterRecyclerComments viewAdapter = new ViewAdapterRecyclerComments(fragment, inboxArrayList, owner);
                 recyclerView.setLayoutManager(new LinearLayoutManager(fragment.getActivity()));
                 recyclerView.setVisibility(VISIBLE);
                 recyclerView.setAdapter(viewAdapter);

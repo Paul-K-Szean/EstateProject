@@ -31,10 +31,11 @@ public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapte
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
     private User user;
+    private User owner;
     private Property property;
     private Favourite favourite;
 
-    public ViewAdapterRecyclerComments(Fragment fragment, ArrayList<Inbox> inboxArrayList) {
+    public ViewAdapterRecyclerComments(Fragment fragment, ArrayList<Inbox> inboxArrayList, User owner) {
         inflator = LayoutInflater.from(fragment.getContext());
         this.fragment = fragment;
         this.inboxArrayList = inboxArrayList;
@@ -43,6 +44,7 @@ public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapte
         propertyCtrl = new PropertyCtrl(fragment.getActivity());
         favouriteCtrl = new FavouriteCtrl(fragment.getActivity());
         user = userCtrl.getUserDetails();
+        this.owner = owner;
     }
 
     @Override
@@ -56,6 +58,11 @@ public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapte
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Inbox inbox = inboxArrayList.get(position);
+
+        if (user.getUserID().equals(owner.getUserID()))
+            holder.tvCmmtUserTitle.setText("Owner");
+        else
+            holder.tvCmmtUserTitle.setText("User");
         holder.tvCmmtUserName.setText(inbox.getSender().getName());
         holder.tvCmmtMessage.setText(inbox.getInboxmessage());
         holder.tvCmmtCreateddate.setText(inbox.getCreateddate());
@@ -69,10 +76,11 @@ public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapte
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView tvCmmtUserName, tvCmmtMessage, tvCmmtCreateddate;
+        TextView tvCmmtUserTitle, tvCmmtUserName, tvCmmtMessage, tvCmmtCreateddate, houserOwner;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            tvCmmtUserTitle = (TextView) itemView.findViewById(R.id.TVCmmtUserTitle);
             tvCmmtUserName = (TextView) itemView.findViewById(R.id.TVCmmtUserName);
             tvCmmtMessage = (TextView) itemView.findViewById(R.id.TVCmmtMessage);
             tvCmmtCreateddate = (TextView) itemView.findViewById(R.id.TVCmmtCreatedDate);
