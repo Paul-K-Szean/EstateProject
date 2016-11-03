@@ -202,6 +202,7 @@ public class PropertyCtrl {
                                 propertyObj.getString(KEY_PROPERTY_CREATEDDATE));
                         // save to local DB
                         EstateCtrl.syncUserPropertyToLocalDB(property);
+                        fragment.getFragmentManager().popBackStack();
                         FragmentHandler.loadFragment(fragment, new FragmentUserListings());
                     } else {
                         String result = JSONHandler.getResultAsString(fragment.getActivity(), response);

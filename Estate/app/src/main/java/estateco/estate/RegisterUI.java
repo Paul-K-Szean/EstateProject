@@ -1,13 +1,11 @@
 package estateco.estate;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
@@ -94,7 +92,8 @@ public class RegisterUI extends Activity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityCompat.requestPermissions(RegisterUI.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
+                // requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                createUser();
             }
         });
 
@@ -110,6 +109,7 @@ public class RegisterUI extends Activity {
     }
 
     public void createUser() {
+        Log.i(TAG, "createUser");
         // getting phone number from simcard
         TelephonyManager tMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         String simCardNumber = tMgr.getLine1Number();

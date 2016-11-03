@@ -36,8 +36,9 @@ import entities.User;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
-import handler.ImageHandler;
+import handler.ImageHandler_DECODE;
 import handler.JSONHandler;
+import handler.Utility;
 
 import static android.graphics.Color.RED;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -85,6 +86,8 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.w(TAG, "onCreateView()");
+        Utility.hideSoftKeyboard(getActivity());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_property_details, container, false);
         savedInstanceState = getActivity().getIntent().getExtras();
@@ -208,10 +211,15 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 tvPropDetFloorLevel.setText("Level " + valProDetFloorLevel);
                 tvPropDetStreetName.setText(valProDetStreetName);
                 // house details
+                System.gc();
                 if (valProDetImage.isEmpty())
                     imgvPropDetImage.setImageResource(R.drawable.ic_menu_camera);
-                else
-                    imgvPropDetImage.setImageBitmap(ImageHandler.decodeStringToImage(valProDetImage));
+                else {
+                    // imgvPropDetImage.setImageBitmap(ImageHandler_ENCODE.decodeStringToImage(valProDetImage));
+                    new ImageHandler_DECODE(imgvPropDetImage).execute(valProDetImage);
+                }
+
+
                 tvPropDetFlatType.setText(valProDetFlatType);
                 tvPropDetPrice.setText("SGD$" + valProDetPrice);
                 tvPropDetFloorArea.setText(valProDetFloorArea + " Sq Meters");
@@ -265,11 +273,50 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getActivity().startActivity(new Intent(Intent.ACTION_CALL).setData(Uri.parse("tel:" + property.getOwner().getContact())));
-        } else {
-            return;
+
+        // loop through all permission requested
+        for (String permission : permissions) {
+            // android.permission.CALL_PHONE
+            if (permission.equalsIgnoreCase("android.permission.CALL_PHONE")) {
+                // if permission granted
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                }
+            }
         }
+
+        switch (requestCode) {
+            case 1: {
+                // android.permission.CALL_PHONE
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // start calling
+                    getActivity().startActivity(new Intent(Intent.ACTION_CALL)
+                            .setData(Uri.parse("tel:" + property.getOwner().getContact()))
+                    );
+                }
+                return;
+            }
+            case 2: {
+                // android.permission.SEND_SMS
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getActivity().startActivity(new Intent(Intent.ACTION_VIEW)
+                            .putExtra("sms_body", "Hi, i found your listing: " + property.getTitle() +
+                                    " from Estate App and I would like to find out more.")
+                            .setType("vnd.android-dir/mms-sms")
+                            .setData(Uri.parse("sms:" + property.getOwner().getContact()))
+
+                    );
+                }
+                return;
+            }
+            default: {
+                return;
+            }
+        }
+
+
     }
 
 
@@ -301,7 +348,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
         }
         if (id == R.id.action_phonemessage) {
             Log.i(TAG, TAG_PHONEMESSAGE + " action clicked");
-            Toast.makeText(getActivity(), TAG_PHONEMESSAGE, LENGTH_SHORT).show();
+            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 2);
         }
         return false;
     }

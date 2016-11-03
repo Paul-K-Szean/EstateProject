@@ -2,13 +2,18 @@ package handler;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import java.lang.ref.WeakReference;
 import java.util.Map;
 
 import controllers.EstateConfig;
@@ -24,12 +29,12 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
     private static String URLAddress;
     private static int methodType;
     private static Map<String, String> paramToPost;
+    public ProgressDialog pDialog;
     // Tag used to cancel the request
     String tag_string_req = "req_" + TAG;
     Boolean IsInternetConnected = false;
     private Activity activity;
     private AsyncTaskResponse asyncTaskResponse;
-    private ProgressDialog pDialog;
 
     public AsyncTaskHandler(int MethodType, String URLAddress, Map<String, String> paramToPost, Activity activity, AsyncTaskResponse asyncTaskResponse) {
         Log.i(TAG, URLAddress);
@@ -38,25 +43,19 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
         AsyncTaskHandler.paramToPost = paramToPost;
         this.activity = activity;
         this.asyncTaskResponse = asyncTaskResponse;
-
-        // Progress dialog
-        pDialog = new ProgressDialog(activity);
-        pDialog.setCancelable(false);
-
-
     }
 
     @Override
     protected void onPreExecute() {
         Log.w("onPreExecute", "onPreExecute()");
         IsInternetConnected = EstateCtrl.CheckInternetConnection(activity);
+        // Progress dialog
+        if (pDialog == null)
+            pDialog = new ProgressDialog(activity);
         // disable dialog for some request
         if (
-//                URLAddress.toLowerCase().equals(EstateConfig.URL_SEARCHLISTINGS) ||
-//                URLAddress.toLowerCase().equals(EstateConfig.URL_LEASELISTINGS) ||
-//                URLAddress.toLowerCase().equals(EstateConfig.URL_SALELISTINGS) ||
                 URLAddress.toLowerCase().equals(EstateConfig.URL_NEWFAVOURITEPROPERTY) ||
-                URLAddress.toLowerCase().equals(EstateConfig.URL_DELETEFAVOURITEPROPERTY)) {
+                        URLAddress.toLowerCase().equals(EstateConfig.URL_DELETEFAVOURITEPROPERTY)) {
             // disable loading dialog
             pDialog.setIndeterminate(false);
             pDialog.setMessage("");
@@ -67,8 +66,6 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
             pDialog.show();
         }
         Utility.hideSoftKeyboard(activity);
-
-
     }
 
     @Override
@@ -112,13 +109,64 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
     protected void onProgressUpdate(String... progress) {
         Log.w("onProgressUpdate", "onProgressUpdate()");
         asyncTaskResponse.onAsyncTaskResponse(progress[0]);
-        pDialog.dismiss();
+
+        if (pDialog != null)
+            pDialog.dismiss();
     }
 
     @Override
     protected void onPostExecute(String response) {
         Log.w("onPostExecute", "onPostExecute()");
         // asyncTaskResponse.onAsyncTaskResponse(response);
+    }
+
+}
+
+class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
+    private static final String TAG = BitmapWorkerTask.class.getSimpleName();
+    private final WeakReference<ImageView> imageViewReference;
+    private int data = 0;
+    private AsyncTaskResponse asyncTaskResponse;
+    private Activity activity;
+
+    public BitmapWorkerTask(Activity activity, ImageView imageView, AsyncTaskResponse asyncTaskResponse) {
+        // Use a WeakReference to ensure the ImageView can be garbage collected
+        imageViewReference = new WeakReference<ImageView>(imageView);
+        this.activity = activity;
+        this.asyncTaskResponse = asyncTaskResponse;
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        // options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    // Decode image in background.
+    @Override
+    protected Bitmap doInBackground(Integer... params) {
+        data = params[0];
+        return decodeSampledBitmapFromResource(activity.getResources(), data, 100, 100);
+    }
+
+    // Once complete, see if ImageView is still around and set bitmap.
+    @Override
+    protected void onPostExecute(Bitmap bitmap) {
+        if (imageViewReference != null && bitmap != null) {
+            final ImageView imageView = imageViewReference.get();
+            if (imageView != null) {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
     }
 
 }

@@ -21,6 +21,7 @@ import controllers.UserCtrl;
 import entities.Property;
 import entities.User;
 import handler.FragmentHandler;
+import handler.Utility;
 import handler.ViewAdapterRecycler;
 import tabs.SlidingTabLayout;
 
@@ -52,6 +53,7 @@ public class FragmentUserListings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.w(TAG, "onCreateView()");
+        Utility.hideSoftKeyboard(getActivity());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_listings, container, false);
 
@@ -122,7 +124,6 @@ public class FragmentUserListings extends Fragment {
     public void onPause() {
         Log.w(TAG, "onPause");
         super.onPause();
-
     }
 
     @Override

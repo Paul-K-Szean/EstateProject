@@ -33,6 +33,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.ExecutionException;
+
 import controllers.EstateCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
@@ -46,7 +48,7 @@ import enums.FurnishLevel;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
-import handler.ImageHandler;
+import handler.ImageHandler_ENCODE;
 import handler.JSONHandler;
 import handler.Utility;
 
@@ -261,15 +263,24 @@ public class FragmentNewProperty extends Fragment {
                                                      valNewFurnishLevel = spNewFurnishLevel.getSelectedItem().toString();
                                                      valNewBedroomCount = spNewBedroomCount.getSelectedItem().toString();
                                                      valNewBathroomCount = spNewBathroomCount.getSelectedItem().toString();
+                                                     System.gc();
                                                      // image details
-                                                     if (bitmap != null)
-                                                         valNewImage = ImageHandler.encodeImagetoString(bitmap);
-                                                     else {
-                                                         imgvNewImage.buildDrawingCache();
-                                                         bitmap = imgvNewImage.getDrawingCache();
-                                                         // bitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_menu_camera);
-                                                         valNewImage = ImageHandler.encodeImagetoString(bitmap);
+                                                     try {
+
+                                                         if (bitmap != null) {
+                                                             valNewImage = new ImageHandler_ENCODE(getActivity(), bitmap).execute().get();
+                                                         } else {
+                                                             imgvNewImage.buildDrawingCache();
+                                                             bitmap = imgvNewImage.getDrawingCache();
+                                                             valNewImage = new ImageHandler_ENCODE(getActivity(), bitmap).execute().get();
+                                                         }
+
+                                                     } catch (InterruptedException e) {
+                                                         e.printStackTrace();
+                                                     } catch (ExecutionException e) {
+                                                         e.printStackTrace();
                                                      }
+
 
                                                      if (valNewDealType.isEmpty() ||
                                                              valNewWholeApartment.isEmpty() ||
@@ -353,9 +364,7 @@ public class FragmentNewProperty extends Fragment {
                                            int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Log.v(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
             //resume tasks needing this permission
-
             // Create intent to Open Image applications like Gallery, Google Photos
             Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -372,7 +381,6 @@ public class FragmentNewProperty extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 Uri uri = data.getData();
                 bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
-
                 String[] projection = {MediaStore.Images.Media.DATA};
                 Cursor cursor = getContext().getContentResolver().query(uri, projection, null, null, null);
                 cursor.moveToFirst();
@@ -381,6 +389,7 @@ public class FragmentNewProperty extends Fragment {
                 cursor.close();
                 selectedImagePath = filePath;
                 imgvNewImage.setImageBitmap(BitmapFactory.decodeFile(filePath));
+                System.gc();
             }
 
         } catch (Exception ex) {

@@ -172,9 +172,8 @@
                 android:id="@+id/ETEditStreetName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:hint="Street Name"
-                android:inputType="textPersonName"
+                android:inputType="text"
                 android:textAlignment="center" />
 
             <TextView

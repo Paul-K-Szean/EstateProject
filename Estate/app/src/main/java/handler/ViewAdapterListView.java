@@ -29,18 +29,22 @@ import static android.view.View.GONE;
 
 public class ViewAdapterListView extends BaseAdapter {
     private static final String TAG = ViewAdapterListView.class.getSimpleName();
+    //Title, Desc,
+    ImageView imgvProDetImage, imgvLblFavouriteIcon;
+    TextView tvProDetPropertyID, tvProDetTitle, tvProDetDesc, tvProDetFlatType, tvProDetDealType, tvProDetFurnishLevel, tvProDetPrice,
+            tvProDetBedroomCount, tvProDetBathroomCount, tvProDetFloorArea, tvProDetStreetName, tvProDetFloorLevel, tvProDetBlock,
+            tvProDetStatus, tvProDetWholeApartment, tvProDetOwnerName, tvProDetOwnerEmail, tvProDetOwnerContact, tvHeaderAddress,
+            tvLblPropertyFavouriteCount;
     private Fragment fragment;
     private ArrayList<Property> propertyArrayList;
     private ArrayList<Favourite> favouriteArrayList;
     private Map<String, String> propertyFavouriteCountList;
-
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
     private User user;
     private Property property;
     private Favourite favourite;
-
 
     public ViewAdapterListView(Fragment fragment, ArrayList<Property> propertyArrayList, Map<String, String> propertyFavouriteCountList) {
         Log.i(TAG, "ViewAdapterListView()");
@@ -68,13 +72,6 @@ public class ViewAdapterListView extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-
-    //Title, Desc,
-    ImageView imgvProDetImage, imgvLblFavouriteIcon;
-    TextView tvProDetPropertyID, tvProDetTitle, tvProDetDesc, tvProDetFlatType, tvProDetDealType, tvProDetFurnishLevel, tvProDetPrice,
-            tvProDetBedroomCount, tvProDetBathroomCount, tvProDetFloorArea, tvProDetStreetName, tvProDetFloorLevel, tvProDetBlock,
-            tvProDetStatus, tvProDetWholeApartment, tvProDetOwnerName, tvProDetOwnerEmail, tvProDetOwnerContact, tvHeaderAddress,
-            tvLblPropertyFavouriteCount;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -121,8 +118,10 @@ public class ViewAdapterListView extends BaseAdapter {
         String imageData = property.getImage();
         if (imageData.isEmpty())
             imgvProDetImage.setImageResource(R.drawable.ic_menu_camera);
-        else
-            imgvProDetImage.setImageBitmap(ImageHandler.decodeStringToImage(imageData));
+        else {
+            // imgvPropDetImage.setImageBitmap(ImageHandler_ENCODE.decodeStringToImage(valProDetImage));
+            new ImageHandler_DECODE(imgvProDetImage).execute(imageData);
+        }
         tvProDetFlatType.setText(property.getFlatType());
         tvProDetPrice.setText("$" + Utility.formatStringNumber(property.getPrice()));
         tvProDetFloorArea.setText(property.getFloorarea() + "sqm");

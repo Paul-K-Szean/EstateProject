@@ -15,6 +15,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import controllers.EstateCtrl;
 import controllers.PropertyCtrl;
@@ -54,7 +56,8 @@ import handler.AlertDialogResponse;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
-import handler.ImageHandler;
+import handler.ImageHandler_DECODE;
+import handler.ImageHandler_ENCODE;
 import handler.JSONHandler;
 import handler.Utility;
 import tabs.SlidingTabLayout;
@@ -99,6 +102,8 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.w(TAG, "onCreateView()");
+        Utility.hideSoftKeyboard(getActivity());
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_update_user_property, container, false);
         savedInstanceState = getArguments();
@@ -199,14 +204,35 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                        valEditFloorLevel = spEditFloorLevel.getSelectedItem().toString().trim();
                                                        valEditFloorArea = (etEditFloorArea.getText().toString()).isEmpty() ? "" : etEditFloorArea.getText().toString();
                                                        valEditPrice = etEditPrice.getText().toString().trim();
-                                                       if (bitmap != null)
-                                                           valEditImage = ImageHandler.encodeImagetoString(bitmap);
-                                                       else {
-                                                           imgvEditImage.buildDrawingCache();
-                                                           bitmap = imgvEditImage.getDrawingCache();
-                                                           // bitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_menu_camera);
-                                                           valEditImage = ImageHandler.encodeImagetoString(bitmap);
+
+                                                       System.gc();
+                                                       // image details
+                                                       try {
+
+                                                           if (bitmap != null) {
+                                                               valEditImage = new ImageHandler_ENCODE(getActivity(), bitmap).execute().get();
+                                                           } else {
+                                                               imgvEditImage.buildDrawingCache();
+                                                               bitmap = imgvEditImage.getDrawingCache();
+                                                               valEditImage = new ImageHandler_ENCODE(getActivity(), bitmap).execute().get();
+                                                           }
+
+//                                                           System.gc();// clear garbage
+//                                                           if (bitmap != null)
+//                                                               valEditImage = ImageHandler_ENCODE.encodeImagetoString(bitmap);
+//                                                           else {
+//                                                               imgvEditImage.buildDrawingCache();
+//                                                               bitmap = imgvEditImage.getDrawingCache();
+//                                                               valEditImage = ImageHandler_ENCODE.encodeImagetoString(bitmap);
+//                                                           }
+
+                                                       } catch (InterruptedException e) {
+                                                           e.printStackTrace();
+                                                       } catch (ExecutionException e) {
+                                                           e.printStackTrace();
                                                        }
+
+
                                                        valEditStatus = spEditStatus.getSelectedItem().toString().trim();
                                                        valEditDealType = spEditDealType.getSelectedItem().toString().trim();
                                                        valEditTitle = etEditTitle.getText().toString().trim();
@@ -389,7 +415,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
         etEditBlock.setText(propertyLocalDB.getBlock());
         spEditFloorLevel.setSelection(EstateCtrl.getSpinnerItemPosition(spEditFloorLevel, propertyLocalDB.getFloorlevel()));
         etEditStreetName.setText(propertyLocalDB.getStreetname());
-
+        etEditStreetName.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
         // house details
         spEditFlatType.setSelection(EstateCtrl.getSpinnerItemPosition(spEditFlatType, propertyLocalDB.getFlatType()));
         etEditPrice.setText(propertyLocalDB.getPrice());
@@ -399,11 +425,13 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
         spEditBathroomCount.setSelection(EstateCtrl.getSpinnerItemPosition(spEditBathroomCount, propertyLocalDB.getBathroomcount()));
 
         // check if photo is empty
-        String photoData = propertyLocalDB.getImage();
-        if (photoData.isEmpty())
+        String imageData = propertyLocalDB.getImage();
+        if (imageData.isEmpty())
             imgvEditImage.setImageResource(R.drawable.ic_menu_camera);
-        else
-            imgvEditImage.setImageBitmap(ImageHandler.decodeStringToImage(photoData));
+        else {
+             new ImageHandler_DECODE(imgvEditImage).execute(imageData);
+        }
+
 
     }
 
@@ -440,6 +468,8 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                 cursor.close();
                 selectedImagePath = filePath;
                 imgvEditImage.setImageBitmap(BitmapFactory.decodeFile(filePath));
+                bitmap = null;
+                System.gc();
             }
 
         } catch (Exception ex) {

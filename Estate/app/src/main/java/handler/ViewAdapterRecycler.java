@@ -1,11 +1,13 @@
 package handler;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +52,7 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
     private CustomFilter customFilter;
     private Property property;
     private Favourite favourite;
-
+    private LruCache<String, Bitmap> mMemoryCache;
 
     public ViewAdapterRecycler(Fragment fragment, ArrayList<Property> propertyArrayList) {
         inflator = LayoutInflater.from(fragment.getContext());
@@ -61,13 +63,28 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
         propertyCtrl = new PropertyCtrl(fragment.getActivity());
         favouriteCtrl = new FavouriteCtrl(fragment.getActivity());
         user = userCtrl.getUserDetails();
+
+
+        // Get memory class of this device, exceeding this amount will throw an
+        // OutOfMemory exception.
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+        // Use 1/8th of the available memory for this memory cache.
+        final int cacheSize = maxMemory / 8;
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            protected int sizeOf(String key, Bitmap bitmap) {
+                // The cache size will be measured in bytes rather than number
+                // of items.
+                return bitmap.getByteCount();
+            }
+
+        };
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflator.inflate(R.layout.customview_propertydetails, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
-
         return holder;
     }
 
@@ -100,10 +117,18 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
         holder.tvProDetStreetName.setText(property.getStreetname());
         // house details
         String imageData = property.getImage();
+//        if (imageData.isEmpty())
+//            holder.imgvProDetImage.setImageResource(R.drawable.ic_menu_camera);
+//        else
+//            holder.imgvProDetImage.setImageBitmap(ImageHandler_ENCODE.decodeStringToImage(imageData));
+        System.gc();
         if (imageData.isEmpty())
             holder.imgvProDetImage.setImageResource(R.drawable.ic_menu_camera);
-        else
-            holder.imgvProDetImage.setImageBitmap(ImageHandler.decodeStringToImage(imageData));
+        else {
+            
+            new ImageHandler_DECODE(holder.imgvProDetImage).execute(imageData);
+        }
+
         holder.tvProDetFlatType.setText(property.getFlatType());
         holder.tvProDetPrice.setText("$" + Utility.formatStringNumber(property.getPrice()));
         holder.tvProDetFloorArea.setText(property.getFloorarea() + "sqm");
@@ -187,10 +212,10 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
             propertyArrayList = (ArrayList<Property>) results.values;
             TextView textView = (TextView) fragment.getView().findViewById(R.id.TVAllListingCount);
 
-            if(getItemCount() > 1)
-                textView.setText(getItemCount() + " records" );
+            if (getItemCount() > 1)
+                textView.setText(getItemCount() + " records");
             else
-                textView.setText(getItemCount() + " record" );
+                textView.setText(getItemCount() + " record");
             notifyDataSetChanged();
         }
     }
