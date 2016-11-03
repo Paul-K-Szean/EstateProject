@@ -106,7 +106,8 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
 
     private void setControls(View view, Bundle savedInstanceState) {
         toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolBarTopPropertyDetails);
-        toolBarTop.setTitle("Property Details");
+        toolBarTop.setTitle("Estate");
+        toolBarTop.setSubtitle("Property Details");
 
         toolBarBottom = (Toolbar) getActivity().findViewById(R.id.toolBarBottomPropertyDetails);
         toolBarBottom.setOnMenuItemClickListener(this);

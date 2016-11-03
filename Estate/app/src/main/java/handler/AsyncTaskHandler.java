@@ -3,7 +3,6 @@ package handler;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -25,18 +24,18 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
     private static String URLAddress;
     private static int methodType;
     private static Map<String, String> paramToPost;
-    private Activity activity;
-    private AsyncTaskResponse asyncTaskResponse;
-    private ProgressDialog pDialog;
     // Tag used to cancel the request
     String tag_string_req = "req_" + TAG;
     Boolean IsInternetConnected = false;
+    private Activity activity;
+    private AsyncTaskResponse asyncTaskResponse;
+    private ProgressDialog pDialog;
 
     public AsyncTaskHandler(int MethodType, String URLAddress, Map<String, String> paramToPost, Activity activity, AsyncTaskResponse asyncTaskResponse) {
         Log.i(TAG, URLAddress);
-        this.methodType = MethodType;
-        this.URLAddress = URLAddress;
-        this.paramToPost = paramToPost;
+        methodType = MethodType;
+        AsyncTaskHandler.URLAddress = URLAddress;
+        AsyncTaskHandler.paramToPost = paramToPost;
         this.activity = activity;
         this.asyncTaskResponse = asyncTaskResponse;
 
@@ -52,9 +51,10 @@ public class AsyncTaskHandler extends AsyncTask<String, String, String> {
         Log.w("onPreExecute", "onPreExecute()");
         IsInternetConnected = EstateCtrl.CheckInternetConnection(activity);
         // disable dialog for some request
-        if (URLAddress.toLowerCase().equals(EstateConfig.URL_SEARCHLISTINGS) ||
-                URLAddress.toLowerCase().equals(EstateConfig.URL_LEASELISTINGS) ||
-                URLAddress.toLowerCase().equals(EstateConfig.URL_SALELISTINGS) ||
+        if (
+//                URLAddress.toLowerCase().equals(EstateConfig.URL_SEARCHLISTINGS) ||
+//                URLAddress.toLowerCase().equals(EstateConfig.URL_LEASELISTINGS) ||
+//                URLAddress.toLowerCase().equals(EstateConfig.URL_SALELISTINGS) ||
                 URLAddress.toLowerCase().equals(EstateConfig.URL_NEWFAVOURITEPROPERTY) ||
                 URLAddress.toLowerCase().equals(EstateConfig.URL_DELETEFAVOURITEPROPERTY)) {
             // disable loading dialog

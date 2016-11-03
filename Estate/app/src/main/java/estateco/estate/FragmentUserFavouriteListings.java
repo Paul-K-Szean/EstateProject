@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import controllers.FavouriteCtrl;
 import controllers.PropertyCtrl;
@@ -25,7 +23,6 @@ import handler.ViewAdapterRecycler;
 import tabs.SlidingTabLayout;
 
 import static android.view.View.GONE;
-import static controllers.FavouriteCtrl.KEY_FAVOURITE_OWNERID;
 
 
 /**
@@ -77,8 +74,10 @@ public class FragmentUserFavouriteListings extends Fragment {
 
     private void setControls(View view, Bundle savedInstanceState) {
         Toolbar toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
-        toolBarTop.setTitle("My favourites");
+        toolBarTop.setSubtitle("My favourites");
         toolBarTop.getMenu().findItem(R.id.menu_action_searchQuery).setVisible(false);
+        slidingTabLayout = (SlidingTabLayout) getActivity().findViewById(R.id.TabLayoutMain);
+        slidingTabLayout.setVisibility(GONE);
         tvUserFavouriteListingsCount = (TextView) view.findViewById(R.id.TVUserFavouriteListingsCount);
     }
 

@@ -17,15 +17,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import controllers.FavouriteCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
+import entities.Property;
 import entities.User;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
 import tabs.SlidingTabLayout;
+
+import static android.view.View.GONE;
 
 // import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 
@@ -95,16 +102,12 @@ public class MainUI extends AppCompatActivity
 
         if (id == R.id.nav_allistings) {
             startActivity(new Intent(MainUI.this, MainUI.class));
+            finish();
         } else if (id == R.id.nav_userlistings) {
             fragObj = new FragmentUserListings();
         } else if (id == R.id.nav_userfavourites) {
+            viewPager.setVisibility(GONE);
             fragObj = new FragmentUserFavouriteListings();
-
-        } else if (id == R.id.nav_myoffers) {
-
-        } else if (id == R.id.nav_mybids) {
-
-        } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_logout) {
             userCtrl.deleteUserTable();
@@ -154,13 +157,14 @@ public class MainUI extends AppCompatActivity
         // tool bars
         toolBarTop = (Toolbar) findViewById(R.id.toolbar_top);
         setSupportActionBar(toolBarTop);
-        toolBarTop.setTitle("All Listings");
+        toolBarTop.setSubtitle("All Listings");
 //        toolBarBottom = (Toolbar) findViewById(R.id.toolbar_bottom);
 //        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
 
         // sliding tabs
         viewPager = (ViewPager) findViewById(R.id.ViewPagerMain);
         viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.TabLayoutMain);
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -169,6 +173,7 @@ public class MainUI extends AppCompatActivity
                 return getResources().getColor(R.color.colorAccent);
             }
         });
+        viewPager.setOffscreenPageLimit(0);
         slidingTabLayout.setViewPager(viewPager);
 
         // navigation
@@ -236,10 +241,10 @@ public class MainUI extends AppCompatActivity
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentPagerAdapter implements Filterable {
 
         String[] tabTitle = {"All", "For Lease", "For Sale"};
-
+        private ArrayList<Property> propertyArrayList;
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -269,6 +274,11 @@ public class MainUI extends AppCompatActivity
 //                case 2:
 //                    return "SECTION 3";
 //            }
+        }
+
+        @Override
+        public Filter getFilter() {
+            return null;
         }
     }
 

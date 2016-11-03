@@ -2,7 +2,6 @@ package estateco.estate;
 
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import controllers.UserCtrl;
@@ -56,7 +54,6 @@ import static controllers.PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL;
 import static controllers.PropertyCtrl.KEY_PROPERTY_IMAGE;
 import static controllers.PropertyCtrl.KEY_PROPERTY_PRICE;
 import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
-import static controllers.PropertyCtrl.KEY_PROPERTY_SEARCH;
 import static controllers.PropertyCtrl.KEY_PROPERTY_STATUS;
 import static controllers.PropertyCtrl.KEY_PROPERTY_STREETNAME;
 import static controllers.PropertyCtrl.KEY_PROPERTY_TITLE;
@@ -73,25 +70,18 @@ import static controllers.UserCtrl.KEY_USERID;
  */
 public class FragmentMainListings extends Fragment {
     private static final String TAG = FragmentMainListings.class.getSimpleName();
+    private static FragmentMainListings fragmentMainListings;
+    private static Bundle args;
     private UserCtrl userCtrl;
     private User user;
     private User owner;
     private Property property;
-
     private ArrayList<Property> propertyArrayList;
-
     private RecyclerView recycler;
     private ViewAdapterRecycler viewAdapter;
-
-
     private ViewAdapterListView viewAdapterListView;
-
-
     private Map<String, String> paramValues;
-
-
     private TextView tvAllListingCount, itemDataID;
-
     private SearchView searchView;
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
@@ -103,24 +93,19 @@ public class FragmentMainListings extends Fragment {
     }
 
     public static FragmentMainListings getInstance(int position) {
-        FragmentMainListings fragmentMainListings = new FragmentMainListings();
-        Bundle args = new Bundle();
+        fragmentMainListings = new FragmentMainListings();
+        args = new Bundle();
 
         switch (position) {
             case 0:
                 args.putString("URL_SEARCHTYPE", URL_SEARCHLISTINGS);
-
                 break;
             case 1:
                 args.putString("URL_SEARCHTYPE", URL_LEASELISTINGS);
-
                 break;
-
             case 2:
                 args.putString("URL_SEARCHTYPE", URL_SALELISTINGS);
-
                 break;
-
         }
         fragmentMainListings.setArguments(args);
         return fragmentMainListings;
@@ -141,18 +126,16 @@ public class FragmentMainListings extends Fragment {
 
         // tool bars
         toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
-//        toolBarBottom = (Toolbar) getActivity().findViewById(R.id.toolbar_bottom);
-//        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
+        //        toolBarBottom = (Toolbar) getActivity().findViewById(R.id.toolbar_bottom);
+        //        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
 
-
-//        // get all property listing from server
+        // get all property listing from server
         new AsyncTaskHandler(Request.Method.GET, URL_ADDRESS, null, getActivity(), new AsyncTaskResponse() {
             @Override
             public void onAsyncTaskResponse(String response) {
                 getAllListings(response);
             }
         }).execute();
-
         return view;
     }
 
@@ -161,7 +144,6 @@ public class FragmentMainListings extends Fragment {
         tvAllListingCount = (TextView) view.findViewById(R.id.TVAllListingCount);
         setHasOptionsMenu(true);
     }
-
 
     private void getAllListings(String response) {
         try {
@@ -224,7 +206,6 @@ public class FragmentMainListings extends Fragment {
         }
     }
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.i(TAG, "onCreateOptionsMenu");
@@ -246,25 +227,7 @@ public class FragmentMainListings extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                final String queryString = newText;
-                Handler mHandler = new Handler();
-                mHandler.removeCallbacksAndMessages(null);
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Map<String, String> paramValues = new HashMap<>();
-                        paramValues.put(KEY_PROPERTY_SEARCH, queryString);
-                        new AsyncTaskHandler(Request.Method.POST, URL_ADDRESS, paramValues, getActivity(), new AsyncTaskResponse() {
-                            @Override
-                            public void onAsyncTaskResponse(String response) {
-                                getAllListings(response);
-                            }
-                        }).execute();
-                    }
-                }, 1000);
-
-
+                viewAdapter.getFilter().filter(newText);
                 return false;
             }
         });

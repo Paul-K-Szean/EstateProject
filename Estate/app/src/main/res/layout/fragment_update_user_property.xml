@@ -1,14 +1,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="estateco.estate.FragmentUpdateUserProperty">
 
     <!-- TODO: Update blank fragment layout -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -39,10 +40,10 @@
                 android:textAlignment="center" />
 
             <CheckBox
-                android:text="WholeApartment"
+                android:id="@+id/CHKBXEditWholeApartment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/CHKBXEditWholeApartment"
+                android:text="WholeApartment"
                 android:textAlignment="center" />
 
             <TextView
@@ -66,9 +67,9 @@
                 android:id="@+id/TVLblCreatedDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Create On"
                 android:textAlignment="center"
-                android:textSize="20sp"
-                android:text="Create On" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/TVLblEditStatus"
@@ -97,9 +98,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="Title"
                 android:inputType="textPersonName"
-                android:textAlignment="center"
-                android:hint="Title" />
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/TVLblEditDesc"
@@ -114,9 +115,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="Desc"
                 android:inputType="textPersonName"
-                android:textAlignment="center"
-                android:hint="Desc" />
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/textView30"
@@ -126,6 +127,23 @@
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="normal|bold" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Block"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/ETEditBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Block number"
+                android:inputType="text"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/TVLblEditFloorLevel"
@@ -147,6 +165,7 @@
                 android:layout_height="wrap_content"
                 android:text="Street Name"
                 android:textAlignment="center"
+                android:textAllCaps="true"
                 android:textSize="20sp" />
 
             <EditText
@@ -154,9 +173,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="Street Name"
                 android:inputType="textPersonName"
-                android:textAlignment="center"
-                android:hint="Street Name" />
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/textView1"
@@ -169,17 +188,17 @@
 
             <ImageView
                 android:id="@+id/IMGVEditImage"
-                app:srcCompat="@drawable/ic_menu_gallery"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:adjustViewBounds="true" />
+                app:srcCompat="@drawable/ic_menu_gallery" />
 
             <Button
-                android:text="Select Photo"
+                android:id="@+id/BTNEditPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/BTNEditPhoto" />
+                android:text="Select Photo" />
 
             <TextView
                 android:id="@+id/TVLblEditFlatType"
@@ -208,9 +227,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="Price SGD(nearest hundred)"
                 android:inputType="textPersonName"
-                android:textAlignment="center"
-                android:hint="Price SGD(nearest hundred)" />
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/TVLblFloorArea"
@@ -225,9 +244,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:hint="Floor Area (SqMeters)"
                 android:inputType="textPersonName"
-                android:textAlignment="center"
-                android:hint="Floor Area (SqMeters)" />
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/TVLblEditFurnishLevel"
@@ -272,16 +291,16 @@
                 android:textAlignment="center" />
 
             <Button
-                android:text="Save"
+                android:id="@+id/BTNEditPropertySave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/BTNEditPropertySave" />
+                android:text="Save" />
 
             <Button
-                android:text="Randomise"
+                android:id="@+id/BTNEditRandom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/BTNEditRandom" />
+                android:text="Randomise" />
 
 
         </LinearLayout>

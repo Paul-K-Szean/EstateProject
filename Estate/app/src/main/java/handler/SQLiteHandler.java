@@ -272,6 +272,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         db.close();
 
         Log.d(TAG, "New property inserted into sqlite: " + id);
+
     }
 
     /**
@@ -354,7 +355,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
                         cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_WHOLEAPARTMENT)),
                         cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_CREATEDDATE)));
                 userPropertyList.add(property);
-
+                Log.i(TAG, property.getBlock() + " " + property.getStreetname());
             } while (cursor.moveToNext());
 
         } else

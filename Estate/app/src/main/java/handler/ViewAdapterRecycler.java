@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,16 +36,18 @@ import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
  * Created by Paul K Szean on 21/10/2016.
  */
 
-public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycler.MyViewHolder> {
+public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycler.MyViewHolder> implements Filterable {
     private static final String TAG = ViewAdapterRecycler.class.getSimpleName();
     private final LayoutInflater inflator;
     private Fragment fragment;
     private ArrayList<Property> propertyArrayList;
     private ArrayList<Favourite> favouriteArrayList;
+    private ArrayList<Property> filterArrayList;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
     private User user;
+    private CustomFilter customFilter;
     private Property property;
     private Favourite favourite;
 
@@ -52,7 +56,7 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
         inflator = LayoutInflater.from(fragment.getContext());
         this.fragment = fragment;
         this.propertyArrayList = propertyArrayList;
-
+        this.filterArrayList = propertyArrayList;
         userCtrl = new UserCtrl(fragment.getActivity());
         propertyCtrl = new PropertyCtrl(fragment.getActivity());
         favouriteCtrl = new FavouriteCtrl(fragment.getActivity());
@@ -137,11 +141,60 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
 
     }
 
-
     @Override
     public int getItemCount() {
         return propertyArrayList.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        if (customFilter == null)
+            customFilter = new CustomFilter();
+        return customFilter;
+    }
+
+    class CustomFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            Log.i(TAG, "performFiltering" + constraint);
+            FilterResults filterResults = new FilterResults();
+            if (constraint != null && constraint.length() > 0) {
+                // CONSTRAINT TO lower
+                constraint = constraint.toString().toLowerCase();
+                ArrayList<Property> filters = new ArrayList<>();
+                for (Property filtered : filterArrayList) {
+                    if (filtered.getOwner().getName().toLowerCase().contains(constraint) ||
+                            filtered.getFlatType().toLowerCase().contains(constraint) ||
+                            filtered.getStreetname().toLowerCase().contains(constraint) ||
+                            filtered.getDealType().toLowerCase().contains(constraint) ||
+                            filtered.getWholeapartment().toLowerCase().contains(constraint)) {
+                        filters.add(filtered);
+                    }
+                }
+                filterResults.count = filters.size();
+                filterResults.values = filters;
+            } else {
+                filterResults.count = filterArrayList.size();
+                filterResults.values = filterArrayList;
+            }
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            Log.i(TAG, "publishResults");
+            propertyArrayList = (ArrayList<Property>) results.values;
+            TextView textView = (TextView) fragment.getView().findViewById(R.id.TVAllListingCount);
+
+            if(getItemCount() > 1)
+                textView.setText(getItemCount() + " records" );
+            else
+                textView.setText(getItemCount() + " record" );
+            notifyDataSetChanged();
+        }
+    }
+
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

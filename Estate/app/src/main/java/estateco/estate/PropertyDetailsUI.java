@@ -24,15 +24,13 @@ import tabs.SlidingTabLayout;
 
 public class PropertyDetailsUI extends AppCompatActivity {
     private static final String TAG = PropertyDetailsUI.class.getSimpleName();
-
+    Toolbar toolBarTopPropertyDetails, toolBarBottom;
     private SessionHandler session;
     private SQLiteHandler db;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
     private User user;
-    Toolbar toolBarTopPropertyDetails, toolBarBottom;
-
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
 
@@ -64,6 +62,7 @@ public class PropertyDetailsUI extends AppCompatActivity {
         toolBarTopPropertyDetails = (Toolbar) findViewById(R.id.toolBarTopPropertyDetails);
         setSupportActionBar(toolBarTopPropertyDetails);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         toolBarBottom = (Toolbar) findViewById(R.id.toolBarBottomPropertyDetails);
         toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
 
@@ -142,6 +141,41 @@ public class PropertyDetailsUI extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onStart() {
+        Log.w(TAG, "onStart");
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        Log.w(TAG, "onResume");
+        super.onResume();
+        // Fetching user details from sqlite
+        user = userCtrl.getUserDetails();
+    }
+
+    @Override
+    public void onPause() {
+        Log.w(TAG, "onPause");
+        super.onPause();
+        if (user != null) {
+            userCtrl.updateUserDetails(user);
+        } else
+            Log.e(TAG, "No user to retain");
+    }
+
+    @Override
+    public void onStop() {
+        Log.w(TAG, "onStop");
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.w(TAG, "onDestroy");
+        super.onDestroy();
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -195,43 +229,6 @@ public class PropertyDetailsUI extends AppCompatActivity {
         }
 
 
-    }
-
-
-    @Override
-    public void onStart() {
-        Log.w(TAG, "onStart");
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        Log.w(TAG, "onResume");
-        super.onResume();
-        // Fetching user details from sqlite
-        user = userCtrl.getUserDetails();
-    }
-
-    @Override
-    public void onPause() {
-        Log.w(TAG, "onPause");
-        super.onPause();
-        if (user != null) {
-            userCtrl.updateUserDetails(user);
-        } else
-            Log.e(TAG, "No user to retain");
-    }
-
-    @Override
-    public void onStop() {
-        Log.w(TAG, "onStop");
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.w(TAG, "onDestroy");
-        super.onDestroy();
     }
 
 }

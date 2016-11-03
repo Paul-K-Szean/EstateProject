@@ -43,7 +43,7 @@ public class InboxUI extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarTopInbox);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Inbox");
+        toolbar.setSubtitle("Inbox");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.ViewPagerInbox);

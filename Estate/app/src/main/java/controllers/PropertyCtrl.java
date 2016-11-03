@@ -31,18 +31,9 @@ import handler.SessionHandler;
  */
 
 public class PropertyCtrl {
-    private static final String TAG = PropertyCtrl.class.getSimpleName();
-
-    private SessionHandler session;
-    private SQLiteHandler db;
-    private ArrayList<Property> propertyArrayList;
-    private Property property;
-    private View view;
-
-
     // table name
     public static final String TABLE_PROPERTY = "estate_property";
-
+    private static final String TAG = PropertyCtrl.class.getSimpleName();
     // table columns names
     public static String KEY_PROPERTY_PROPERTYID = "propertyID";
     public static String KEY_PROPERTY_OWNERID = "ownerID";
@@ -71,6 +62,11 @@ public class PropertyCtrl {
     public static String KEY_ACTION_DECREASEFAVOURITE = "decreasefavourite";
     public static String KEY_ACTION_INCREASEVIEW = "increaseview";
     public static String KEY_ACTION_DECREASEVIEW = "decreaseview";
+    private SessionHandler session;
+    private SQLiteHandler db;
+    private ArrayList<Property> propertyArrayList;
+    private Property property;
+    private View view;
 
     public PropertyCtrl(Context context) {
         // SQLite database handler
@@ -218,30 +214,31 @@ public class PropertyCtrl {
         }).execute();
     }
 
-    public void serverUpdateUserProperty(final Fragment fragment, final Property property, final User user) {
+    public void serverUpdateUserProperty(final Fragment fragment, final Property property) {
         Log.i(TAG, "serverUpdateUserProperty");
         Map<String, String> paramValues = new HashMap<>();
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, property.getPropertyID());
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_FLATTYPE, property.getFlatType()); // flattype
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_BLOCK, property.getBlock());    // block
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_STREETNAME, property.getStreetname()); // streentname
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());    // floorarea
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_FLOORAREA, property.getFloorarea());    // floorarea
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_PRICE, property.getPrice());    // price
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_IMAGE, property.getImage());    // photo
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_STATUS, property.getStatus()); // status
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_DEALTYPE, property.getDealType());    // dealtype
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_TITLE, property.getTitle()); // title
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_DESC, property.getDescription());    // description
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel()); // furnishlevel
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount()); // noofbedrooms
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount()); // noofbathrooms
-        paramValues.put(PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());    // wholeapartment
+        paramValues.put(KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
+        paramValues.put(KEY_PROPERTY_PROPERTYID, property.getPropertyID());
+        paramValues.put(KEY_PROPERTY_FLATTYPE, property.getFlatType()); // flattype
+        paramValues.put(KEY_PROPERTY_BLOCK, property.getBlock());    // block
+        paramValues.put(KEY_PROPERTY_STREETNAME, property.getStreetname()); // streentname
+        paramValues.put(KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());    // floorarea
+        paramValues.put(KEY_PROPERTY_FLOORAREA, property.getFloorarea());    // floorarea
+        paramValues.put(KEY_PROPERTY_PRICE, property.getPrice());    // price
+        paramValues.put(KEY_PROPERTY_IMAGE, property.getImage());    // photo
+        paramValues.put(KEY_PROPERTY_STATUS, property.getStatus()); // status
+        paramValues.put(KEY_PROPERTY_DEALTYPE, property.getDealType());    // dealtype
+        paramValues.put(KEY_PROPERTY_TITLE, property.getTitle()); // title
+        paramValues.put(KEY_PROPERTY_DESC, property.getDescription());    // description
+        paramValues.put(KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel()); // furnishlevel
+        paramValues.put(KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount()); // noofbedrooms
+        paramValues.put(KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount()); // noofbathrooms
+        paramValues.put(KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());    // wholeapartment
 
-        Log.i(TAG, "Param size: " + String.valueOf(paramValues.size()));
-        for (Map.Entry<String, String> val : paramValues.entrySet()) {
-            Log.i(TAG, val.getKey() + " == " + val.getValue());
-        }
+//        Log.i(TAG, "Param size: " + String.valueOf(paramValues.size()));
+//        for (Map.Entry<String, String> val : paramValues.entrySet()) {
+//            Log.i(TAG, val.getKey() + " == " + val.getValue());
+//        }
         // save to remote server
         if (paramValues != null) {
             new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_UPDATEUSERPROPERTY, paramValues, fragment.getActivity(), new AsyncTaskResponse() {

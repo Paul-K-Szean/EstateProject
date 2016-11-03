@@ -17,6 +17,8 @@ import handler.SQLiteHandler;
 import handler.SessionHandler;
 import handler.Utility;
 
+import static android.view.View.GONE;
+
 public class LoginUI extends Activity {
     private static final String TAG = LoginUI.class.getSimpleName();
 
@@ -68,8 +70,8 @@ public class LoginUI extends Activity {
         tvErrorMsgLogin = (TextView) findViewById(R.id.TVErrorMsgLogin);
         tvRegisterLink = (TextView) findViewById(R.id.TVRegisterLink);
 
-        etLoginEmail.setText("user01@gmail.com");
-        etLoginPassword.setText("user01");
+//        etLoginEmail.setText("user01@gmail.com");
+//        etLoginPassword.setText("user01");
 
 
         // login button click
@@ -97,6 +99,7 @@ public class LoginUI extends Activity {
         );
 
         btnLoginRandom = (Button) findViewById(R.id.BTNLoginRandom);
+        btnLoginRandom.setVisibility(GONE);
         btnLoginRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

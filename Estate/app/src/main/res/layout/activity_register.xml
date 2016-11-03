@@ -8,6 +8,31 @@
     android:padding="10dp"
     android:weightSum="1">
 
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dip"
+        android:background="@null"
+        android:text="Estate"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="26sp"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dip"
+        android:background="@null"
+        android:text="Registration"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="15dp" />
+
     <EditText
         android:id="@+id/ETRegName"
         android:layout_width="fill_parent"
@@ -64,9 +89,9 @@
         android:text="Register" />
 
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView4" />
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/BTNRegRandom"
@@ -75,8 +100,8 @@
         android:layout_below="@+id/ETLoginPassword"
         android:layout_centerHorizontal="true"
         android:background="@color/btn_login_bg"
-        android:text="Random"
-        android:elevation="0dp" />
+        android:elevation="0dp"
+        android:text="Random" />
 
     <!-- Link to Login Screen -->
     <TextView

@@ -1,13 +1,20 @@
 package estateco.estate;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
@@ -15,6 +22,9 @@ import entities.User;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
 import handler.Utility;
+
+import static android.view.View.GONE;
+import static android.widget.Toast.LENGTH_LONG;
 
 public class RegisterUI extends Activity {
     private static final String TAG = RegisterUI.class.getSimpleName();
@@ -60,10 +70,20 @@ public class RegisterUI extends Activity {
 
         tvLoginLink = (TextView) findViewById(R.id.TVLoginLink);
 
+
+        SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        if (manager.getSensorList(Sensor.TYPE_ALL).isEmpty()) {
+            // running on an emulator
+            valRegContact = "96693115";
+        } else {
+            // running on a device
+        }
+
+        btnRegRandom.setVisibility(GONE);
         btnRegRandom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String value = "user" + String.valueOf(Utility.generateNumber(10, 40));
+                String value = "user" + String.valueOf(Utility.generateNumberAsString(01, 20));
                 etRegName.setText(value);
                 etRegEmail.setText(value + "@gmail.com");
                 etRegPassword01.setText(value);
@@ -74,43 +94,7 @@ public class RegisterUI extends Activity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                valRegName = etRegName.getText().toString();
-                valRegEmail = etRegEmail.getText().toString();
-                valRegPassword01 = etRegPassword01.getText().toString();
-                valRegPassword02 = etRegPassword02.getText().toString();
-                valRegContact = "96693115";
-
-                boolean isNameEmpty = valRegName.isEmpty();
-                boolean isEmailEmpty = valRegEmail.isEmpty();
-                boolean isPassword01Empty = valRegPassword01.isEmpty();
-                boolean isPassword02Empty = valRegPassword02.isEmpty();
-
-                // No empty fields
-                if (!isNameEmpty &&
-                        !isEmailEmpty &&
-                        !isPassword01Empty &&
-                        !isPassword02Empty) {
-
-                    boolean isEmailValid = Utility.isEmailValid(valRegEmail);
-                    boolean isPasswordSame = valRegPassword02.equals((valRegPassword01));
-
-                    if (isEmailValid && isPasswordSame) {
-                        // register user to server
-                        userCtrl.serverUserRegister(RegisterUI.this, valRegName, valRegEmail, valRegPassword02, valRegContact);
-                    } else {
-                        // error messages
-                        if (!isEmailValid) etRegEmail.setError("Email format not valid.");
-                        if (!isPasswordSame)
-                            etRegPassword02.setError("Confirm password does not match.");
-                    }
-                } else {
-                    // empty fields check
-                    if (isNameEmpty) etRegName.setError("Required field!");
-                    if (isEmailEmpty) etRegEmail.setError("Required field!");
-                    if (isPassword01Empty) etRegPassword01.setError("Required field!");
-                    if (isPassword02Empty) etRegPassword02.setError("Required field!");
-                }
+                ActivityCompat.requestPermissions(RegisterUI.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
             }
         });
 
@@ -124,6 +108,69 @@ public class RegisterUI extends Activity {
 
 
     }
+
+    public void createUser() {
+        // getting phone number from simcard
+        TelephonyManager tMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        String simCardNumber = tMgr.getLine1Number();
+        if (simCardNumber.isEmpty()) {
+            valRegContact = "96693115";
+        } else {
+            valRegContact = simCardNumber;
+        }
+
+        valRegName = etRegName.getText().toString();
+        valRegEmail = etRegEmail.getText().toString();
+        valRegPassword01 = etRegPassword01.getText().toString();
+        valRegPassword02 = etRegPassword02.getText().toString();
+
+        boolean isNameEmpty = valRegName.isEmpty();
+        boolean isEmailEmpty = valRegEmail.isEmpty();
+        boolean isPassword01Empty = valRegPassword01.isEmpty();
+        boolean isPassword02Empty = valRegPassword02.isEmpty();
+
+        // No empty fields
+        if (!isNameEmpty &&
+                !isEmailEmpty &&
+                !isPassword01Empty &&
+                !isPassword02Empty) {
+
+            boolean isEmailValid = Utility.isEmailValid(valRegEmail);
+            boolean isPasswordSame = valRegPassword02.equals((valRegPassword01));
+
+            if (isEmailValid && isPasswordSame) {
+                // register user to server
+                userCtrl.serverUserRegister(RegisterUI.this, valRegName, valRegEmail, valRegPassword02, valRegContact);
+            } else {
+                // error messages
+                if (!isEmailValid) etRegEmail.setError("Email format not valid.");
+                if (!isPasswordSame)
+                    etRegPassword02.setError("Confirm password does not match.");
+            }
+        } else {
+            // empty fields check
+            if (isNameEmpty) etRegName.setError("Required field!");
+            if (isEmailEmpty) etRegEmail.setError("Required field!");
+            if (isPassword01Empty) etRegPassword01.setError("Required field!");
+            if (isPassword02Empty) etRegPassword02.setError("Required field!");
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Log.v(TAG, "Permission: " + permissions[0] + " was " + grantResults[0]);
+            //resume tasks needing this permission
+            createUser();
+        } else {
+            Toast.makeText(RegisterUI.this, "This application need to use your mobile phone number.", LENGTH_LONG).show();
+            return;
+        }
+    }
+
 
     @Override
     public void onStart() {

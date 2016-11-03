@@ -32,17 +32,15 @@ import static android.view.View.GONE;
  */
 public class FragmentUserListings extends Fragment {
     private static final String TAG = FragmentUserListings.class.getSimpleName();
-
-    private UserCtrl userCtrl;
-    private User user;
-    private PropertyCtrl propertyCtrl;
-
-    private RecyclerView recycler;
-    private ViewAdapterRecycler viewAdapter;
-    private ArrayList<Property> propertyArrayList;
     Button btnNewListing;
     TextView tvUserMsg, itemDataID;
     Toolbar toolBarTop;
+    private UserCtrl userCtrl;
+    private User user;
+    private PropertyCtrl propertyCtrl;
+    private RecyclerView recycler;
+    private ViewAdapterRecycler viewAdapter;
+    private ArrayList<Property> propertyArrayList;
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
 
@@ -74,7 +72,7 @@ public class FragmentUserListings extends Fragment {
 
     public void setControls(View view) {
         toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
-        toolBarTop.setTitle("My Listings");
+        toolBarTop.setSubtitle("My Listings");
         toolBarTop.getMenu().findItem(R.id.menu_action_searchQuery).setVisible(false);
         // error msg
         tvUserMsg = (TextView) view.findViewById(R.id.TVUserListingsCount);

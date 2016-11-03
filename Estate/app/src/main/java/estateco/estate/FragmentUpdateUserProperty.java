@@ -72,12 +72,12 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
     Bitmap bitmap;
     Button btnEditPropertySave, btnEditPhoto, btnEditRandom;
     CheckBox chkbxEditWholeApartment;
-    EditText etEditTitle, etEditDesc, etEditStreetName, etEditPrice, etEditFloorArea;
+    EditText etEditTitle, etEditDesc, etEditBlock, etEditStreetName, etEditPrice, etEditFloorArea;
     ImageView imgvEditImage;
     Map<String, String> paramValues = new HashMap<>();
     Spinner spEditDealType, spEditFloorLevel, spEditFlatType, spEditFurnishLevel, spEditBedroomCount, spEditBathroomCount, spEditStatus;
     String selectedImagePath;
-    String valEditPropertyID, valEditFlatType, valEditBlock = "000", valEditStreetName, valEditFloorLevel,
+    String valEditPropertyID, valEditFlatType, valEditBlock, valEditStreetName, valEditFloorLevel,
             valEditFloorArea, valEditPrice, valEditImage, valEditStatus,
             valEditDealType, valEditTitle, valEditDesc, valEditFurnishLevel, valEditBedroomCount,
             valEditBathroomCount, valEditFavouriteCount, valEditViewCount, valEditWholeApartment, valEditCreatedDate;
@@ -121,7 +121,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
 
     private void setControls(View view, final Bundle savedInstanceState) {
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
-        toolbar.setTitle("Update Property");
+        toolbar.setSubtitle("Update Property");
 
         // check box
         chkbxEditWholeApartment = (CheckBox) view.findViewById(R.id.CHKBXEditWholeApartment);
@@ -130,6 +130,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
         // edit texts
         etEditTitle = (EditText) view.findViewById(R.id.ETEditTitle);
         etEditDesc = (EditText) view.findViewById(R.id.ETEditDesc);
+        etEditBlock = (EditText) view.findViewById(R.id.ETEditBlock);
         etEditStreetName = (EditText) view.findViewById(R.id.ETEditStreetName);
         etEditPrice = (EditText) view.findViewById(R.id.ETEditPrice);
         etEditFloorArea = (EditText) view.findViewById(R.id.ETEditFloorArea);
@@ -191,12 +192,13 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                    public void onClick(View v) {
                                                        // assign to valString
                                                        valEditPropertyID = savedInstanceState.getString(PropertyCtrl.KEY_PROPERTY_PROPERTYID);
-                                                       valEditFlatType = spEditFlatType.getSelectedItem().toString();
-                                                       valEditPrice = etEditPrice.getText().toString();
-                                                       valEditStreetName = etEditStreetName.getText().toString();
-                                                       valEditFloorLevel = spEditFloorLevel.getSelectedItem().toString();
+                                                       valEditFlatType = spEditFlatType.getSelectedItem().toString().trim();
+                                                       valEditPrice = etEditPrice.getText().toString().trim();
+                                                       valEditBlock = etEditBlock.getText().toString().trim();
+                                                       valEditStreetName = etEditStreetName.getText().toString().trim();
+                                                       valEditFloorLevel = spEditFloorLevel.getSelectedItem().toString().trim();
                                                        valEditFloorArea = (etEditFloorArea.getText().toString()).isEmpty() ? "" : etEditFloorArea.getText().toString();
-                                                       valEditPrice = etEditPrice.getText().toString();
+                                                       valEditPrice = etEditPrice.getText().toString().trim();
                                                        if (bitmap != null)
                                                            valEditImage = ImageHandler.encodeImagetoString(bitmap);
                                                        else {
@@ -205,16 +207,16 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                            // bitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_menu_camera);
                                                            valEditImage = ImageHandler.encodeImagetoString(bitmap);
                                                        }
-                                                       valEditStatus = spEditStatus.getSelectedItem().toString();
-                                                       valEditDealType = spEditDealType.getSelectedItem().toString();
-                                                       valEditTitle = etEditTitle.getText().toString();
-                                                       valEditDesc = etEditDesc.getText().toString();
-                                                       valEditFurnishLevel = spEditFurnishLevel.getSelectedItem().toString();
-                                                       valEditBedroomCount = spEditBedroomCount.getSelectedItem().toString();
-                                                       valEditBathroomCount = spEditBathroomCount.getSelectedItem().toString();
+                                                       valEditStatus = spEditStatus.getSelectedItem().toString().trim();
+                                                       valEditDealType = spEditDealType.getSelectedItem().toString().trim();
+                                                       valEditTitle = etEditTitle.getText().toString().trim();
+                                                       valEditDesc = etEditDesc.getText().toString().trim();
+                                                       valEditFurnishLevel = spEditFurnishLevel.getSelectedItem().toString().trim();
+                                                       valEditBedroomCount = spEditBedroomCount.getSelectedItem().toString().trim();
+                                                       valEditBathroomCount = spEditBathroomCount.getSelectedItem().toString().trim();
                                                        valEditFavouriteCount =
                                                                valEditWholeApartment = chkbxEditWholeApartment.isChecked() ? PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT : PropertyCtrl.KEY_PROPERTY_ROOM;
-                                                       valEditCreatedDate = tvLblCreatedDate.getText().toString();
+                                                       valEditCreatedDate = tvLblCreatedDate.getText().toString().trim();
 
 
                                                        // check for empty fields
@@ -305,6 +307,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                              JSONArray jsonArray = JSONHandler.getRecordsAsArray(getActivity(), response);
                                                              if (jsonArray != null && jsonArray.length() > 0) {
                                                                  if (jsonArray instanceof JSONArray) {
+                                                                     Toast.makeText(getActivity(), "Location at (" + location + ").", Toast.LENGTH_SHORT).show();
                                                                      int resultArrSize = jsonArray.length();
                                                                      int randomIndex = Utility.generateNumber(0, resultArrSize);
                                                                      JSONObject jsonRandomObject = (JSONObject) jsonArray.get(randomIndex);
@@ -340,7 +343,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                                      etEditTitle.setText(Utility.generateTitle());
                                                                      etEditDesc.setText(Utility.generateDesc());
                                                                      // address details
-                                                                     valEditBlock = entityGovDataResaleFlat.getBlock();
+                                                                     etEditBlock.setText(entityGovDataResaleFlat.getBlock());
                                                                      spEditFloorLevel.setSelection(EstateCtrl.getSpinnerItemPosition(spEditFloorLevel, entityGovDataResaleFlat.getStorey_range()));
                                                                      etEditStreetName.setText(entityGovDataResaleFlat.getStreet_name());
                                                                      // house details
@@ -350,6 +353,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                                      spEditFurnishLevel.setSelection(Utility.generateNumber(1, spEditFurnishLevel.getCount() - 1));
                                                                      spEditBedroomCount.setSelection(Utility.generateNumber(1, spEditBedroomCount.getCount() - 1));
                                                                      spEditBathroomCount.setSelection(Utility.generateNumber(1, spEditBathroomCount.getCount() - 1));
+
                                                                  }
                                                              } else {
                                                                  Toast.makeText(getActivity(), "No data for (" + location + ") from gov data.", Toast.LENGTH_SHORT).show();
@@ -382,8 +386,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
         etEditDesc.setText(propertyLocalDB.getDescription());
 
         // address details
-
-        Log.i(TAG, "Floor Level: " + propertyLocalDB.getFloorlevel());
+        etEditBlock.setText(propertyLocalDB.getBlock());
         spEditFloorLevel.setSelection(EstateCtrl.getSpinnerItemPosition(spEditFloorLevel, propertyLocalDB.getFloorlevel()));
         etEditStreetName.setText(propertyLocalDB.getStreetname());
 
@@ -449,7 +452,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
     // alert dialog response
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        propertyCtrl.serverUpdateUserProperty(FragmentUpdateUserProperty.this, property, user);
+        propertyCtrl.serverUpdateUserProperty(FragmentUpdateUserProperty.this, property);
 
     }
 

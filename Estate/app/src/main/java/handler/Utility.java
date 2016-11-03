@@ -15,18 +15,15 @@ import java.util.regex.Pattern;
 
 public class Utility {
     private static final String TAG = Utility.class.getSimpleName();
-
-    public Utility() {
-
-    }
-
-    private static Pattern pattern;
-    private static Matcher matcher;
     //Email Pattern
     private static final String EMAIL_PATTERN =
             "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static Pattern pattern;
+    private static Matcher matcher;
+    public Utility() {
 
+    }
 
     public static boolean isEmailValid(String email) {
         pattern = Pattern.compile(EMAIL_PATTERN);
@@ -105,6 +102,17 @@ public class Utility {
         return random.nextBoolean();
     }
 
+    public static void showSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(activity.getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (activity.getCurrentFocus() != null)
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
     public String generateLocation() {
         String[] location = {"Raffles Place", "Cecil", "Marina",
                 "Anson", "Tanjong Pagar",
@@ -137,21 +145,10 @@ public class Utility {
         };
 
         Random random = new Random();
-        String locationValue = location[random.nextInt(location.length) + 1];
+        String locationValue = location[random.nextInt(location.length - 1) + 1];
         Log.i(TAG, locationValue);
         return locationValue;
 
-    }
-
-    public static void showSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInput(activity.getCurrentFocus(), InputMethodManager.SHOW_IMPLICIT);
-    }
-
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (activity.getCurrentFocus() != null)
-            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
 }

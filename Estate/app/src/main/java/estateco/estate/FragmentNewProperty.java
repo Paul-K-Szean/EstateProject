@@ -65,7 +65,7 @@ public class FragmentNewProperty extends Fragment {
     Bitmap bitmap;
     Button btnCreateProperty, btnNewRandom, btnNewImage;
     CheckBox chkbxNewWholeApartment;
-    EditText etNewTitle, etNewDesc, etNewStreetName, etNewPrice, etNewFloorArea;
+    EditText etNewTitle, etNewDesc, etNewBlock, etNewStreetName, etNewPrice, etNewFloorArea;
     ImageView imgvNewImage;
     Spinner spNewDealType, spNewFloorLevel, spNewFlatType, spNewFurnishLevel, spNewBedroomCount, spNewBathroomCount;
     String valNewFlatType, valNewBlock, valNewStreetName, valNewFloorLevel, valNewFloorArea, valNewPrice, valNewImage, valNewStatus,
@@ -75,6 +75,7 @@ public class FragmentNewProperty extends Fragment {
     private PropertyCtrl propertyCtrl;
     private User user;
     private Property property;
+
     public FragmentNewProperty() {
         // Required empty public constructor
     }
@@ -97,7 +98,7 @@ public class FragmentNewProperty extends Fragment {
 
     public void setControls(View view) {
         toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
-        toolBarTop.setTitle("My Listings");
+        toolBarTop.setSubtitle("My Listings");
         toolBarTop.getMenu().findItem(R.id.menu_action_searchQuery).setVisible(false);
 
 
@@ -108,6 +109,7 @@ public class FragmentNewProperty extends Fragment {
         // edit texts
         etNewTitle = (EditText) view.findViewById(R.id.ETNewTitle);
         etNewDesc = (EditText) view.findViewById(R.id.ETNewDesc);
+        etNewBlock = (EditText) view.findViewById(R.id.ETNewBlock);
         etNewStreetName = (EditText) view.findViewById(R.id.ETNewStreetName);
         etNewPrice = (EditText) view.findViewById(R.id.ETNewPrice);
         etNewFloorArea = (EditText) view.findViewById(R.id.ETNewFloorArea);
@@ -210,7 +212,7 @@ public class FragmentNewProperty extends Fragment {
                                                                     etNewTitle.setText(Utility.generateTitle());
                                                                     etNewDesc.setText(Utility.generateDesc());
                                                                     // address details
-                                                                    valNewBlock = entityGovDataResaleFlat.getBlock();
+                                                                    etNewBlock.setText(entityGovDataResaleFlat.getBlock());
                                                                     spNewFloorLevel.setSelection(EstateCtrl.getSpinnerItemPosition(spNewFloorLevel, entityGovDataResaleFlat.getStorey_range()));
                                                                     etNewStreetName.setText(entityGovDataResaleFlat.getStreet_name());
                                                                     // house details
@@ -249,6 +251,7 @@ public class FragmentNewProperty extends Fragment {
                                                      valNewTitle = etNewTitle.getText().toString();
                                                      valNewDesc = etNewDesc.getText().toString();
                                                      // address details
+                                                     valNewBlock = etNewBlock.getText().toString().trim();
                                                      valNewFloorLevel = spNewFloorLevel.getSelectedItem().toString();
                                                      valNewStreetName = etNewStreetName.getText().toString();
                                                      // house details
@@ -300,6 +303,8 @@ public class FragmentNewProperty extends Fragment {
                                                              etNewTitle.setError("Required field!");
                                                          if (etNewDesc.getText().toString().isEmpty())
                                                              etNewDesc.setError("Required field!");
+                                                         if (etNewBlock.getText().toString().isEmpty())
+                                                             etNewBlock.setError("Required field!");
                                                          if (etNewStreetName.getText().toString().isEmpty())
                                                              etNewStreetName.setError("Required field!");
                                                          if (etNewPrice.getText().toString().isEmpty())
