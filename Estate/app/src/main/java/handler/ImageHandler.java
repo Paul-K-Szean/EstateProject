@@ -31,6 +31,7 @@ public class ImageHandler {
 
         return inSampleSize;
     }
+
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
                                                          int reqWidth, int reqHeight) {
 
@@ -46,4 +47,6 @@ public class ImageHandler {
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(res, resId, options);
     }
+
+
 }

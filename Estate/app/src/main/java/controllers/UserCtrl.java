@@ -28,26 +28,24 @@ import handler.SessionHandler;
  */
 
 public class UserCtrl {
-    private static final String TAG = UserCtrl.class.getSimpleName();
-
-    private SessionHandler session;
-    private SQLiteHandler db;
-    private User user;
-
     // table name
     public static final String TABLE_USER = "estate_user";
-
     // table columns names
     public static final String KEY_USERID = "userID";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_CONTACT = "contact";
+    private static final String TAG = UserCtrl.class.getSimpleName();
+    private SessionHandler session;
+    private SQLiteHandler db;
+    private User user;
 
 
     public UserCtrl(Context context) {
         // SQLite database handler
         db = new SQLiteHandler(context);
+
     }
 
     public UserCtrl(Context context, SessionHandler session) {
@@ -119,8 +117,6 @@ public class UserCtrl {
                         );
                         EstateCtrl.syncUserAccountToLocalDB(user);
                         EstateCtrl.syncUserPropertiesToLocalDB(activity, user);
-
-
                     } else {
                         String result = JSONHandler.getResultAsString(activity, response);
                         Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
@@ -146,6 +142,7 @@ public class UserCtrl {
                 String result = JSONHandler.getResultAsString(activity, response);
                 Log.i(TAG, "serverUserRegister: " + result.toString());
                 Toast.makeText(activity, result, Toast.LENGTH_LONG).show();
+
                 if (result.contains("successfully")) {
                     activity.startActivity(new Intent(activity, LoginUI.class));
                     activity.finish();

@@ -1,8 +1,10 @@
 package estateco.estate;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.LruCache;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -23,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import controllers.UserCtrl;
 import entities.Property;
@@ -31,7 +34,6 @@ import entities.User;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.JSONHandler;
-import handler.ViewAdapterListView;
 import handler.ViewAdapterRecycler;
 import tabs.SlidingTabLayout;
 
@@ -68,10 +70,13 @@ import static controllers.UserCtrl.KEY_USERID;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentMainListings extends Fragment {
+public class FragmentMainListings extends Fragment implements Filterable {
     private static final String TAG = FragmentMainListings.class.getSimpleName();
     private static FragmentMainListings fragmentMainListings;
     private static Bundle args;
+    private static LruCache<String, Bitmap> lruCache;
+    final int maxMemorySize = (int) Runtime.getRuntime().maxMemory() / 1024;
+    final int cacheSize = maxMemorySize / 10;
     private UserCtrl userCtrl;
     private User user;
     private User owner;
@@ -79,14 +84,14 @@ public class FragmentMainListings extends Fragment {
     private ArrayList<Property> propertyArrayList;
     private RecyclerView recycler;
     private ViewAdapterRecycler viewAdapter;
-    private ViewAdapterListView viewAdapterListView;
-    private Map<String, String> paramValues;
     private TextView tvAllListingCount, itemDataID;
     private SearchView searchView;
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
     private Toolbar toolBarTop, toolBarBottom;
     private String URL_ADDRESS;
+    private CustomFilter customFilter;
+    private ArrayList<Property> filterArrayList;
 
     public FragmentMainListings() {
         // Required empty public constructor
@@ -111,9 +116,21 @@ public class FragmentMainListings extends Fragment {
         return fragmentMainListings;
     }
 
+    public static Bitmap getBitmapFromCache(String key) {
+        return lruCache.get(key);
+    }
+
+    public static void setBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromCache(key) == null) {
+
+        }
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(TAG, "onCreateView");
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_main_listings, container, false);
         savedInstanceState = getArguments();
@@ -124,11 +141,6 @@ public class FragmentMainListings extends Fragment {
 
         setControls(view);
 
-        // tool bars
-        toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
-        //        toolBarBottom = (Toolbar) getActivity().findViewById(R.id.toolbar_bottom);
-        //        toolBarBottom.inflateMenu(R.menu.property_details_actionbar);
-
         // get all property listing from server
         new AsyncTaskHandler(Request.Method.GET, URL_ADDRESS, null, getActivity(), new AsyncTaskResponse() {
             @Override
@@ -136,19 +148,28 @@ public class FragmentMainListings extends Fragment {
                 getAllListings(response);
             }
         }).execute();
+
         return view;
     }
 
     public void setControls(final View view) {
+        // tool bars
         toolBarTop = (Toolbar) getActivity().findViewById(R.id.toolbar_top);
         tvAllListingCount = (TextView) view.findViewById(R.id.TVAllListingCount);
+
+        lruCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount() / 1024;
+            }
+        };
         setHasOptionsMenu(true);
     }
 
     private void getAllListings(String response) {
         try {
+
             propertyArrayList = new ArrayList<>();
-            recycler = (RecyclerView) getView().findViewById(R.id.recycleView);
             JSONArray jsonArray = JSONHandler.getResultAsArray(getActivity(), response);
             if (jsonArray != null) {
                 Log.i(TAG, "Results: " + jsonArray.length());
@@ -182,18 +203,19 @@ public class FragmentMainListings extends Fragment {
                             jsonObject.getString(KEY_PROPERTY_WHOLEAPARTMENT),
                             jsonObject.getString(KEY_PROPERTY_CREATEDDATE));
                     propertyArrayList.add(property);
+                    recycler = (RecyclerView) getView().findViewById(R.id.recycleView);
+                    viewAdapter = new ViewAdapterRecycler(FragmentMainListings.this, propertyArrayList);
+                    recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    recycler.setVisibility(VISIBLE);
+                    recycler.setAdapter(viewAdapter);
+
+
+                    if (propertyArrayList.size() > 1)
+                        tvAllListingCount.setText(propertyArrayList.size() + " records");
+                    else
+                        tvAllListingCount.setText(propertyArrayList.size() + " record");
                 }
 
-
-                viewAdapter = new ViewAdapterRecycler(FragmentMainListings.this, propertyArrayList);
-                recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-                recycler.setVisibility(VISIBLE);
-                recycler.setAdapter(viewAdapter);
-
-                if (propertyArrayList.size() > 1)
-                    tvAllListingCount.setText(propertyArrayList.size() + " records");
-                else
-                    tvAllListingCount.setText(propertyArrayList.size() + " record");
 
             } else {
                 recycler.setVisibility(GONE);
@@ -234,6 +256,13 @@ public class FragmentMainListings extends Fragment {
     }
 
     @Override
+    public Filter getFilter() {
+        if (customFilter == null)
+            customFilter = new CustomFilter();
+        return customFilter;
+    }
+
+    @Override
     public void onStart() {
         Log.w(TAG, "onStart");
         super.onStart();
@@ -269,6 +298,48 @@ public class FragmentMainListings extends Fragment {
     public void onDestroy() {
         Log.w(TAG, "onDestroy");
         super.onDestroy();
+    }
+
+    class CustomFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            Log.i(TAG, "performFiltering" + constraint);
+            FilterResults filterResults = new FilterResults();
+            if (constraint != null && constraint.length() > 0) {
+                // CONSTRAINT TO lower
+                constraint = constraint.toString().toLowerCase();
+                ArrayList<Property> filters = new ArrayList<>();
+                for (Property filtered : filterArrayList) {
+                    if (filtered.getOwner().getName().toLowerCase().contains(constraint) ||
+                            filtered.getFlatType().toLowerCase().contains(constraint) ||
+                            filtered.getStreetname().toLowerCase().contains(constraint) ||
+                            filtered.getDealType().toLowerCase().contains(constraint) ||
+                            filtered.getWholeapartment().toLowerCase().contains(constraint)) {
+                        filters.add(filtered);
+                    }
+                }
+                filterResults.count = filters.size();
+                filterResults.values = filters;
+            } else {
+                filterResults.count = filterArrayList.size();
+                filterResults.values = filterArrayList;
+            }
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            Log.i(TAG, "publishResults");
+            propertyArrayList = (ArrayList<Property>) results.values;
+            TextView textView = (TextView) getView().findViewById(R.id.TVAllListingCount);
+
+            if (propertyArrayList.size() > 1)
+                textView.setText(propertyArrayList.size() + " records");
+            else
+                textView.setText(propertyArrayList.size() + " record");
+            viewAdapter.notifyDataSetChanged();
+        }
     }
 
 }

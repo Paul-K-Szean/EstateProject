@@ -19,7 +19,6 @@ import controllers.UserCtrl;
 import entities.User;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
-import handler.Utility;
 import tabs.SlidingTabLayout;
 
 public class PropertyDetailsUI extends AppCompatActivity {
@@ -68,23 +67,7 @@ public class PropertyDetailsUI extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.ViewPagerPropertyDetails);
         viewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                Utility.hideSoftKeyboard(PropertyDetailsUI.this);
-
-            }
-        });
         slidingTabLayout = (SlidingTabLayout) findViewById(R.id.TabLayoutPropertyDetails);
         slidingTabLayout.setDistributeEvenly(true);
         slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
@@ -198,7 +181,6 @@ public class PropertyDetailsUI extends AppCompatActivity {
 
             switch (position) {
                 case 0:
-                    // args.putString(KEY_PROPERTY_PROPERTYID, pro);
                     fragment = new FragmentPropertyDetails();
                     return fragment;
                 case 1:
@@ -210,7 +192,6 @@ public class PropertyDetailsUI extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return tabTitle.length;
         }
 

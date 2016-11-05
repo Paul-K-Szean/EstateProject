@@ -1,5 +1,6 @@
 package controllers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import entities.Inbox;
+import entities.Property;
 import entities.User;
+import estateco.estate.FragmentComment;
 import estateco.estate.R;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
@@ -30,6 +34,7 @@ import handler.ViewAdapterRecyclerComments;
 
 import static android.view.View.VISIBLE;
 import static controllers.EstateConfig.URL_GETINBOX;
+import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
 import static controllers.UserCtrl.KEY_CONTACT;
 import static controllers.UserCtrl.KEY_EMAIL;
 import static controllers.UserCtrl.KEY_NAME;
@@ -50,7 +55,20 @@ public class InboxCtrl {
     public static String KEY_INBOXTYPE = "inboxtype";
     public static String KEY_INBOXTITLE = "inboxtitle";
     public static String KEY_INBOXMESSAGE = "inboxmessage";
+    public static String KEY_INBOXSTATUS = "inboxstatus";
     public static String KEY_CREATEDDATE = "createddate";
+
+
+    public static String KEY_INBOXTYPE_COMMENT = "Property Comment";
+    public static String KEY_INBOXTYPE_FAVOURITENOTIFICATION = "Favourite Notification";
+
+    public static String KEY_INBOXSTATUS_DISPLAY = "Display";
+    public static String KEY_INBOXSTATUS_NOTREAD = "Not Read";
+    public static String KEY_INBOXSTATUS_READ = "Read";
+    public static String KEY_INBOXSTATUS_CANCELLED = "Cancelled";
+
+    public static String KEY_FCMTOKEN = "fcmtoken";
+
     private SessionHandler session;
     private SQLiteHandler db;
     private Inbox inbox;
@@ -68,50 +86,6 @@ public class InboxCtrl {
     }
 
     // **********************************************************************
-    // ********************* LOCAL SQLITE DATABASE ACCESS *******************
-    // **********************************************************************
-//    // add favourite property details into local db
-//    public void addInbox(Inbox inbox) {
-//        db.addInbox(inbox);
-//    }
-//
-//    // get user favourite property details from local db
-//    public Inbox getUserInbox(String propertyID) {
-//        // Fetching user details from sqlite
-//        HashMap<String, String> savedInbox = db.getUserFavouriteProperty(user.getUserID(), propertyID);
-//        if (savedInbox != null) {
-//            Log.i(TAG, "Retrieving propertyID: " + savedInbox.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID));
-//            inbox = new Inbox(
-//                    savedInbox.get(KEY_INBOXID),
-//                    savedInbox.get(KEY_SENDERID),
-//                    savedInbox.get(KEY_RECIPIENTID),
-//                    savedInbox.get(KEY_INBOXTYPE),
-//                    savedInbox.get(KEY_INBOXTITLE),
-//                    savedInbox.get(KEY_INBOXMESSAGE),
-//                    savedInbox.get(KEY_CREATEDDATE));
-//            return inbox;
-//        } else {
-//            Log.e(TAG, "No favourite property data from local database.");
-//            return null;
-//        }
-//    }
-//
-//    // get user favourite properties from local db
-//    public ArrayList<Favourite> getInboxs(User owner) {
-//        return db.getUserFavouriteProperties(owner);
-//    }
-//
-//    // delete a favourite property from local db
-//    public void deleteFavouriteProperty(Favourite favourite) {
-//        db.deleteFavouriteProperty(favourite);
-//    }
-//
-//    // remove all favourite property from local db
-//    public void deleteFavouritePropertyTable() {
-//        db.deleteFavouritePropertyTable();
-//    }
-
-    // **********************************************************************
     // ********************* REMOTE WAMP SERVER ACCESS **********************
     // **********************************************************************
 
@@ -124,6 +98,7 @@ public class InboxCtrl {
         paramValues.put(KEY_INBOXTYPE, inbox.getInboxtype());
         paramValues.put(KEY_INBOXTITLE, inbox.getInboxtitle());
         paramValues.put(KEY_INBOXMESSAGE, inbox.getInboxmessage());
+        paramValues.put(KEY_INBOXSTATUS, inbox.getInboxstatus());
         new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_NEWINBOX, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
             @Override
             public void onAsyncTaskResponse(String response) {
@@ -131,20 +106,78 @@ public class InboxCtrl {
                 if (jsonObject != null) {
                     // server side created comment
                     Toast.makeText(fragment.getActivity(), "You have commented!", Toast.LENGTH_LONG).show();
-                    Log.i(TAG, "Comment successfully created!");
+                    if (inbox.getInboxtype().equals(KEY_INBOXTYPE_COMMENT))
+                        Log.i(TAG, "Comment successfully created!");
 
                 } else {
                     String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
                     Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_SHORT).show();
                 }
 
-                // refresh recycle list
-                serverGetInboxPropertyComment(fragment, inbox);
+                if (fragment.getClass().getSimpleName().equals(FragmentComment.class.getSimpleName()))
+                    // refresh recycle list
+                    serverGetInboxPropertyComment(fragment, inbox);
+
             }
         }).execute();
     }
 
-    // get user favourite listings
+    // create new notification into fcm
+    public void serverNewNotification(final Activity activity, final User user) {
+        Log.i(TAG, "serverNewNotification");
+        Log.i(TAG, FirebaseInstanceId.getInstance().getToken());
+        Map<String, String> paramValues = new HashMap<>();
+        paramValues.put(KEY_USERID, user.getUserID());
+        paramValues.put(KEY_FCMTOKEN, FirebaseInstanceId.getInstance().getToken());
+
+        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_NEWNOTIFICATION, paramValues, activity, new AsyncTaskResponse() {
+            @Override
+            public void onAsyncTaskResponse(String response) {
+                Log.i(TAG, response);
+            }
+        }).execute();
+    }
+
+    // create new notification into fcm
+    public void serverPushNotification(final Activity activity, final Inbox inbox, final Property property) {
+        Log.i(TAG, "serverPushNotification");
+        Map<String, String> paramValues = new HashMap<>();
+        paramValues.put("userID", property.getOwner().getUserID());
+        paramValues.put(KEY_PROPERTY_PROPERTYID, property.getPropertyID());
+        paramValues.put("title", inbox.getInboxtitle());
+        paramValues.put("message", inbox.getInboxmessage());
+        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_PUSHNOTIFICATION, paramValues, activity, new AsyncTaskResponse() {
+            @Override
+            public void onAsyncTaskResponse(String response) {
+                Log.i(TAG, response);
+            }
+        }).execute();
+    }
+
+
+    // update inbox status
+    public void serverUpdateInbox(final Fragment fragment, final Inbox inbox) {
+        Log.i(TAG, "serverUpdateInbox");
+        Map<String, String> paramValues = new HashMap<>();
+        paramValues.put(KEY_INBOXID, inbox.getInboxID());
+        paramValues.put(KEY_INBOXTYPE, inbox.getInboxtitle());
+        paramValues.put(KEY_INBOXMESSAGE, inbox.getInboxmessage());
+        paramValues.put(KEY_INBOXSTATUS, inbox.getInboxstatus());
+        Log.i(TAG, paramValues.toString());
+        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_UPDATEINBOX, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
+            @Override
+            // server side update favourite property
+            public void onAsyncTaskResponse(String response) {
+                JSONObject jsonObject = JSONHandler.getResultAsObject(fragment.getActivity(), response);
+                if (jsonObject != null) {
+                    Log.i(TAG, jsonObject.toString());
+                }
+            }
+        }).execute();
+    }
+
+
+    // get comments for a listings
     public void serverGetInboxPropertyComment(final Fragment fragment, final Inbox inbox) {
         Log.i(TAG, "serverGetInboxPropertyComment");
         Map<String, String> paramValues = new HashMap<>();
@@ -192,6 +225,7 @@ public class InboxCtrl {
                             jsonObject.getString(KEY_INBOXTYPE),
                             jsonObject.getString(KEY_INBOXTITLE),
                             jsonObject.getString(KEY_INBOXMESSAGE),
+                            jsonObject.getString(KEY_INBOXSTATUS),
                             jsonObject.getString(KEY_CREATEDDATE));
                     inboxArrayList.add(inboxToShow);
                     Log.i(TAG, "inboxToShow user: " + inboxToShow.getSender().getUserID() + ", " + inboxToShow.getSender().getName());

@@ -2,18 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="estateco.estate.FragmentUserListings"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="estateco.estate.FragmentUserListings">
 
     <!-- TODO: Update blank fragment layout -->
 
     <Button
-        android:text="New Listings"
+        android:id="@+id/BTNNewListing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/BTNNewListing"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="New Listings" />
 
     <TextView
         android:id="@+id/TVUserListingsCount"

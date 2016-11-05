@@ -24,6 +24,7 @@ import controllers.UserCtrl;
 import entities.Favourite;
 import entities.Property;
 import entities.User;
+import estateco.estate.FragmentMainListings;
 import estateco.estate.FragmentUpdateUserProperty;
 import estateco.estate.FragmentUserListings;
 import estateco.estate.PropertyDetailsUI;
@@ -116,18 +117,20 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
         holder.tvProDetFloorLevel.setText("Storey " + property.getFloorlevel() + " @");
         holder.tvProDetStreetName.setText(property.getStreetname());
         // house details
-        String imageData = property.getImage();
-//        if (imageData.isEmpty())
-//            holder.imgvProDetImage.setImageResource(R.drawable.ic_menu_camera);
-//        else
-//            holder.imgvProDetImage.setImageBitmap(ImageHandler_ENCODE.decodeStringToImage(imageData));
+
         System.gc();
+        String imageData = property.getImage();
+        Bitmap bitmap = FragmentMainListings.getBitmapFromCache(property.getPropertyID());
         if (imageData.isEmpty())
             holder.imgvProDetImage.setImageResource(R.drawable.ic_menu_camera);
         else {
-            
-            new ImageHandler_DECODE(holder.imgvProDetImage).execute(imageData);
+            if (bitmap != null) {
+                holder.imgvProDetImage.setImageBitmap(bitmap);
+            } else {
+                new ImageHandler_DECODE(holder.imgvProDetImage).execute(imageData, property.getPropertyID());
+            }
         }
+
 
         holder.tvProDetFlatType.setText(property.getFlatType());
         holder.tvProDetPrice.setText("$" + Utility.formatStringNumber(property.getPrice()));
@@ -266,8 +269,6 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
             String itemID = ((TextView) v.findViewById(R.id.TVLblPropertyID)).getText().toString();
             Bundle args = new Bundle();
             args.putString(KEY_PROPERTY_PROPERTYID, itemID);
-
-
             // check for action
             if (fragment.getClass().getSimpleName().contains(FragmentUserListings.class.getSimpleName()))
                 FragmentHandler.loadFragment(fragment, new FragmentUpdateUserProperty(), args);

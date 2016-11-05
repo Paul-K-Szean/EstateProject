@@ -4,6 +4,7 @@ package estateco.estate;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -212,13 +213,17 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 tvPropDetStreetName.setText(valProDetStreetName);
                 // house details
                 System.gc();
-                if (valProDetImage.isEmpty())
+                String imageData = valProDetImage;
+                Bitmap bitmap = FragmentMainListings.getBitmapFromCache(property.getPropertyID());
+                if (imageData.isEmpty())
                     imgvPropDetImage.setImageResource(R.drawable.ic_menu_camera);
                 else {
-                    // imgvPropDetImage.setImageBitmap(ImageHandler_ENCODE.decodeStringToImage(valProDetImage));
-                    new ImageHandler_DECODE(imgvPropDetImage).execute(valProDetImage);
+                    if (bitmap != null) {
+                        imgvPropDetImage.setImageBitmap(bitmap);
+                    } else {
+                        new ImageHandler_DECODE(imgvPropDetImage).execute(imageData, property.getPropertyID());
+                    }
                 }
-
 
                 tvPropDetFlatType.setText(valProDetFlatType);
                 tvPropDetPrice.setText("SGD$" + valProDetPrice);

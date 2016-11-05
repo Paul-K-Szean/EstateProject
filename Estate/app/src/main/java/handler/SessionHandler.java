@@ -11,22 +11,17 @@ import android.util.Log;
  */
 
 public class SessionHandler {
-    // LogCat tag
-    private static String TAG = SessionHandler.class.getSimpleName();
-
-    // Shared Preferences
-    SharedPreferences pref;
-
-    SharedPreferences.Editor editor;
-    Context _context;
-
-    // Shared pref mode
-    int PRIVATE_MODE = 0;
-
     // Shared preferences file name
     private static final String PREF_NAME = "EstateLocalUser";
-
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
+    // LogCat tag
+    private static String TAG = SessionHandler.class.getSimpleName();
+    // Shared Preferences
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+    Context _context;
+    // Shared pref mode
+    int PRIVATE_MODE = 0;
 
     public SessionHandler(Context context) {
         this._context = context;

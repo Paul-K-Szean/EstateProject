@@ -14,9 +14,9 @@ import android.support.v4.app.Fragment;
 
 public class AlertDialogHandler extends DialogFragment {
     private static final String TAG = AlertDialogHandler.class.getSimpleName();
+    public static Fragment fragment;
     // Use this instance of the interface to deliver action events
     AlertDialogResponse mListener;
-    public static Fragment fragment;
 
     public static void showMyDialog(Fragment fragment) {
         AlertDialogHandler dialog = new AlertDialogHandler();

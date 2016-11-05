@@ -10,8 +10,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Spinner;
 
 import com.android.volley.Request;
@@ -25,6 +23,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import designpattern.Publisher;
+import designpattern.Subject;
 import entities.Favourite;
 import entities.Property;
 import entities.User;
@@ -64,40 +64,32 @@ import static controllers.PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
 
 public class EstateCtrl extends Application {
     public static final String TAG = EstateCtrl.class.getSimpleName();
-    private RequestQueue requestQueue;
+    private final static int maxMemorySize = (int) Runtime.getRuntime().maxMemory() / 1024;
+    public final static int cacheSize = maxMemorySize / 10;
     private static EstateCtrl mInstance;
     private static UserCtrl userCtrl;
+
     private static PropertyCtrl propertyCtrl;
     private static FavouriteCtrl favouriteCtrl;
     private static User user;
     private static Property property;
     private static Favourite favourite;
     private static Map<String, String> paramValues;
+    /* News Publisher */
+    private static Subject publisher;
+    private RequestQueue requestQueue;
+    private static InboxCtrl inboxCtrl;
 
     public EstateCtrl() {
 
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mInstance = this;
     }
 
     public static synchronized EstateCtrl getInstance() {
         return mInstance;
     }
 
-    public RequestQueue getRequestQueue() {
-        if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(getApplicationContext());
-        }
-        return requestQueue;
-    }
-
-    public <T> void addToRequestQueue(Request<T> req, String tag) {
-        req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
-        getRequestQueue().add(req);
+    public static synchronized Subject getPublisher() {
+        return publisher;
     }
 
     public static Boolean CheckInternetConnection(Context context) {
@@ -157,6 +149,8 @@ public class EstateCtrl extends Application {
                                     propertyObj.getString(KEY_PROPERTY_CREATEDDATE));
                             // add into local db
                             propertyCtrl.addPropertyDetails(property);
+
+                            EstateCtrl.syncUserFavouritePropertiesToLocalDB(activity, user);
                         }// end of for loop
                     }
                 } catch (JSONException error) {
@@ -164,7 +158,6 @@ public class EstateCtrl extends Application {
                     ErrorHandler.errorHandler(activity, error);
                 }
 
-                EstateCtrl.syncUserFavouritePropertiesToLocalDB(activity, user);
 
             }
         }
@@ -234,14 +227,13 @@ public class EstateCtrl extends Application {
                             // add into local db
                             favouriteCtrl.addFavouritePropertyDetails(favourite);
                         }// end of for loop
+                        inboxCtrl = new InboxCtrl(activity.getApplicationContext());
+                        inboxCtrl.serverNewNotification(activity, user);
                     }
-
-
                 } catch (JSONException error) {
                     // JSON error
                     ErrorHandler.errorHandler(activity, error);
                 }
-
 
                 activity.startActivity(new Intent(activity, MainUI.class));
                 activity.finish();
@@ -268,6 +260,36 @@ public class EstateCtrl extends Application {
         favouriteCtrl.deleteFavouriteProperty(favourite);
     }
 
+    public static int getSpinnerItemPosition(Spinner spinner, String value) {
+        int index = 0;
+        for (int i = 0; i < spinner.getCount(); i++) {
+            // Log.i(TAG, spinner.getItemAtPosition(i).toString() + " " + value + " " + spinner.getItemAtPosition(i).toString().contains(value));
+            if (spinner.getItemAtPosition(i).toString().contains(value)) {
+                return i;
+            }
+        }
+        return index;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mInstance = this;
+        publisher = new Publisher();
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            requestQueue = Volley.newRequestQueue(getApplicationContext());
+        }
+        return requestQueue;
+    }
+
+    public <T> void addToRequestQueue(Request<T> req, String tag) {
+        req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
+        getRequestQueue().add(req);
+    }
+
     // sync drawer values
     public void updateDisplayValues(Fragment fragment) {
         userCtrl = new UserCtrl(getInstance());
@@ -291,18 +313,6 @@ public class EstateCtrl extends Application {
             navigationView.getMenu().getItem(1).setTitle("My listings (" + propertyCtrl.getUserPropertyCountDetails() + ")");
             navigationView.getMenu().getItem(2).setTitle("Favourite Listings (" + favouriteCtrl.getUserFarvouriteCountDetails() + ")");
         }
-    }
-
-
-    public static int getSpinnerItemPosition(Spinner spinner, String value) {
-        int index = 0;
-        for (int i = 0; i < spinner.getCount(); i++) {
-            // Log.i(TAG, spinner.getItemAtPosition(i).toString() + " " + value + " " + spinner.getItemAtPosition(i).toString().contains(value));
-            if (spinner.getItemAtPosition(i).toString().contains(value)) {
-                return i;
-            }
-        }
-        return index;
     }
 
 

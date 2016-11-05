@@ -3,12 +3,39 @@
 
     <item
         is-multidex="false"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics\9.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.2"
+        sha1="9ff04cc3470178a44512624036751a803418c2ca">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-analytics-9.8.0_bd357099ade443c6d55f6a0286e20df513a30b11.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.google.firebase\firebase-common\9.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.2"
+        sha1="c61641e333fa88da21758bab8cc28ee16604b05f">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-common-9.8.0_fb2a2bfe7f7ae6631dc1da5a01a0542dad6ece19.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="C:\Users\szean\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\24.2.1\support-annotations-24.2.1.jar"
         jumboMode="false"
         optimize="true"
         revision="24.0.2"
         sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
         <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\support-annotations-24.2.1_3df10f1fd264ef46c2fc64a6c3f7d251eae8324b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.google.firebase\firebase-iid\9.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.2"
+        sha1="6b6f292b8b951dcf2ecf2b20853e3eabc7d65c48">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-iid-9.8.0_0581f020f728cf455debc673018f8c869a815352.jar" />
     </item>
     <item
         is-multidex="false"
@@ -75,6 +102,24 @@
     </item>
     <item
         is-multidex="false"
+        jar="C:\Users\szean\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.2"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\picasso-2.5.2_c2c00882d91d73f9a4d55b64eb11c167a4a55ebe.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-tasks\9.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.2"
+        sha1="bf2e1838e4428616c1aa26edf43de72b5b99bf84">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-tasks-9.8.0_530a538e201805d7e6d92615141f8fd1b7160fff.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.oguzdev\CircularFloatingActionMenu\1.0.2\jars\classes.jar"
         jumboMode="false"
         optimize="true"
@@ -102,6 +147,15 @@
     </item>
     <item
         is-multidex="false"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\9.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.2"
+        sha1="9f6d236bac26d02b410e4ee186ba517ace5ee661">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.google.android.gms-play-services-basement-9.8.0_2044eb36e66d21c77f97172350db7b607b847373.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-compat\24.2.1\jars\classes.jar"
         jumboMode="false"
         optimize="true"
@@ -120,6 +174,15 @@
     </item>
     <item
         is-multidex="false"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.google.firebase\firebase-messaging\9.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.2"
+        sha1="5ffe8867f51cfc726e9fb21db1e5b6962ebf25a0">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-messaging-9.8.0_940d9fe6817def83ee4b0d3e0e1475665ef4e470.jar" />
+    </item>
+    <item
+        is-multidex="false"
         jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\24.2.1\jars\classes.jar"
         jumboMode="false"
         optimize="true"
@@ -135,6 +198,15 @@
         revision="24.0.2"
         sha1="7521486d9bfd2cd9e756e0cf75ed7d97f2ce2d3b">
         <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.android.support-recyclerview-v7-24.2.1_f11aab66bfbe6d77a2cf1fb87a15199d8591a9ed.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\szean\.gradle\caches\modules-2\files-2.1\com.github.bumptech.glide\glide\3.5.2\ecf534dba3a8446ce84cbb797d314763be212a68\glide-3.5.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.2"
+        sha1="ecf534dba3a8446ce84cbb797d314763be212a68">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\glide-3.5.2_72cbb36a07dbc3898c564f6f272a637710717abc.jar" />
     </item>
     <item
         is-multidex="false"
@@ -162,6 +234,15 @@
         revision="24.0.2"
         sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
         <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\internal_impl-24.2.1_8124b2f30b8de36223546ac2a5e88f0798427859.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\exploded-aar\com.google.firebase\firebase-analytics-impl\9.8.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="24.0.2"
+        sha1="190a642ba16d1421296a4d794606279b80039c59">
+        <dex dex="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate\app\build\intermediates\pre-dexed\debug\com.google.firebase-firebase-analytics-impl-9.8.0_d88b49ba9cfb1110e4f8cfb2d9a16a1fa8f57866.jar" />
     </item>
     <item
         is-multidex="false"

@@ -290,7 +290,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         // Move to first row
         if (cursor.moveToFirst()) {
             Log.d(TAG, "Fetching property from sqlite: " + cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID)));
-            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID));
+            userPropertyHashMap.put(KEY_PROPERTY_PROPERTYID, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID)));
             userPropertyHashMap.put(KEY_PROPERTY_OWNERID, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_OWNERID)));
             userPropertyHashMap.put(KEY_PROPERTY_FLATTYPE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLATTYPE)));
             userPropertyHashMap.put(KEY_PROPERTY_BLOCK, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BLOCK)));
@@ -328,6 +328,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_PROPERTY + " WHERE OWNERID = ?";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, new String[]{owner.getUserID()});
+
         // Move to first row
         if (cursor.moveToFirst()) {
             Log.d(TAG, "Fetching user properties from sqlite. Total count: " + cursor.getCount());

@@ -18,17 +18,17 @@
             android:title="Favourite Listings" />
 
         <!--<item-->
-            <!--android:id="@+id/nav_myoffers"-->
-            <!--android:icon="@drawable/ic_menu_myoffers"-->
-            <!--android:title="My Offers" />-->
+        <!--android:id="@+id/nav_myoffers"-->
+        <!--android:icon="@drawable/ic_menu_myoffers"-->
+        <!--android:title="My Offers" />-->
         <!--<item-->
-            <!--android:id="@+id/nav_mybids"-->
-            <!--android:icon="@drawable/ic_menu_mybids"-->
-            <!--android:title="My Bids" />-->
+        <!--android:id="@+id/nav_mybids"-->
+        <!--android:icon="@drawable/ic_menu_mybids"-->
+        <!--android:title="My Bids" />-->
         <!--<item-->
-            <!--android:id="@+id/nav_manage"-->
-            <!--android:icon="@drawable/ic_menu_manage"-->
-            <!--android:title="Tools" />-->
+        <!--android:id="@+id/nav_manage"-->
+        <!--android:icon="@drawable/ic_menu_manage"-->
+        <!--android:title="Tools" />-->
     </group>
 
     <item android:title="Sign out">

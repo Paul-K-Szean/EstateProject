@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import entities.Favourite;
+import entities.Inbox;
 import entities.Property;
 import entities.User;
 import estateco.estate.R;
@@ -34,6 +35,8 @@ import handler.ViewAdapterRecycler;
 
 import static android.view.View.VISIBLE;
 import static controllers.EstateConfig.URL_USERFAVOURITELISTINGS;
+import static controllers.InboxCtrl.KEY_INBOXSTATUS_NOTREAD;
+import static controllers.InboxCtrl.KEY_INBOXTYPE_FAVOURITENOTIFICATION;
 import static controllers.PropertyCtrl.KEY_ACTION_DECREASEFAVOURITE;
 import static controllers.PropertyCtrl.KEY_ACTION_INCREASEFAVOURITE;
 import static controllers.PropertyCtrl.KEY_ACTION_INCREASEVIEW;
@@ -80,6 +83,7 @@ public class FavouriteCtrl {
     private User user;
     private Favourite favourite;
     private UserCtrl userCtrl;
+    private InboxCtrl inboxCtrl;
     private PropertyCtrl propertyCtrl;
 
 
@@ -88,6 +92,7 @@ public class FavouriteCtrl {
         db = new SQLiteHandler(context);
         userCtrl = new UserCtrl(context);
         propertyCtrl = new PropertyCtrl(context);
+        inboxCtrl = new InboxCtrl(context);
     }
 
     public FavouriteCtrl(Context context, SessionHandler session) {
@@ -175,6 +180,18 @@ public class FavouriteCtrl {
                         EstateCtrl.syncUserNewFavouritePropertyToLocalDB(favourite);
                         // update drawer values
                         new EstateCtrl().updateDisplayValues(fragment);
+
+                        // push notification to owner
+                        Inbox inbox = new Inbox(
+                                user,
+                                property.getOwner().getUserID(),
+                                KEY_INBOXTYPE_FAVOURITENOTIFICATION,
+                                property.getPropertyID(),
+                                user.getName() + " favourite your listing, " + property.getTitle(),
+                                KEY_INBOXSTATUS_NOTREAD
+                        );
+                        // inboxCtrl.serverNewInbox(fragment, inbox);
+                        inboxCtrl.serverPushNotification(fragment.getActivity(), inbox, property);
                     } else {
                         String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
                         Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_SHORT).show();
@@ -187,30 +204,7 @@ public class FavouriteCtrl {
         }).execute();
     }
 
-    // delete favourite property
-    public void serverDeleteFavouriteProperty(final Fragment fragment, final User user, final Property property) {
-        Log.i(TAG, "serverDeleteFavouriteProperty");
-        Map<String, String> paramValues = new HashMap<>();
-        paramValues.put(KEY_FAVOURITE_OWNERID, user.getUserID());
-        paramValues.put(KEY_FAVOURITE_PROPERTYID, property.getPropertyID());
-
-        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_DELETEFAVOURITEPROPERTY, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
-            @Override
-            // server side deleted favourite property
-            public void onAsyncTaskResponse(String response) {
-                String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
-                Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_LONG).show();
-                favourite = getUserFavouritePropertyDetails(user, property);
-                // delete from local DB
-                EstateCtrl.syncUserDeletedFavouritePropertyToLocalDB(favourite);
-                // update drawer values
-                new EstateCtrl().updateDisplayValues(fragment);
-            }
-        }).execute();
-
-    }
-
-
+    // update property count
     public void serverUpdatePropertyCount(final Fragment fragment, final Property property, final String action, final MenuItem menuItem) {
         Log.i(TAG, "serverUpdatePropertyCount");
         Map<String, String> paramValues = new HashMap<>();
@@ -289,6 +283,7 @@ public class FavouriteCtrl {
         }).execute();
     }
 
+
     // get user favourite listings
     public void serverGetUserFavouriteListings(final Fragment fragment, User user) {
         Log.i(TAG, "serverGetUserFavouriteListings");
@@ -356,6 +351,31 @@ public class FavouriteCtrl {
         } catch (JSONException error) {
 
         }
+    }
+
+
+    // delete favourite property
+    public void serverDeleteFavouriteProperty(final Fragment fragment, final User user, final Property property) {
+        Log.i(TAG, "serverDeleteFavouriteProperty");
+        Map<String, String> paramValues = new HashMap<>();
+        paramValues.put(KEY_FAVOURITE_OWNERID, user.getUserID());
+        paramValues.put(KEY_FAVOURITE_PROPERTYID, property.getPropertyID());
+
+        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_DELETEFAVOURITEPROPERTY, paramValues, fragment.getActivity(), new AsyncTaskResponse() {
+            @Override
+            // server side deleted favourite property
+            public void onAsyncTaskResponse(String response) {
+                String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
+                Toast.makeText(fragment.getActivity(), result, Toast.LENGTH_LONG).show();
+                favourite = getUserFavouritePropertyDetails(user, property);
+                // delete from local DB
+                EstateCtrl.syncUserDeletedFavouritePropertyToLocalDB(favourite);
+                // update drawer values
+                new EstateCtrl().updateDisplayValues(fragment);
+
+            }
+        }).execute();
+
     }
 
 }

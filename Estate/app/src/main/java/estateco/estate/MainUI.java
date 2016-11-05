@@ -245,6 +245,7 @@ public class MainUI extends AppCompatActivity
 
         String[] tabTitle = {"All", "For Lease", "For Sale"};
         private ArrayList<Property> propertyArrayList;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -252,8 +253,6 @@ public class MainUI extends AppCompatActivity
         @Override
         public Fragment getItem(int position) {
             Log.i(TAG, "getItem " + position);
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             return FragmentMainListings.getInstance(position);
         }
 

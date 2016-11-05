@@ -13,7 +13,6 @@ import estateco.estate.R;
 public class FragmentHandler {
 
 
-
     public static void loadFragment(Fragment currentFragment, Fragment nextFragment) {
         FragmentTransaction fragmentTransaction = currentFragment.getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, nextFragment);

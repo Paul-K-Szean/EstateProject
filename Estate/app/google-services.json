@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "518558454603",
+    "firebase_url": "https://fcmproject-c1203.firebaseio.com",
+    "project_id": "fcmproject-c1203",
+    "storage_bucket": "fcmproject-c1203.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518558454603:android:0cd176db4378c408",
+        "android_client_info": {
+          "package_name": "estateco.estate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518558454603-rd4r00slb50iv5t6v6lbevbo16b7ieo8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtBW-9Vqmmwc1USvvcDUH4dZpXRuhqFCc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -90,6 +90,7 @@ public class PropertyCtrl {
 
     // get user property details from local db
     public Property getUserPropertyDetails(String propertyID, User owner) {
+        Log.i(TAG, "getUserPropertyDetails");
         // Fetching user details from sqlite
         HashMap<String, String> savedProperty = db.getUserProperty(propertyID);
         if (savedProperty != null) {

@@ -21,6 +21,7 @@ public class Utility {
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     private static Pattern pattern;
     private static Matcher matcher;
+
     public Utility() {
 
     }

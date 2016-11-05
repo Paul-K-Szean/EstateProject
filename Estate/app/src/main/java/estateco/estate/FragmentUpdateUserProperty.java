@@ -381,8 +381,9 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                                      spEditBathroomCount.setSelection(Utility.generateNumber(1, spEditBathroomCount.getCount() - 1));
 
                                                                  }
+                                                                 btnEditRandom.setText("Location : " + location);
                                                              } else {
-                                                                 Toast.makeText(getActivity(), "No data for (" + location + ") from gov data.", Toast.LENGTH_SHORT).show();
+                                                                 btnEditRandom.setText("No data for (" + location + ") from gov data.");
                                                              }
                                                          } catch (JSONException error) {
                                                              // JSON error
@@ -426,13 +427,16 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
 
         // check if photo is empty
         String imageData = propertyLocalDB.getImage();
+        Bitmap bitmap = FragmentMainListings.getBitmapFromCache(propertyLocalDB.getPropertyID());
         if (imageData.isEmpty())
             imgvEditImage.setImageResource(R.drawable.ic_menu_camera);
         else {
-             new ImageHandler_DECODE(imgvEditImage).execute(imageData);
+            if (bitmap != null) {
+                imgvEditImage.setImageBitmap(bitmap);
+            } else {
+                new ImageHandler_DECODE(imgvEditImage).execute(imageData, propertyLocalDB.getPropertyID());
+            }
         }
-
-
     }
 
     @Override

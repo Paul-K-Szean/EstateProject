@@ -37,6 +37,7 @@ public class RegisterUI extends Activity {
     private Button btnRegister, btnRegRandom;
     private TextView tvLoginLink;
     private String valRegName, valRegEmail, valRegPassword01, valRegPassword02, valRegContact;
+    private String defaultContact = "+6581821129";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class RegisterUI extends Activity {
         SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
         if (manager.getSensorList(Sensor.TYPE_ALL).isEmpty()) {
             // running on an emulator
-            valRegContact = "96693115";
+            valRegContact = defaultContact;
         } else {
             // running on a device
         }
@@ -114,7 +115,7 @@ public class RegisterUI extends Activity {
         TelephonyManager tMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         String simCardNumber = tMgr.getLine1Number();
         if (simCardNumber.isEmpty()) {
-            valRegContact = "96693115";
+            valRegContact = defaultContact;
         } else {
             valRegContact = simCardNumber;
         }

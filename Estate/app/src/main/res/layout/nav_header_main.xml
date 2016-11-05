@@ -12,7 +12,6 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
-
     <TextView
         android:id="@+id/TVHderTitle"
         android:layout_width="match_parent"

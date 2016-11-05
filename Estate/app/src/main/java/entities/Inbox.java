@@ -12,15 +12,17 @@ public class Inbox {
     private String inboxtype;
     private String inboxtitle;
     private String inboxmessage;
+    private String inboxstatus;
     private String createddate;
 
     // for creating
-    public Inbox(User sender, String recipientID, String inboxtype, String inboxtitle, String inboxmessage) {
+    public Inbox(User sender, String recipientID, String inboxtype, String inboxtitle, String inboxmessage, String inboxstatus) {
         this.sender = sender;
         this.recipientID = recipientID;
         this.inboxtype = inboxtype;
         this.inboxtitle = inboxtitle;
         this.inboxmessage = inboxmessage;
+        this.inboxstatus = inboxstatus;
     }
 
     // for retrieving
@@ -30,13 +32,14 @@ public class Inbox {
     }
 
     // for displaying
-    public Inbox(String inboxID, User sender, String recipientID, String inboxtype, String inboxtitle, String inboxmessage, String createddate) {
+    public Inbox(String inboxID, User sender, String recipientID, String inboxtype, String inboxtitle, String inboxmessage, String inboxstatus, String createddate) {
         this.inboxID = inboxID;
         this.sender = sender;
         this.recipientID = recipientID;
         this.inboxtype = inboxtype;
         this.inboxtitle = inboxtitle;
         this.inboxmessage = inboxmessage;
+        this.inboxstatus = inboxstatus;
         this.createddate = createddate;
     }
 
@@ -86,6 +89,14 @@ public class Inbox {
 
     public void setInboxmessage(String inboxmessage) {
         this.inboxmessage = inboxmessage;
+    }
+
+    public String getInboxstatus() {
+        return inboxstatus;
+    }
+
+    public void setInboxstatus(String inboxstatus) {
+        this.inboxstatus = inboxstatus;
     }
 
     public String getCreateddate() {

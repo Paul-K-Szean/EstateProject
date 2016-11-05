@@ -31,7 +31,11 @@ public class EstateConfig {
     public static String URL_UPDATEPROPERTYCOUNT = "http://" + URL + "/estateupdatepropertycount.php";
     // INBOX
     public static String URL_NEWINBOX = "http://" + URL + "/estatenewinbox.php";
+    public static String URL_UPDATEINBOX = "http://" + URL + "/estateupdateinbox.php";
     public static String URL_GETINBOX = "http://" + URL + "/estategetinbox.php";
+
+    public static String URL_NEWNOTIFICATION = "http://" + URL + "/estatenewnotification.php";
+    public static String URL_PUSHNOTIFICATION = "http://" + URL + "/estatepushnotification.php";
 
     // GOV DATA
     public static String URL_GOVDATA_RESALEFLATPRICES = "https://data.gov.sg/api/action/datastore_search?resource_id=83b2fc37-ce8c-4df4-968b-370fd818138b";
