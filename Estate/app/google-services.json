@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "518558454603",
-    "firebase_url": "https://fcmproject-c1203.firebaseio.com",
-    "project_id": "fcmproject-c1203",
-    "storage_bucket": "fcmproject-c1203.appspot.com"
+    "project_number": "676395595559",
+    "firebase_url": "https://fir-cloudmessaging-c73cf.firebaseio.com",
+    "project_id": "fir-cloudmessaging-c73cf",
+    "storage_bucket": "fir-cloudmessaging-c73cf.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:518558454603:android:0cd176db4378c408",
+        "mobilesdk_app_id": "1:676395595559:android:0cd176db4378c408",
         "android_client_info": {
           "package_name": "estateco.estate"
         }
       },
       "oauth_client": [
         {
-          "client_id": "518558454603-rd4r00slb50iv5t6v6lbevbo16b7ieo8.apps.googleusercontent.com",
+          "client_id": "676395595559-9kt1mes4g2gq26fujins1b7uupvullph.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDtBW-9Vqmmwc1USvvcDUH4dZpXRuhqFCc"
+          "current_key": "AIzaSyCk7Hlq7P3NLkjQZ2zwQJ1RGZ6U6wTxyhI"
         }
       ],
       "services": {

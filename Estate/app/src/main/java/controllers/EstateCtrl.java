@@ -77,8 +77,8 @@ public class EstateCtrl extends Application {
     private static Map<String, String> paramValues;
     /* News Publisher */
     private static Subject publisher;
-    private RequestQueue requestQueue;
     private static InboxCtrl inboxCtrl;
+    private RequestQueue requestQueue;
 
     public EstateCtrl() {
 
@@ -149,15 +149,16 @@ public class EstateCtrl extends Application {
                                     propertyObj.getString(KEY_PROPERTY_CREATEDDATE));
                             // add into local db
                             propertyCtrl.addPropertyDetails(property);
-
-                            EstateCtrl.syncUserFavouritePropertiesToLocalDB(activity, user);
                         }// end of for loop
+
                     }
                 } catch (JSONException error) {
                     // JSON error
                     ErrorHandler.errorHandler(activity, error);
                 }
 
+
+                EstateCtrl.syncUserFavouritePropertiesToLocalDB(activity, user);
 
             }
         }
@@ -227,14 +228,14 @@ public class EstateCtrl extends Application {
                             // add into local db
                             favouriteCtrl.addFavouritePropertyDetails(favourite);
                         }// end of for loop
-                        inboxCtrl = new InboxCtrl(activity.getApplicationContext());
-                        inboxCtrl.serverNewNotification(activity, user);
+
                     }
                 } catch (JSONException error) {
                     // JSON error
                     ErrorHandler.errorHandler(activity, error);
                 }
-
+                inboxCtrl = new InboxCtrl(activity.getApplicationContext());
+                inboxCtrl.serverNewNotification(activity, user);
                 activity.startActivity(new Intent(activity, MainUI.class));
                 activity.finish();
             }

@@ -37,7 +37,7 @@ public class RegisterUI extends Activity {
     private Button btnRegister, btnRegRandom;
     private TextView tvLoginLink;
     private String valRegName, valRegEmail, valRegPassword01, valRegPassword02, valRegContact;
-    private String defaultContact = "+6581821129";
+    private String defaultContact = "+6596693115";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +70,7 @@ public class RegisterUI extends Activity {
         tvLoginLink = (TextView) findViewById(R.id.TVLoginLink);
 
 
-        SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        if (manager.getSensorList(Sensor.TYPE_ALL).isEmpty()) {
-            // running on an emulator
-            valRegContact = defaultContact;
-        } else {
-            // running on a device
-        }
+
 
         btnRegRandom.setVisibility(GONE);
         btnRegRandom.setOnClickListener(new View.OnClickListener() {
@@ -111,14 +105,23 @@ public class RegisterUI extends Activity {
 
     public void createUser() {
         Log.i(TAG, "createUser");
-        // getting phone number from simcard
-        TelephonyManager tMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        String simCardNumber = tMgr.getLine1Number();
-        if (simCardNumber.isEmpty()) {
+        // getting phone number
+
+        SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        if (manager.getSensorList(Sensor.TYPE_ALL).isEmpty()) {
+            // running on an emulator
             valRegContact = defaultContact;
         } else {
-            valRegContact = simCardNumber;
+            // running on a device
+            TelephonyManager tMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+            String simCardNumber = tMgr.getLine1Number();
+            if (simCardNumber.isEmpty()) {
+                valRegContact = defaultContact;
+            } else {
+                valRegContact = simCardNumber;
+            }
         }
+
 
         valRegName = etRegName.getText().toString();
         valRegEmail = etRegEmail.getText().toString();
