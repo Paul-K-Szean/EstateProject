@@ -42,7 +42,6 @@ import handler.JSONHandler;
 import handler.Utility;
 
 import static android.graphics.Color.RED;
-import static android.widget.Toast.LENGTH_SHORT;
 import static controllers.PropertyCtrl.KEY_ACTION_DECREASEFAVOURITE;
 import static controllers.PropertyCtrl.KEY_ACTION_INCREASEFAVOURITE;
 import static controllers.PropertyCtrl.KEY_ACTION_INCREASEVIEW;
@@ -255,6 +254,10 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                     tvPropDetOwnerEmail.setTextColor(RED);
                 }
 
+                if (valProDetOwnerID.equals(user.getUserID())) {
+                    menuItemPhoneMessage.setEnabled(false);
+                    menuItemPhoneMessage.setEnabled(false);
+                }
             }
         }).execute();
 
@@ -347,9 +350,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
         }
         if (id == R.id.action_phone_call) {
             Log.i(TAG, TAG_PHONECALL + " action clicked");
-            Toast.makeText(getActivity(), TAG_PHONECALL, LENGTH_SHORT).show();
             requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 1);
-
         }
         if (id == R.id.action_phonemessage) {
             Log.i(TAG, TAG_PHONEMESSAGE + " action clicked");

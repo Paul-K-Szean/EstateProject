@@ -328,7 +328,7 @@ public class FragmentNewProperty extends Fragment {
                                                          valNewFavouriteCount = valNewViewCount = "0";
 //                                                         if (valNewDealType.equals(DealType.ForLease.toString()) && valNewWholeApartment.equals(KEY_PROPERTY_ROOM))
 //                                                             valNewPrice = String.valueOf((Double.valueOf(valNewPrice)) / 1000);
-                                                         valNewPrice = propertyCtrl.calculatePropertyPrice(valNewDealType,valNewWholeApartment,valNewPrice);
+                                                         // valNewPrice = propertyCtrl.calculatePropertyPrice(valNewDealType,valNewWholeApartment,valNewPrice);
                                                          // create property to server
                                                          property = new Property(
                                                                  user,
