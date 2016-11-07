@@ -17,6 +17,7 @@ import java.util.Map;
 
 import entities.Property;
 import entities.User;
+import enums.DealType;
 import estateco.estate.FragmentUserListings;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
@@ -262,6 +263,22 @@ public class PropertyCtrl {
         }
     }
 
+
+    //  OTHERS
+    public String calculatePropertyPrice(String valNewDealType, String valNewWholeApartment, String valNewPrice) {
+        Log.i(TAG, "calculatePropertyPrice");
+        Log.i(TAG, "valNewPrice: " + valNewPrice);
+        if (valNewDealType.equals(DealType.ForLease.toString()) && valNewWholeApartment.equals(KEY_PROPERTY_ROOM)) {
+            String value = String.valueOf((Double.valueOf(valNewPrice)) / 1000);
+            return value;
+        }
+        if (valNewWholeApartment.equals(KEY_PROPERTY_WHOLEAPARTMENT) && !valNewPrice.isEmpty()) {
+            String value = String.valueOf((Double.valueOf(valNewPrice)) * 1000);
+            Log.i(TAG, value);
+            return value;
+        }
+        return "000";
+    }
 
 }
 

@@ -7,7 +7,7 @@ package controllers;
 public class EstateConfig {
 
 
-    public static String URL = "192.168.1.122";
+    public static String URL = "192.168.33.1";
     // URLS
     // 10.0.2.2 = localhost (default)
     // look for estatephpfiles folder in our dropbox

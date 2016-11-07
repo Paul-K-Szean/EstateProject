@@ -168,7 +168,6 @@ public class PropertyDetailsUI extends AppCompatActivity {
 
         String[] tabTitle = {"Details", "Comments"};
 
-
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }

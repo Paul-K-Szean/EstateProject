@@ -108,6 +108,7 @@ public class FragmentNewProperty extends Fragment {
         chkbxNewWholeApartment = (CheckBox) view.findViewById(R.id.CHKBXNewWholeApartment);
         chkbxNewWholeApartment.setChecked(false);
         chkbxNewWholeApartment.setEnabled(false);
+
         // edit texts
         etNewTitle = (EditText) view.findViewById(R.id.ETNewTitle);
         etNewDesc = (EditText) view.findViewById(R.id.ETNewDesc);
@@ -325,9 +326,9 @@ public class FragmentNewProperty extends Fragment {
                                                      } else {
                                                          valNewStatus = "open";
                                                          valNewFavouriteCount = valNewViewCount = "0";
-                                                         if (valNewDealType.equals(DealType.ForLease.toString()) && valNewWholeApartment.equals(KEY_PROPERTY_ROOM))
-                                                             valNewPrice = String.valueOf((Double.valueOf(valNewPrice)) / 1000);
-
+//                                                         if (valNewDealType.equals(DealType.ForLease.toString()) && valNewWholeApartment.equals(KEY_PROPERTY_ROOM))
+//                                                             valNewPrice = String.valueOf((Double.valueOf(valNewPrice)) / 1000);
+                                                         valNewPrice = propertyCtrl.calculatePropertyPrice(valNewDealType,valNewWholeApartment,valNewPrice);
                                                          // create property to server
                                                          property = new Property(
                                                                  user,

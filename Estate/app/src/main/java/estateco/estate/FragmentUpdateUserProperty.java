@@ -64,6 +64,7 @@ import tabs.SlidingTabLayout;
 
 import static android.view.View.GONE;
 import static controllers.EstateConfig.URL_GOVDATA_RESALEFLATPRICES;
+import static controllers.PropertyCtrl.KEY_PROPERTY_ROOM;
 
 
 /**
@@ -132,6 +133,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
         chkbxEditWholeApartment = (CheckBox) view.findViewById(R.id.CHKBXEditWholeApartment);
         chkbxEditWholeApartment.setChecked(false);
         chkbxEditWholeApartment.setEnabled(false);
+
         // edit texts
         etEditTitle = (EditText) view.findViewById(R.id.ETEditTitle);
         etEditDesc = (EditText) view.findViewById(R.id.ETEditDesc);
@@ -153,10 +155,12 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (spEditDealType.getSelectedItem().equals(DealType.ForLease)) {
                     chkbxEditWholeApartment.setEnabled(true);
+                    chkbxEditWholeApartment.setText("Leasing Wholeapartment?");
                 }
                 if (spEditDealType.getSelectedItem().equals(DealType.ForSale)) {
                     chkbxEditWholeApartment.setChecked(true);
                     chkbxEditWholeApartment.setEnabled(false);
+                    chkbxEditWholeApartment.setText("Selling wholeapartment?");
                 }
             }
 
@@ -241,7 +245,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                        valEditBedroomCount = spEditBedroomCount.getSelectedItem().toString().trim();
                                                        valEditBathroomCount = spEditBathroomCount.getSelectedItem().toString().trim();
                                                        valEditFavouriteCount =
-                                                               valEditWholeApartment = chkbxEditWholeApartment.isChecked() ? PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT : PropertyCtrl.KEY_PROPERTY_ROOM;
+                                                               valEditWholeApartment = chkbxEditWholeApartment.isChecked() ? PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT : KEY_PROPERTY_ROOM;
                                                        valEditCreatedDate = tvLblCreatedDate.getText().toString().trim();
 
 
@@ -365,6 +369,7 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                                          chkbxEditWholeApartment.setText("Leasing whole apartment");
                                                                          chkbxEditWholeApartment.setChecked(Utility.generateBool());
                                                                      }
+
                                                                      // general details
                                                                      etEditTitle.setText(Utility.generateTitle());
                                                                      etEditDesc.setText(Utility.generateDesc());
@@ -375,7 +380,8 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                                                                      // house details
                                                                      spEditFlatType.setSelection(EstateCtrl.getSpinnerItemPosition(spEditFlatType, entityGovDataResaleFlat.getFlat_type()));
                                                                      etEditFloorArea.setText(entityGovDataResaleFlat.getFloor_area_sqm());
-                                                                     etEditPrice.setText(entityGovDataResaleFlat.getResale_price());
+                                                                     etEditPrice.setText(propertyCtrl.calculatePropertyPrice(valEditDealType, valEditWholeApartment, valEditPrice));
+                                                                     // etEditPrice.setText(entityGovDataResaleFlat.getResale_price());
                                                                      spEditFurnishLevel.setSelection(Utility.generateNumber(1, spEditFurnishLevel.getCount() - 1));
                                                                      spEditBedroomCount.setSelection(Utility.generateNumber(1, spEditBedroomCount.getCount() - 1));
                                                                      spEditBathroomCount.setSelection(Utility.generateNumber(1, spEditBathroomCount.getCount() - 1));
@@ -437,6 +443,8 @@ public class FragmentUpdateUserProperty extends Fragment implements AlertDialogR
                 new ImageHandler_DECODE(imgvEditImage).execute(imageData, propertyLocalDB.getPropertyID());
             }
         }
+
+
     }
 
     @Override
