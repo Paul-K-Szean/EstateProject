@@ -96,8 +96,8 @@ public class ViewAdapterRecycler extends RecyclerView.Adapter<ViewAdapterRecycle
         user = userCtrl.getUserDetails();
         User owner = new User(property.getOwner().getUserID(), property.getOwner().getName(), property.getOwner().getEmail(), property.getOwner().getContact());
         // deal details
-        holder.tvProDetDealType.setText(property.getDealType());
-        holder.tvProDetWholeApartment.setText(property.getWholeapartment());
+        holder.tvProDetDealType.setText(" - " + property.getDealType() + " - " + property.getWholeapartment());
+        // holder.tvProDetWholeApartment.setText(property.getWholeapartment());
         // general details
         holder.tvProDetPropertyID.setText(property.getPropertyID());
         holder.tvProDetStatus.setText(property.getStatus());

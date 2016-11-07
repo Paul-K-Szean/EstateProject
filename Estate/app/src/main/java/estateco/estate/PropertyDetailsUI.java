@@ -166,7 +166,7 @@ public class PropertyDetailsUI extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        String[] tabTitle = {"House Details", "Comments"};
+        String[] tabTitle = {"Details", "Comments"};
 
 
         public SectionsPagerAdapter(FragmentManager fm) {

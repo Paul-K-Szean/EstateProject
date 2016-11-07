@@ -21,16 +21,15 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/taskArtifacts/taskArtifacts.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/2.14.1/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/google-services.json" afterPath="$PROJECT_DIR$/app/google-services.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/controllers/EstateCtrl.java" afterPath="$PROJECT_DIR$/app/src/main/java/controllers/EstateCtrl.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentNewProperty.java" afterPath="$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentNewProperty.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/estateco/estate/PropertyDetailsUI.java" afterPath="$PROJECT_DIR$/app/src/main/java/estateco/estate/PropertyDetailsUI.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/estateco/estate/RegisterUI.java" afterPath="$PROJECT_DIR$/app/src/main/java/estateco/estate/RegisterUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/handler/FirebaseMessagingService.java" afterPath="$PROJECT_DIR$/app/src/main/java/handler/FirebaseMessagingService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/handler/ViewAdapterRecycler.java" afterPath="$PROJECT_DIR$/app/src/main/java/handler/ViewAdapterRecycler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/customview_comments.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/customview_comments.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/customview_propertydetails.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/customview_propertydetails.xml" />
     </list>
     <ignored path="Estate.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -65,56 +64,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="FirebaseMessagingService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/handler/FirebaseMessagingService.java">
+      <file leaf-file-name="PropertyDetailsUI.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/estateco/estate/PropertyDetailsUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserCtrl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/controllers/UserCtrl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2088">
-              <caret line="130" column="29" selection-start-line="130" selection-start-column="16" selection-end-line="130" selection-end-column="34" />
-              <folding>
-                <element signature="method#getUserDetails#0;class#UserCtrl#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RegisterUI.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/estateco/estate/RegisterUI.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="122" column="9" selection-start-line="122" selection-start-column="9" selection-end-line="122" selection-end-column="9" />
+            <state relative-caret-position="568">
+              <caret line="168" column="44" selection-start-line="168" selection-start-column="44" selection-end-line="168" selection-end-column="44" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EstateCtrl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/controllers/EstateCtrl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2400">
-              <caret line="187" column="56" selection-start-line="187" selection-start-column="20" selection-end-line="187" selection-end-column="56" />
-              <folding>
-                <element signature="method#CheckInternetConnection#0;class#EstateCtrl#0" expanded="false" />
-                <element signature="method#syncUserAccountToLocalDB#0;class#EstateCtrl#0" expanded="false" />
-                <element signature="method#syncUserPropertyToLocalDB#0;class#EstateCtrl#0" expanded="false" />
-                <element signature="method#syncUserUpdatedPropertyToLocalDB#0;class#EstateCtrl#0" expanded="false" />
-                <element signature="method#syncUserDeletedFavouritePropertyToLocalDB#0;class#EstateCtrl#0" expanded="false" />
-                <element signature="method#getSpinnerItemPosition#0;class#EstateCtrl#0" expanded="false" />
-                <element signature="method#getRequestQueue#0;class#EstateCtrl#0" expanded="false" />
-                <element signature="method#addToRequestQueue#0;class#EstateCtrl#0" expanded="false" />
-                <element signature="method#updateDisplayValues#0;class#EstateCtrl#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -1627,7 +1582,7 @@
     <option name="modificationStamps">
       <map>
         <entry key="$PROJECT_DIR$/../../../AndroidStudioProjects/Estate" value="4421109142997" />
-        <entry key="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate" value="4430887616827" />
+        <entry key="D:\DriveD.Documents\WorkSpace\GitHub\EstateProject\Estate" value="4430914011685" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1959,8 +1914,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_login.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/nav_header_main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_register.xml" />
@@ -1970,11 +1923,9 @@
         <option value="$PROJECT_DIR$/app/src/main/java/handler/Utility.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_update_user_property.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_new_property.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentNewProperty.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/handler/ImageHandler_ENCODE.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentUserListings.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/handler/BitmapWorkerTask.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/PropertyDetailsUI.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentInboxAnnouncement.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_inbox_announcement.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/InboxUI.java" />
@@ -1988,7 +1939,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/handler/ImageHandler_DECODE.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/handler/ImageHandler.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/handler/ViewAdapterRecycler.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentSaleListings.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/MainUI.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentMainListings.java" />
@@ -2007,9 +1957,14 @@
         <option value="$PROJECT_DIR$/app/src/main/java/controllers/EstateCtrl.java" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/handler/FirebaseMessagingService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentNewProperty.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/handler/ViewAdapterRecycler.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/customview_propertydetails.xml" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/RegisterUI.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/customview_comments.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/estateco/estate/PropertyDetailsUI.java" />
       </list>
     </option>
   </component>
@@ -2044,7 +1999,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -2062,10 +2016,79 @@
               <option name="myItemId" value="Estate" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Estate" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Estate" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="handler" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Estate" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="estate" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Estate" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="ProjectPane" />
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
@@ -2464,7 +2487,14 @@
       <option name="project" value="LOCAL" />
       <updated>1478197066344</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Main Project">
+      <created>1478451884801</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1478451884801</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2489,8 +2519,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5415704" sideWeight="0.5021482" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5415704" sideWeight="0.49785176" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.8325635" sideWeight="0.4870829" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283237" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.54849887" sideWeight="0.4870829" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290993" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2502,8 +2532,8 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26745436" sideWeight="0.50404626" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4907621" sideWeight="0.4828142" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2543,40 +2573,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentUserListings.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_inbox_announcement.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="1152">
-          <caret line="48" column="16" selection-start-line="48" selection-start-column="16" selection-end-line="48" selection-end-column="16" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_inbox.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentInbox.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentInboxAnnouncement.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
@@ -2623,6 +2619,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="17" column="36" selection-start-line="17" selection-start-column="25" selection-end-line="17" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer2">
@@ -2642,6 +2639,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="376">
           <caret line="308" column="0" selection-start-line="308" selection-start-column="0" selection-end-line="308" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2664,7 +2662,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2697,6 +2694,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1989">
           <caret line="255" column="0" selection-start-line="255" selection-start-column="0" selection-end-line="255" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#8803#8804#0" expanded="false" />
+            <element signature="e#8836#8837#0" expanded="false" />
+            <element signature="method#getCount#0;class#SectionsPagerAdapter#0;class#MainUI#0" expanded="false" />
+            <element signature="method#getPageTitle#0;class#SectionsPagerAdapter#0;class#MainUI#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2704,6 +2708,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="421">
           <caret line="393" column="46" selection-start-line="393" selection-start-column="46" selection-end-line="393" selection-end-column="46" />
+          <folding>
+            <element signature="e#19825#27314#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2767,6 +2774,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1056">
           <caret line="88" column="54" selection-start-line="88" selection-start-column="36" selection-end-line="88" selection-end-column="54" />
+          <folding>
+            <element signature="method#setFavouritedIcon#0;class#FragmentPropertyDetails#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2774,20 +2784,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-298">
           <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/estateco/estate/PropertyDetailsUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1488">
-          <caret line="81" column="30" selection-start-line="81" selection-start-column="12" selection-end-line="81" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/handler/ViewAdapterRecycler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3984">
-          <caret line="270" column="50" selection-start-line="270" selection-start-column="27" selection-end-line="270" selection-end-column="50" />
+          <folding>
+            <element signature="e#4556#4557#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2816,8 +2815,8 @@
         <state relative-caret-position="277">
           <caret line="86" column="16" selection-start-line="86" selection-start-column="16" selection-end-line="86" selection-end-column="16" />
           <folding>
-            <element signature="e#3412#3413#0" expanded="true" />
-            <element signature="e#3452#3453#0" expanded="true" />
+            <element signature="e#3412#3413#0" expanded="false" />
+            <element signature="e#3452#3453#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2837,46 +2836,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/controllers/FavouriteCtrl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="277">
           <caret line="193" column="24" selection-start-line="193" selection-start-column="24" selection-end-line="193" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1124">
-          <caret line="47" column="14" selection-start-line="46" selection-start-column="3" selection-end-line="51" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/controllers/EstateCtrl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2400">
-          <caret line="187" column="56" selection-start-line="187" selection-start-column="20" selection-end-line="187" selection-end-column="56" />
           <folding>
-            <element signature="method#CheckInternetConnection#0;class#EstateCtrl#0" expanded="false" />
-            <element signature="method#syncUserAccountToLocalDB#0;class#EstateCtrl#0" expanded="false" />
-            <element signature="method#syncUserPropertyToLocalDB#0;class#EstateCtrl#0" expanded="false" />
-            <element signature="method#syncUserUpdatedPropertyToLocalDB#0;class#EstateCtrl#0" expanded="false" />
-            <element signature="method#syncUserDeletedFavouritePropertyToLocalDB#0;class#EstateCtrl#0" expanded="false" />
-            <element signature="method#getSpinnerItemPosition#0;class#EstateCtrl#0" expanded="false" />
-            <element signature="method#getRequestQueue#0;class#EstateCtrl#0" expanded="false" />
-            <element signature="method#addToRequestQueue#0;class#EstateCtrl#0" expanded="false" />
-            <element signature="method#updateDisplayValues#0;class#EstateCtrl#0" expanded="false" />
+            <element signature="imports" expanded="false" />
+            <element signature="method#serverUpdatePropertyCount#0;class#FavouriteCtrl#0" expanded="false" />
+            <element signature="method#serverUpdatePropertyCount#1;class#FavouriteCtrl#0" expanded="false" />
+            <element signature="method#serverGetUserFavouriteListings#0;class#FavouriteCtrl#0" expanded="false" />
+            <element signature="method#displayListings#0;class#FavouriteCtrl#0" expanded="false" />
+            <element signature="method#serverDeleteFavouriteProperty#0;class#FavouriteCtrl#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2888,19 +2858,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/handler/FirebaseMessagingService.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/controllers/EstateCtrl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="279">
+          <caret line="187" column="56" selection-start-line="187" selection-start-column="20" selection-end-line="187" selection-end-column="56" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/controllers/UserCtrl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2088">
+        <state relative-caret-position="334">
           <caret line="130" column="29" selection-start-line="130" selection-start-column="16" selection-end-line="130" selection-end-column="34" />
           <folding>
             <element signature="method#getUserDetails#0;class#UserCtrl#0" expanded="false" />
@@ -2908,10 +2875,92 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/handler/FirebaseMessagingService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="18" column="40" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/estateco/estate/FragmentNewProperty.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5304">
+          <caret line="369" column="81" selection-start-line="369" selection-start-column="61" selection-end-line="369" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="24">
+          <caret line="4" column="68" selection-start-line="4" selection-start-column="68" selection-end-line="4" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/customview_propertydetails.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="26" column="52" selection-start-line="26" selection-start-column="52" selection-end-line="26" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/handler/ViewAdapterRecyclerComments.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="51" column="60" selection-start-line="51" selection-start-column="60" selection-end-line="51" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/customview_comments.xml">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="1800">
+          <caret line="75" column="40" selection-start-line="75" selection-start-column="40" selection-end-line="75" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/estateco/estate/RegisterUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="122" column="9" selection-start-line="122" selection-start-column="9" selection-end-line="122" selection-end-column="9" />
+        <state relative-caret-position="554">
+          <caret line="117" column="32" selection-start-line="117" selection-start-column="32" selection-end-line="117" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/handler/ViewAdapterRecycler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1178">
+          <caret line="98" column="48" selection-start-line="98" selection-start-column="48" selection-end-line="98" selection-end-column="48" />
+          <folding>
+            <element signature="class#CustomFilter#0;class#ViewAdapterRecycler#0" expanded="false" />
+            <element signature="method#MyViewHolder#0;class#MyViewHolder#0;class#ViewAdapterRecycler#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/estateco/estate/PropertyDetailsUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="568">
+          <caret line="168" column="44" selection-start-line="168" selection-start-column="44" selection-end-line="168" selection-end-column="44" />
           <folding />
         </state>
       </provider>

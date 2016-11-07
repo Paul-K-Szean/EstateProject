@@ -397,7 +397,6 @@ public class FragmentNewProperty extends Fragment {
 
             Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
         }
-
     }
 
 

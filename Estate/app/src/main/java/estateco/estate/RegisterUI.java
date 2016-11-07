@@ -3,8 +3,6 @@ package estateco.estate;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -68,9 +66,14 @@ public class RegisterUI extends Activity {
         btnRegRandom = (Button) findViewById(R.id.BTNRegRandom);
 
         tvLoginLink = (TextView) findViewById(R.id.TVLoginLink);
-
-
-
+//       SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
+//        if (manager.getSensorList(Sensor.TYPE_ALL).isEmpty()) {
+//            // running on an emulator
+//            valRegContact = defaultContact;
+//        } else {
+//            // running on a device
+//
+//        }
 
         btnRegRandom.setVisibility(GONE);
         btnRegRandom.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +90,7 @@ public class RegisterUI extends Activity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                // requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
                 createUser();
             }
         });
@@ -106,15 +109,19 @@ public class RegisterUI extends Activity {
     public void createUser() {
         Log.i(TAG, "createUser");
         // getting phone number
-
-        SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        if (manager.getSensorList(Sensor.TYPE_ALL).isEmpty()) {
+        TelephonyManager tMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        String IMEI_Number = tMgr.getDeviceId();
+        String simCardNumber = tMgr.getLine1Number();
+        Log.i(TAG, IMEI_Number);
+        if (IMEI_Number.contains("000000000000000")) {
+            Log.i(TAG, "running on an emulator");
             // running on an emulator
             valRegContact = defaultContact;
         } else {
+            Log.i(TAG, "running on a device");
             // running on a device
-            TelephonyManager tMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-            String simCardNumber = tMgr.getLine1Number();
+
+
             if (simCardNumber.isEmpty()) {
                 valRegContact = defaultContact;
             } else {
