@@ -78,11 +78,13 @@ public class PropertyDetailsUI extends AppCompatActivity {
         });
         slidingTabLayout.setViewPager(viewPager);
 
+        if (savedInstanceState != null) {
+            if (savedInstanceState.get("previousfragment").toString().equals(FragmentUserFavouriteListings.class.getSimpleName())) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            } else
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-        if (savedInstanceState.get("previousfragment").toString().equals(FragmentUserFavouriteListings.class.getSimpleName())) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        } else
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 

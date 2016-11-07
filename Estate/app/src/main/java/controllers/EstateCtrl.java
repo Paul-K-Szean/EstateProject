@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,8 +24,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import designpattern.Publisher;
-import designpattern.Subject;
 import entities.Favourite;
 import entities.Property;
 import entities.User;
@@ -75,8 +74,7 @@ public class EstateCtrl extends Application {
     private static Property property;
     private static Favourite favourite;
     private static Map<String, String> paramValues;
-    /* News Publisher */
-    private static Subject publisher;
+
     private static InboxCtrl inboxCtrl;
     private RequestQueue requestQueue;
 
@@ -86,10 +84,6 @@ public class EstateCtrl extends Application {
 
     public static synchronized EstateCtrl getInstance() {
         return mInstance;
-    }
-
-    public static synchronized Subject getPublisher() {
-        return publisher;
     }
 
     public static Boolean CheckInternetConnection(Context context) {
@@ -234,8 +228,14 @@ public class EstateCtrl extends Application {
                     // JSON error
                     ErrorHandler.errorHandler(activity, error);
                 }
-                inboxCtrl = new InboxCtrl(activity.getApplicationContext());
-                inboxCtrl.serverNewNotification(activity, user);
+
+
+                // register new token for notification
+                Log.i(TAG, "new notification");
+                String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                Log.i(TAG, "refreshedToken notification : " + refreshedToken);
+                inboxCtrl = new InboxCtrl(activity);
+                inboxCtrl.serverNewNotification(user, refreshedToken);
                 activity.startActivity(new Intent(activity, MainUI.class));
                 activity.finish();
             }
@@ -276,7 +276,6 @@ public class EstateCtrl extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        publisher = new Publisher();
     }
 
     public RequestQueue getRequestQueue() {

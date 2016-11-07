@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "676395595559-mmb1sbsollogg83t7irlt11poo8bmp8d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "estateco.estate",
+            "certificate_hash": "B62E46F68281E089125E265D47C8B220ED286CC6"
+          }
+        },
+        {
           "client_id": "676395595559-9kt1mes4g2gq26fujins1b7uupvullph.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676395595559-9kt1mes4g2gq26fujins1b7uupvullph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

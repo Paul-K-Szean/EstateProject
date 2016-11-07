@@ -14,7 +14,6 @@ import java.util.HashMap;
 import controllers.FavouriteCtrl;
 import controllers.UserCtrl;
 import entities.Favourite;
-import entities.Inbox;
 import entities.Property;
 import entities.User;
 
@@ -99,6 +98,11 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             + FavouriteCtrl.KEY_FAVOURITE_CREATEDDATE + " TEXT "
             + ");";
 
+    private Cursor cursor;
+    private SQLiteDatabase db;
+    private ContentValues values;
+    private String selectQuery;
+
     public SQLiteHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -111,6 +115,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_PROPERTY_TABLE);
         db.execSQL(CREATE_FAVOURITE_TABLE);
+        // closing database connection
+        db.close();
         Log.d(TAG, "Database table created.");
     }
 
@@ -124,6 +130,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + FavouriteCtrl.TABLE_FAVOURITE);
         // Create tables again
         onCreate(db);
+        // closing database connection
+        db.close();
     }
 
 
@@ -136,21 +144,23 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public void addUser(User user) {
         Log.i(TAG, "addUser()");
-        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db = this.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(UserCtrl.KEY_USERID, user.getUserID());
-        values.put(UserCtrl.KEY_NAME, user.getName());
-        values.put(UserCtrl.KEY_EMAIL, user.getEmail());
-        values.put(UserCtrl.KEY_PASSWORD, user.getPassword());
-        values.put(UserCtrl.KEY_CONTACT, user.getContact());
+            values = new ContentValues();
+            values.put(UserCtrl.KEY_USERID, user.getUserID());
+            values.put(UserCtrl.KEY_NAME, user.getName());
+            values.put(UserCtrl.KEY_EMAIL, user.getEmail());
+            values.put(UserCtrl.KEY_PASSWORD, user.getPassword());
+            values.put(UserCtrl.KEY_CONTACT, user.getContact());
 
-        // inserting a new row
-        long id = db.insert(UserCtrl.TABLE_USER, null, values);
-        // closing database connection
-        db.close();
-
-        Log.d(TAG, "New user inserted into sqlite: " + id);
+            // inserting a new row
+            long id = db.insert(UserCtrl.TABLE_USER, null, values);
+            Log.d(TAG, "New user inserted into sqlite: " + id);
+        } finally {
+            // closing database connection
+            db.close();
+        }
     }
 
     /**
@@ -158,63 +168,70 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public HashMap<String, String> getUserDetails() {
         Log.d(TAG, "getUserDetails");
-        HashMap<String, String> userHashMap = new HashMap<>();
-        String selectQuery = "SELECT  * FROM " + UserCtrl.TABLE_USER;
+        try {
+            HashMap<String, String> userHashMap = new HashMap<>();
+            selectQuery = "SELECT  * FROM " + UserCtrl.TABLE_USER;
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(selectQuery, null);
 
-        // Move to first row
-        if (cursor.moveToFirst()) {
-            Log.d(TAG, "Fetching user from sqlite: " + cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_USERID)) + ", " +
-                    cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_EMAIL)));
-            userHashMap.put(UserCtrl.KEY_USERID, cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_USERID)));
-            userHashMap.put(UserCtrl.KEY_NAME, cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_NAME)));
-            userHashMap.put(UserCtrl.KEY_EMAIL, cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_EMAIL)));
-            userHashMap.put(UserCtrl.KEY_PASSWORD, cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_PASSWORD)));
-            userHashMap.put(UserCtrl.KEY_CONTACT, cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_CONTACT)));
-
-        } else {
-            Log.d(TAG, "No userHashMap data to fetching from Sqlite.");
+            // Move to first row
+            if (cursor.moveToFirst()) {
+                Log.d(TAG, "Fetching user from sqlite: " + cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_USERID)) + ", " +
+                        cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_EMAIL)));
+                userHashMap.put(UserCtrl.KEY_USERID, cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_USERID)));
+                userHashMap.put(UserCtrl.KEY_NAME, cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_NAME)));
+                userHashMap.put(UserCtrl.KEY_EMAIL, cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_EMAIL)));
+                userHashMap.put(UserCtrl.KEY_PASSWORD, cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_PASSWORD)));
+                userHashMap.put(UserCtrl.KEY_CONTACT, cursor.getString(cursor.getColumnIndex(UserCtrl.KEY_CONTACT)));
+            } else {
+                Log.d(TAG, "No userHashMap data to fetching from Sqlite.");
+            }
+            // return userHashMap
+            return userHashMap;
+        } finally {
+            cursor.close();
+            // closing database connection
+            db.close();
         }
-        cursor.close();
-        db.close();
-        // return userHashMap
-
-
-        return userHashMap;
     }
 
     /**
      * Update user details in database
      */
     public void updateUser(User user) {
-        // retain user information here
-        SQLiteDatabase db = this.getReadableDatabase();
+        Log.i(TAG, "updateUser");
+        try {
+            // retain user information here
+            db = this.getReadableDatabase();
 
-        // new value for user
-        ContentValues values = new ContentValues();
-        // values.put(KEY_USERID, user.getUserID());
-        values.put(UserCtrl.KEY_NAME, user.getName());
-        values.put(UserCtrl.KEY_EMAIL, user.getEmail());
-        values.put(UserCtrl.KEY_PASSWORD, user.getPassword());
-        values.put(UserCtrl.KEY_CONTACT, user.getContact());
+            // new value for user
+            ContentValues values = new ContentValues();
+            // values.put(KEY_USERID, user.getUserID());
+            values.put(UserCtrl.KEY_NAME, user.getName());
+            values.put(UserCtrl.KEY_EMAIL, user.getEmail());
+            values.put(UserCtrl.KEY_PASSWORD, user.getPassword());
+            values.put(UserCtrl.KEY_CONTACT, user.getContact());
 
-        // row to update, based on the title
-        String selection = UserCtrl.KEY_USERID + " LIKE ?";
-        String[] selectionArgs = {user.getUserID()};
+            // row to update, based on the title
+            String selection = UserCtrl.KEY_USERID + " LIKE ?";
+            String[] selectionArgs = {user.getUserID()};
 
-        // Commit to storage
-        int count = db.update(
-                UserCtrl.TABLE_USER,
-                values,
-                selection,
-                selectionArgs);
-        db.close();
-        if (count != 0)
-            Log.d(TAG, "User information retained.");
-        else
-            Log.e(TAG, "Error retaining user information.");
+            // Commit to storage
+            int count = db.update(
+                    UserCtrl.TABLE_USER,
+                    values,
+                    selection,
+                    selectionArgs);
+
+            if (count != 0)
+                Log.d(TAG, "User information retained.");
+            else
+                Log.e(TAG, "Error retaining user information.");
+        } finally {
+            db.close();
+        }
+
     }
 
     /**
@@ -222,12 +239,16 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      * delete tables and create them again
      */
     public void deleteUserTable() {
-        // TODO: update to server before deleting any user information.
-        SQLiteDatabase db = this.getWritableDatabase();
-        // Delete All Rows
-        db.delete(UserCtrl.TABLE_USER, null, null);
-        db.close();
-        Log.d(TAG, "Deleted all user info from sqlite");
+        Log.i(TAG, "deleteUserTable");
+        try {
+            db = this.getWritableDatabase();
+            // Delete All Rows
+            db.delete(UserCtrl.TABLE_USER, null, null);
+            Log.d(TAG, "Deleted all user info from sqlite");
+        } finally {
+            db.close();
+        }
+
     }
 
 
@@ -240,38 +261,39 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public void addProperty(Property property) {
         Log.i(TAG, "addProperty()");
-        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db = this.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_PROPERTY_PROPERTYID, property.getPropertyID());
-        values.put(KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
-        values.put(KEY_PROPERTY_FLATTYPE, property.getFlatType());
-        values.put(KEY_PROPERTY_BLOCK, property.getBlock());
-        values.put(KEY_PROPERTY_STREETNAME, property.getStreetname());
-        values.put(KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());
-        values.put(KEY_PROPERTY_FLOORAREA, property.getFloorarea());
-        values.put(KEY_PROPERTY_PRICE, property.getPrice());
-        values.put(KEY_PROPERTY_IMAGE, property.getImage());
-        values.put(KEY_PROPERTY_STATUS, property.getStatus());
-        values.put(KEY_PROPERTY_DEALTYPE, property.getDealType());
-        values.put(KEY_PROPERTY_TITLE, property.getTitle());
-        values.put(KEY_PROPERTY_DESC, property.getDescription());
-        values.put(KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel());
-        values.put(KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount());
-        values.put(KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount());
-        values.put(KEY_PROPERTY_FAVOURITECOUNT, property.getFavouritecount());
-        values.put(KEY_PROPERTY_VIEWCOUNT, property.getViewcount());
-        values.put(KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());
-        values.put(KEY_PROPERTY_CREATEDDATE, property.getCreateddate());
+            values = new ContentValues();
+            values.put(KEY_PROPERTY_PROPERTYID, property.getPropertyID());
+            values.put(KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
+            values.put(KEY_PROPERTY_FLATTYPE, property.getFlatType());
+            values.put(KEY_PROPERTY_BLOCK, property.getBlock());
+            values.put(KEY_PROPERTY_STREETNAME, property.getStreetname());
+            values.put(KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());
+            values.put(KEY_PROPERTY_FLOORAREA, property.getFloorarea());
+            values.put(KEY_PROPERTY_PRICE, property.getPrice());
+            values.put(KEY_PROPERTY_IMAGE, property.getImage());
+            values.put(KEY_PROPERTY_STATUS, property.getStatus());
+            values.put(KEY_PROPERTY_DEALTYPE, property.getDealType());
+            values.put(KEY_PROPERTY_TITLE, property.getTitle());
+            values.put(KEY_PROPERTY_DESC, property.getDescription());
+            values.put(KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel());
+            values.put(KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount());
+            values.put(KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount());
+            values.put(KEY_PROPERTY_FAVOURITECOUNT, property.getFavouritecount());
+            values.put(KEY_PROPERTY_VIEWCOUNT, property.getViewcount());
+            values.put(KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());
+            values.put(KEY_PROPERTY_CREATEDDATE, property.getCreateddate());
+            //   Log.i(TAG, values.toString());
 
-        //   Log.i(TAG, values.toString());
-
-        // inserting a new row
-        long id = db.insert(TABLE_PROPERTY, null, values);
-        // closing database connection
-        db.close();
-
-        Log.d(TAG, "New property inserted into sqlite: " + id);
+            // inserting a new row
+            long id = db.insert(TABLE_PROPERTY, null, values);
+            Log.d(TAG, "New property inserted into sqlite: " + id);
+        } finally {
+            // closing database connection
+            db.close();
+        }
 
     }
 
@@ -280,43 +302,48 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public HashMap<String, String> getUserProperty(String propertyID) {
         Log.i(TAG, "getUserProperty()");
-        HashMap<String, String> userPropertyHashMap = new HashMap<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_PROPERTY + " WHERE PROPERTYID = ?";
+        try {
+            HashMap<String, String> userPropertyHashMap = new HashMap<>();
+            selectQuery = "SELECT  * FROM " + TABLE_PROPERTY + " WHERE PROPERTYID = ?";
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(selectQuery, new String[]{propertyID});
+            cursor.getColumnCount();
+            Log.i(TAG, "getUserProperty count: " + cursor.getCount());
+            // Move to first row
+            if (cursor.moveToFirst()) {
+                Log.d(TAG, "Fetching property from sqlite: " + cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID)));
+                userPropertyHashMap.put(KEY_PROPERTY_PROPERTYID, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID)));
+                userPropertyHashMap.put(KEY_PROPERTY_OWNERID, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_OWNERID)));
+                userPropertyHashMap.put(KEY_PROPERTY_FLATTYPE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLATTYPE)));
+                userPropertyHashMap.put(KEY_PROPERTY_BLOCK, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BLOCK)));
+                userPropertyHashMap.put(KEY_PROPERTY_STREETNAME, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STREETNAME)));
+                userPropertyHashMap.put(KEY_PROPERTY_FLOORLEVEL, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORLEVEL)));
+                userPropertyHashMap.put(KEY_PROPERTY_FLOORAREA, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORAREA)));
+                userPropertyHashMap.put(KEY_PROPERTY_PRICE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PRICE)));
+                userPropertyHashMap.put(KEY_PROPERTY_IMAGE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_IMAGE)));
+                userPropertyHashMap.put(KEY_PROPERTY_STATUS, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STATUS)));
+                userPropertyHashMap.put(KEY_PROPERTY_DEALTYPE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DEALTYPE)));
+                userPropertyHashMap.put(KEY_PROPERTY_TITLE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_TITLE)));
+                userPropertyHashMap.put(KEY_PROPERTY_DESC, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DESC)));
+                userPropertyHashMap.put(KEY_PROPERTY_FURNISHLEVEL, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FURNISHLEVEL)));
+                userPropertyHashMap.put(KEY_PROPERTY_BEDROOMCOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BEDROOMCOUNT)));
+                userPropertyHashMap.put(KEY_PROPERTY_BATHROOMCOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BATHROOMCOUNT)));
+                userPropertyHashMap.put(KEY_PROPERTY_FAVOURITECOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FAVOURITECOUNT)));
+                userPropertyHashMap.put(KEY_PROPERTY_VIEWCOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_VIEWCOUNT)));
+                userPropertyHashMap.put(KEY_PROPERTY_WHOLEAPARTMENT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_WHOLEAPARTMENT)));
+                userPropertyHashMap.put(KEY_PROPERTY_CREATEDDATE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_CREATEDDATE)));
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, new String[]{propertyID});
-        cursor.getColumnCount();
-        Log.i(TAG, "getUserProperty count: " + cursor.getCount());
-        // Move to first row
-        if (cursor.moveToFirst()) {
-            Log.d(TAG, "Fetching property from sqlite: " + cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID)));
-            userPropertyHashMap.put(KEY_PROPERTY_PROPERTYID, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID)));
-            userPropertyHashMap.put(KEY_PROPERTY_OWNERID, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_OWNERID)));
-            userPropertyHashMap.put(KEY_PROPERTY_FLATTYPE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLATTYPE)));
-            userPropertyHashMap.put(KEY_PROPERTY_BLOCK, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BLOCK)));
-            userPropertyHashMap.put(KEY_PROPERTY_STREETNAME, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STREETNAME)));
-            userPropertyHashMap.put(KEY_PROPERTY_FLOORLEVEL, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORLEVEL)));
-            userPropertyHashMap.put(KEY_PROPERTY_FLOORAREA, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORAREA)));
-            userPropertyHashMap.put(KEY_PROPERTY_PRICE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PRICE)));
-            userPropertyHashMap.put(KEY_PROPERTY_IMAGE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_IMAGE)));
-            userPropertyHashMap.put(KEY_PROPERTY_STATUS, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STATUS)));
-            userPropertyHashMap.put(KEY_PROPERTY_DEALTYPE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DEALTYPE)));
-            userPropertyHashMap.put(KEY_PROPERTY_TITLE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_TITLE)));
-            userPropertyHashMap.put(KEY_PROPERTY_DESC, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DESC)));
-            userPropertyHashMap.put(KEY_PROPERTY_FURNISHLEVEL, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FURNISHLEVEL)));
-            userPropertyHashMap.put(KEY_PROPERTY_BEDROOMCOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BEDROOMCOUNT)));
-            userPropertyHashMap.put(KEY_PROPERTY_BATHROOMCOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BATHROOMCOUNT)));
-            userPropertyHashMap.put(KEY_PROPERTY_FAVOURITECOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FAVOURITECOUNT)));
-            userPropertyHashMap.put(KEY_PROPERTY_VIEWCOUNT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_VIEWCOUNT)));
-            userPropertyHashMap.put(KEY_PROPERTY_WHOLEAPARTMENT, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_WHOLEAPARTMENT)));
-            userPropertyHashMap.put(KEY_PROPERTY_CREATEDDATE, cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_CREATEDDATE)));
-
-        } else {
-            Log.d(TAG, "No property data to fetch from Sqlite.");
+            } else {
+                Log.d(TAG, "No property data to fetch from Sqlite.");
+            }
+            // return userHashMap
+            return userPropertyHashMap;
+        } finally {
+            cursor.close();
+            // closing database connection
+            db.close();
         }
-        cursor.close();
-        db.close();
-        return userPropertyHashMap;
+
     }
 
     /**
@@ -324,50 +351,49 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public ArrayList<Property> getUserProperties(User owner) {
         Log.i(TAG, "getUserProperties()");
-        ArrayList<Property> userPropertyList = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_PROPERTY + " WHERE OWNERID = ?";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, new String[]{owner.getUserID()});
+        try {
+            ArrayList<Property> userPropertyList = new ArrayList<>();
+            selectQuery = "SELECT  * FROM " + TABLE_PROPERTY + " WHERE OWNERID = ?";
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(selectQuery, new String[]{owner.getUserID()});
 
-        // Move to first row
-        if (cursor.moveToFirst()) {
-            Log.d(TAG, "Fetching user properties from sqlite. Total count: " + cursor.getCount());
-
-            do {
-                Property property = new Property(
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID)),
-                        owner,
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLATTYPE)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BLOCK)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STREETNAME)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORLEVEL)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORAREA)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PRICE)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_IMAGE)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STATUS)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DEALTYPE)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_TITLE)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DESC)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FURNISHLEVEL)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BEDROOMCOUNT)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BATHROOMCOUNT)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FAVOURITECOUNT)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_VIEWCOUNT)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_WHOLEAPARTMENT)),
-                        cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_CREATEDDATE)));
-                userPropertyList.add(property);
-                Log.i(TAG, property.getBlock() + " " + property.getStreetname());
-            } while (cursor.moveToNext());
-
-        } else
-
-        {
-            Log.d(TAG, "No user properties to fetch from Sqlite.");
+            // Move to first row
+            if (cursor.moveToFirst()) {
+                Log.d(TAG, "Fetching user properties from sqlite. Total count: " + cursor.getCount());
+                do {
+                    Property property = new Property(
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PROPERTYID)),
+                            owner,
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLATTYPE)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BLOCK)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STREETNAME)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORLEVEL)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FLOORAREA)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_PRICE)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_IMAGE)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_STATUS)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DEALTYPE)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_TITLE)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_DESC)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FURNISHLEVEL)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BEDROOMCOUNT)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_BATHROOMCOUNT)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_FAVOURITECOUNT)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_VIEWCOUNT)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_WHOLEAPARTMENT)),
+                            cursor.getString(cursor.getColumnIndex(KEY_PROPERTY_CREATEDDATE)));
+                    userPropertyList.add(property);
+                    Log.i(TAG, property.getBlock() + " " + property.getStreetname());
+                } while (cursor.moveToNext());
+            } else {
+                Log.d(TAG, "No user properties to fetch from Sqlite.");
+            }
+            return userPropertyList;
+        } finally {
+            cursor.close();
+            // closing database connection
+            db.close();
         }
-
-        cursor.close();
-        db.close();
-        return userPropertyList;
     }
 
     /**
@@ -375,37 +401,41 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public void updateUserProperty(Property property) {
         Log.i(TAG, "updateUserProperty()");
-        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db = this.getWritableDatabase();
+            values = new ContentValues();
+            values.put(KEY_PROPERTY_PROPERTYID, property.getPropertyID());
+            values.put(KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
+            values.put(KEY_PROPERTY_FLATTYPE, property.getFlatType());
+            values.put(KEY_PROPERTY_BLOCK, property.getBlock());
+            values.put(KEY_PROPERTY_STREETNAME, property.getStreetname());
+            values.put(KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());
+            values.put(KEY_PROPERTY_FLOORAREA, property.getFloorarea());
+            values.put(KEY_PROPERTY_PRICE, property.getPrice());
+            values.put(KEY_PROPERTY_IMAGE, property.getImage());
+            values.put(KEY_PROPERTY_STATUS, property.getStatus());
+            values.put(KEY_PROPERTY_DEALTYPE, property.getDealType());
+            values.put(KEY_PROPERTY_TITLE, property.getTitle());
+            values.put(KEY_PROPERTY_DESC, property.getDescription());
+            values.put(KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel());
+            values.put(KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount());
+            values.put(KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount());
+            values.put(KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());
+            values.put(KEY_PROPERTY_CREATEDDATE, property.getCreateddate());
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_PROPERTY_PROPERTYID, property.getPropertyID());
-        values.put(KEY_PROPERTY_OWNERID, property.getOwner().getUserID());
-        values.put(KEY_PROPERTY_FLATTYPE, property.getFlatType());
-        values.put(KEY_PROPERTY_BLOCK, property.getBlock());
-        values.put(KEY_PROPERTY_STREETNAME, property.getStreetname());
-        values.put(KEY_PROPERTY_FLOORLEVEL, property.getFloorlevel());
-        values.put(KEY_PROPERTY_FLOORAREA, property.getFloorarea());
-        values.put(KEY_PROPERTY_PRICE, property.getPrice());
-        values.put(KEY_PROPERTY_IMAGE, property.getImage());
-        values.put(KEY_PROPERTY_STATUS, property.getStatus());
-        values.put(KEY_PROPERTY_DEALTYPE, property.getDealType());
-        values.put(KEY_PROPERTY_TITLE, property.getTitle());
-        values.put(KEY_PROPERTY_DESC, property.getDescription());
-        values.put(KEY_PROPERTY_FURNISHLEVEL, property.getFurnishLevel());
-        values.put(KEY_PROPERTY_BEDROOMCOUNT, property.getBedroomcount());
-        values.put(KEY_PROPERTY_BATHROOMCOUNT, property.getBathroomcount());
-        values.put(KEY_PROPERTY_WHOLEAPARTMENT, property.getWholeapartment());
-        values.put(KEY_PROPERTY_CREATEDDATE, property.getCreateddate());
+            // updating a existing row
+            long id = db.update(TABLE_PROPERTY, values, "PROPERTYID = ?", new String[]{property.getPropertyID()});
 
-        // updating a existing row
-        long id = db.update(TABLE_PROPERTY, values, "PROPERTYID = ?", new String[]{property.getPropertyID()});
-        // closing database connection
-        db.close();
+            if (id != 0)
+                Log.d(TAG, "Property updated into sqlite.");
+            else
+                Log.d(TAG, "Property did not update into sqlite.");
+        } finally {
+            // closing database connection
+            db.close();
 
-        if (id != 0)
-            Log.d(TAG, "Property updated into sqlite.");
-        else
-            Log.d(TAG, "Property did not update into sqlite.");
+        }
+
     }
 
     /**
@@ -413,17 +443,21 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public int getUserPropertyCount() {
         Log.i(TAG, "getUserPropertyCount()");
-        String selectQuery = "SELECT * FROM " + TABLE_PROPERTY;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        int count = 0;
-        cursor.moveToFirst();
-        count = cursor.getCount();
+        try {
+            selectQuery = "SELECT * FROM " + TABLE_PROPERTY;
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(selectQuery, null);
+            int count = 0;
+            cursor.moveToFirst();
+            count = cursor.getCount();
 
-        cursor.close();
-        db.close();
-        Log.i(TAG, "Fetching user properties count from sqlite. Count = " + count);
-        return count;
+            Log.i(TAG, "Fetching user properties count from sqlite. Count = " + count);
+            return count;
+        } finally {
+            cursor.close();
+            // closing database connection
+            db.close();
+        }
     }
 
 
@@ -432,12 +466,15 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      * delete tables and create them again
      */
     public void deletePropertyTable() {
-        // TODO: update to server before deleting any user information.
-        SQLiteDatabase db = this.getWritableDatabase();
-        // Delete All Rows
-        db.delete(TABLE_PROPERTY, null, null);
-        db.close();
-        Log.d(TAG, "Deleted all user property info from sqlite");
+        try {
+            db = this.getWritableDatabase();
+            // Delete All Rows
+            db.delete(TABLE_PROPERTY, null, null);
+            Log.d(TAG, "Deleted all user property info from sqlite");
+        } finally {
+            db.close();
+        }
+
     }
 
 
@@ -450,22 +487,21 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public void addFavouriteProperty(Favourite favourite) {
         Log.i(TAG, "addFavouriteProperty()");
-        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db = this.getWritableDatabase();
+            values = new ContentValues();
+            values.put(KEY_FAVOURITEID, favourite.getFavouriteID());
+            values.put(KEY_FAVOURITE_OWNERID, favourite.getOwner().getUserID());
+            values.put(KEY_FAVOURITE_PROPERTYID, favourite.getProperty().getPropertyID());
+            values.put(KEY_FAVOURITE_CREATEDDATE, favourite.getCreateddate());
 
-        ContentValues values = new ContentValues();
-        values.put(KEY_FAVOURITEID, favourite.getFavouriteID());
-        values.put(KEY_FAVOURITE_OWNERID, favourite.getOwner().getUserID());
-        values.put(KEY_FAVOURITE_PROPERTYID, favourite.getProperty().getPropertyID());
-        values.put(KEY_FAVOURITE_CREATEDDATE, favourite.getCreateddate());
-
-        Log.i(TAG, values.toString());
-
-        // inserting a new row
-        long id = db.insert(TABLE_FAVOURITE, null, values);
-        // closing database connection
-        db.close();
-
-        Log.d(TAG, "New favourite property inserted into sqlite: " + id);
+            // inserting a new row
+            long id = db.insert(TABLE_FAVOURITE, null, values);
+            Log.d(TAG, "New favourite property inserted into sqlite: " + id);
+        } finally {
+            // closing database connection
+            db.close();
+        }
     }
 
     /**
@@ -473,26 +509,31 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public HashMap<String, String> getUserFavouriteProperty(String ownerID, String propertyID) {
         Log.i(TAG, "getUserFavouriteProperty()");
-        HashMap<String, String> favoruiteHashMap = null;
-        String selectQuery = "SELECT  * FROM " + TABLE_FAVOURITE + " WHERE " + KEY_FAVOURITE_OWNERID + " = ? AND " + KEY_FAVOURITE_PROPERTYID + " = ?";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, new String[]{ownerID, propertyID});
-        // Move to first row
-        if (cursor.moveToFirst()) {
-            Log.d(TAG, "Fetching favourite property from sqlite: " + cursor.getString(cursor.getColumnIndex(KEY_FAVOURITEID)) + ", ownerID: " +
-                    cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_OWNERID)) + ", propertyID: " +
-                    cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_PROPERTYID)));
-            favoruiteHashMap = new HashMap<>();
-            favoruiteHashMap.put(KEY_FAVOURITEID, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITEID)));
-            favoruiteHashMap.put(KEY_FAVOURITE_OWNERID, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_OWNERID)));
-            favoruiteHashMap.put(KEY_FAVOURITE_PROPERTYID, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_PROPERTYID)));
-            favoruiteHashMap.put(KEY_FAVOURITE_CREATEDDATE, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_CREATEDDATE)));
-        } else {
-            Log.d(TAG, "No favourite property data to fetch from Sqlite.");
+        try {
+            HashMap<String, String> favoruiteHashMap = null;
+            selectQuery = "SELECT  * FROM " + TABLE_FAVOURITE + " WHERE " + KEY_FAVOURITE_OWNERID + " = ? AND " + KEY_FAVOURITE_PROPERTYID + " = ?";
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(selectQuery, new String[]{ownerID, propertyID});
+            // Move to first row
+            if (cursor.moveToFirst()) {
+                Log.d(TAG, "Fetching favourite property from sqlite: " + cursor.getString(cursor.getColumnIndex(KEY_FAVOURITEID)) + ", ownerID: " +
+                        cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_OWNERID)) + ", propertyID: " +
+                        cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_PROPERTYID)));
+                favoruiteHashMap = new HashMap<>();
+                favoruiteHashMap.put(KEY_FAVOURITEID, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITEID)));
+                favoruiteHashMap.put(KEY_FAVOURITE_OWNERID, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_OWNERID)));
+                favoruiteHashMap.put(KEY_FAVOURITE_PROPERTYID, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_PROPERTYID)));
+                favoruiteHashMap.put(KEY_FAVOURITE_CREATEDDATE, cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_CREATEDDATE)));
+            } else {
+                Log.d(TAG, "No favourite property data to fetch from Sqlite.");
+            }
+            return favoruiteHashMap;
+        } finally {
+            cursor.close();
+            // closing database connection
+            db.close();
         }
-        cursor.close();
-        db.close();
-        return favoruiteHashMap;
+
     }
 
     /**
@@ -500,28 +541,34 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public ArrayList<Favourite> getUserFavouriteProperties(User user, Property property) {
         Log.i(TAG, "getUserProperties()");
-        ArrayList<Favourite> userFavouritePropertyList = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_FAVOURITE + " WHERE OWNERID = ?";
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, new String[]{user.getUserID()});
-        // Move to first row
-        if (cursor.moveToFirst()) {
-            Log.d(TAG, "Fetching user favourite properties from sqlite. Total count: " + cursor.getCount());
-            do {
-                Favourite favourite = new Favourite(
-                        cursor.getString(cursor.getColumnIndex(KEY_FAVOURITEID)),
-                        user,
-                        property,
-                        cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_CREATEDDATE)));
-                userFavouritePropertyList.add(favourite);
-            } while (cursor.moveToNext());
-        } else {
-            Log.d(TAG, "No user favourite properties to fetch from Sqlite.");
-        }
-        cursor.close();
-        db.close();
 
-        return userFavouritePropertyList;
+        try {
+            ArrayList<Favourite> userFavouritePropertyList = new ArrayList<>();
+            selectQuery = "SELECT  * FROM " + TABLE_FAVOURITE + " WHERE OWNERID = ?";
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(selectQuery, new String[]{user.getUserID()});
+            // Move to first row
+            if (cursor.moveToFirst()) {
+                Log.d(TAG, "Fetching user favourite properties from sqlite. Total count: " + cursor.getCount());
+                do {
+                    Favourite favourite = new Favourite(
+                            cursor.getString(cursor.getColumnIndex(KEY_FAVOURITEID)),
+                            user,
+                            property,
+                            cursor.getString(cursor.getColumnIndex(KEY_FAVOURITE_CREATEDDATE)));
+                    userFavouritePropertyList.add(favourite);
+                } while (cursor.moveToNext());
+            } else {
+                Log.d(TAG, "No user favourite properties to fetch from Sqlite.");
+            }
+
+            return userFavouritePropertyList;
+        } finally {
+            cursor.close();
+            // closing database connection
+            db.close();
+        }
+
     }
 
     /**
@@ -529,31 +576,35 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      */
     public int getUserFavouriteCount() {
         Log.i(TAG, "getUserFavouriteCount()");
-        String selectQuery = "SELECT * FROM " + TABLE_FAVOURITE;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        int count = 0;
-        cursor.moveToFirst();
-        count = cursor.getCount();
-
-        cursor.close();
-        db.close();
-        Log.i(TAG, "Fetching user favourite count from sqlite. Count = " + count);
-        return count;
+        try {
+            db = this.getReadableDatabase();
+            selectQuery = "SELECT * FROM " + TABLE_FAVOURITE;
+            cursor = db.rawQuery(selectQuery, null);
+            int count = 0;
+            cursor.moveToFirst();
+            count = cursor.getCount();
+            Log.i(TAG, "Fetching user favourite count from sqlite. Count = " + count);
+            return count;
+        } finally {
+            cursor.close();
+            // closing database connection
+            db.close();
+        }
     }
-
 
     /**
      * delete user favourited property
      */
     public void deleteFavouriteProperty(Favourite favourite) {
-        // TODO: update to server before deleting any local data.
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        // Delete All Rows
-        db.delete(TABLE_FAVOURITE, "FAVOURITEID = ?", new String[]{favourite.getFavouriteID()});
-        db.close();
-        Log.d(TAG, "Deleted user favourite property info from sqlite");
+        try {
+            db = this.getWritableDatabase();
+            // Delete All Rows
+            db.delete(TABLE_FAVOURITE, "FAVOURITEID = ?", new String[]{favourite.getFavouriteID()});
+            Log.d(TAG, "Deleted user favourite property info from sqlite");
+        } finally {
+            // closing database connection
+            db.close();
+        }
     }
 
 
@@ -562,42 +613,16 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      * delete tables and create them again
      */
     public void deleteFavouritePropertyTable() {
-        // TODO: update to server before deleting any local data.
-        SQLiteDatabase db = this.getWritableDatabase();
-        // Delete All Rows
-        db.delete(TABLE_FAVOURITE, null, null);
-        db.close();
-        Log.d(TAG, "Deleted all user favourite property info from sqlite");
-    }
 
-
-    /****************************************************************************************************************************************
-     * inbox section
-     **************************************************************************************************************************************/
-    /**
-     * store favourite property details in database
-     */
-    public void addInbox(Inbox inbox) {
-        Log.i(TAG, "addInbox()");
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-//        values.put(KEY_INBOXID, inbox.getInboxID());
-//        values.put(KEY_SENDERID, inbox.getSender());
-//        values.put(KEY_RECIPIENTID, inbox.getSender());
-//        values.put(KEY_INBOXTYPE, inbox.getInboxtype());
-//        values.put(KEY_INBOXTITLE, inbox.getInboxtitle());
-//        values.put(KEY_INBOXMESSAGE, inbox.getInboxmessage());
-//        values.put(InboxCtrl.KEY_CREATEDDATE, inbox.getCreateddate());
-
-        Log.i(TAG, values.toString());
-
-        // inserting a new row
-        long id = db.insert(TABLE_FAVOURITE, null, values);
-        // closing database connection
-        db.close();
-
-        Log.d(TAG, "New favourite property inserted into sqlite: " + id);
+        try {
+            db = this.getWritableDatabase();
+            // Delete All Rows
+            db.delete(TABLE_FAVOURITE, null, null);
+            Log.d(TAG, "Deleted all user favourite property info from sqlite");
+        } finally {
+            // closing database connection
+            db.close();
+        }
     }
 
 

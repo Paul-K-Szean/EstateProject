@@ -186,8 +186,8 @@ public class FavouriteCtrl {
                                 user,
                                 property.getOwner().getUserID(),
                                 KEY_INBOXTYPE_FAVOURITENOTIFICATION,
-                                property.getPropertyID(),
-                                user.getName() + " favourite your listing, " + property.getTitle(),
+                                "Favourite",
+                                user.getName() + " favourite your listing",
                                 KEY_INBOXSTATUS_NOTREAD
                         );
                         // inboxCtrl.serverNewInbox(fragment, inbox);

@@ -9,7 +9,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +36,8 @@ import handler.ViewAdapterRecyclerComments;
 
 import static android.view.View.VISIBLE;
 import static controllers.EstateConfig.URL_GETINBOX;
+import static controllers.EstateConfig.URL_NEWNOTIFICATION;
+import static controllers.EstateConfig.URL_PUSHNOTIFICATION;
 import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
 import static controllers.UserCtrl.KEY_CONTACT;
 import static controllers.UserCtrl.KEY_EMAIL;
@@ -123,35 +127,72 @@ public class InboxCtrl {
     }
 
     // create new notification into fcm
-    public void serverNewNotification(final Activity activity, final User user) {
+    public void serverNewNotification(final User user, final String refreshedToken) {
         Log.i(TAG, "serverNewNotification");
-        Log.i(TAG, FirebaseInstanceId.getInstance().getToken());
-        Map<String, String> paramValues = new HashMap<>();
-        paramValues.put(KEY_USERID, user.getUserID());
-        paramValues.put(KEY_FCMTOKEN, FirebaseInstanceId.getInstance().getToken());
+        Log.i(TAG, refreshedToken);
+        String tag_string_req = "req_" + TAG;
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                URL_NEWNOTIFICATION, new Response.Listener<String>() {
 
-        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_NEWNOTIFICATION, paramValues, activity, new AsyncTaskResponse() {
             @Override
-            public void onAsyncTaskResponse(String response) {
-                Log.i(TAG, response);
+            public void onResponse(String response) {
+                Log.d(TAG, "serverNewNotification onResponse: " + response.toString());
             }
-        }).execute();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "serverNewNotification onErrorResponse: " + error.getMessage());
+                error.printStackTrace();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Log.i(TAG, "serverNewNotification getParams()");
+                // posting params to server side
+                Map<String, String> paramValues = new HashMap<>();
+                paramValues.put(KEY_USERID, user.getUserID());
+                paramValues.put(KEY_FCMTOKEN, refreshedToken);
+                return paramValues;
+            }
+        };
+        // Adding request to request queue
+        EstateCtrl.getInstance().addToRequestQueue(strReq, tag_string_req);
+
     }
 
     // create new notification into fcm
     public void serverPushNotification(final Activity activity, final Inbox inbox, final Property property) {
         Log.i(TAG, "serverPushNotification");
-        Map<String, String> paramValues = new HashMap<>();
-        paramValues.put("userID", property.getOwner().getUserID());
-        paramValues.put(KEY_PROPERTY_PROPERTYID, property.getPropertyID());
-        paramValues.put("title", inbox.getInboxtitle());
-        paramValues.put("message", inbox.getInboxmessage());
-        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_PUSHNOTIFICATION, paramValues, activity, new AsyncTaskResponse() {
+        String tag_string_req = "req_" + TAG;
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                URL_PUSHNOTIFICATION, new Response.Listener<String>() {
+
             @Override
-            public void onAsyncTaskResponse(String response) {
-                Log.i(TAG, response);
+            public void onResponse(String response) {
+                Log.d(TAG, "serverPushNotification onResponse: " + response.toString());
             }
-        }).execute();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "serverPushNotification onErrorResponse: " + error.getMessage());
+                error.printStackTrace();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Log.i(TAG, "serverPushNotification getParams()");
+                // posting params to server side
+                Map<String, String> paramValues = new HashMap<>();
+                paramValues.put(KEY_USERID, property.getOwner().getUserID());
+                paramValues.put(KEY_PROPERTY_PROPERTYID, property.getPropertyID());
+                paramValues.put("title", inbox.getInboxtitle());
+                paramValues.put("message", inbox.getInboxmessage());
+                return paramValues;
+            }
+        };
+        // Adding request to request queue
+        EstateCtrl.getInstance().addToRequestQueue(strReq, tag_string_req);
+
     }
 
 
