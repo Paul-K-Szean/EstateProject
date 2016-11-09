@@ -19,7 +19,7 @@ import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.Property;
 import entities.User;
-import handler.ViewAdapterRecycler;
+import handler.ViewAdapterRecyclerProperty;
 import tabs.SlidingTabLayout;
 
 import static android.view.View.GONE;
@@ -38,7 +38,7 @@ public class FragmentUserFavouriteListings extends Fragment {
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
     private RecyclerView recycler;
-    private ViewAdapterRecycler viewAdapter;
+    private ViewAdapterRecyclerProperty viewAdapter;
     private ArrayList<Property> propertyArrayList;
 
     private TextView tvUserFavouriteListingsCount;

@@ -44,7 +44,6 @@ import handler.Utility;
 import static android.graphics.Color.RED;
 import static controllers.PropertyCtrl.KEY_ACTION_DECREASEFAVOURITE;
 import static controllers.PropertyCtrl.KEY_ACTION_INCREASEFAVOURITE;
-import static controllers.PropertyCtrl.KEY_ACTION_INCREASEVIEW;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -154,7 +153,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
         // get property details from server
         Map<String, String> paramValues = new HashMap<>();
         paramValues.put(PropertyCtrl.KEY_PROPERTY_PROPERTYID, savedInstanceState.get(PropertyCtrl.KEY_PROPERTY_PROPERTYID).toString());
-        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_PROPERTYDETAILS, paramValues, getActivity(), new AsyncTaskResponse() {
+        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_GETPROPERTYDETAILS, paramValues, getActivity(), new AsyncTaskResponse() {
             @Override
             public void onAsyncTaskResponse(String response) {
                 try {
@@ -213,7 +212,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 // house details
                 System.gc();
                 String imageData = valProDetImage;
-                Bitmap bitmap = FragmentMainListings.getBitmapFromCache(property.getPropertyID());
+                Bitmap bitmap = FragmentMainListings.getBitmapFromCache(valProDetPropertyID);
                 if (imageData.isEmpty())
                     imgvPropDetImage.setImageResource(R.drawable.ic_menu_camera);
                 else {
@@ -239,8 +238,11 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 // set favourite icon
                 setFavouritedIcon(property);
 
+
+                // TODO do not use serverUpdateFavouriteCount in favouriteCtrl. Change to propertyctrl
                 // increase view count
-                favouriteCtrl.serverUpdatePropertyCount(FragmentPropertyDetails.this, property, KEY_ACTION_INCREASEVIEW, menuItemViewCount);
+                favouriteCtrl.serverUpdateViewCount(FragmentPropertyDetails.this,
+                        property, menuItemViewCount);
 
                 //
                 if (valProDetStatus.equals("closed")) {
@@ -338,14 +340,16 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 Log.i(TAG, "Trying to un-favourite this property. isFavourite value is = " + isFavourited);
                 item.setIcon(R.drawable.ic_action_favourite_outline);
                 // decrease favourite count of this property
-                favouriteCtrl.serverUpdatePropertyCount(FragmentPropertyDetails.this, property, KEY_ACTION_DECREASEFAVOURITE, menuItemFavouriteCount);
+                favouriteCtrl.serverUpdateFavouriteCount(FragmentPropertyDetails.this, property, KEY_ACTION_DECREASEFAVOURITE,
+                        menuItemFavouriteCount);
 
             } else {
                 isFavourited = true;
                 Log.i(TAG, "Trying to favourite this property. isFavourite value is = " + isFavourited);
                 item.setIcon(R.drawable.ic_action_favourite);
                 // increase favourite count of this property
-                favouriteCtrl.serverUpdatePropertyCount(FragmentPropertyDetails.this, property, KEY_ACTION_INCREASEFAVOURITE, menuItemFavouriteCount);
+                favouriteCtrl.serverUpdateFavouriteCount(FragmentPropertyDetails.this, property, KEY_ACTION_INCREASEFAVOURITE,
+                        menuItemFavouriteCount);
             }
         }
         if (id == R.id.action_phone_call) {

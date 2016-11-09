@@ -75,7 +75,7 @@ public class EstateCtrl extends Application {
     private static Favourite favourite;
     private static Map<String, String> paramValues;
 
-    private static InboxCtrl inboxCtrl;
+    private static NotificationCtrl notificationCtrl;
     private RequestQueue requestQueue;
 
     public EstateCtrl() {
@@ -184,7 +184,7 @@ public class EstateCtrl extends Application {
         // get user properties from server and insert into local DB
         paramValues = new HashMap<>();
         paramValues.put(FavouriteCtrl.KEY_FAVOURITE_OWNERID, user.getUserID());
-        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_USERFAVOURITELISTINGS, paramValues, activity, new AsyncTaskResponse() {
+        new AsyncTaskHandler(Request.Method.POST, EstateConfig.URL_GETUSERFAVOURITELISTINGS, paramValues, activity, new AsyncTaskResponse() {
             @Override
             public void onAsyncTaskResponse(String response) {
                 try {
@@ -234,8 +234,8 @@ public class EstateCtrl extends Application {
                 Log.i(TAG, "new notification");
                 String refreshedToken = FirebaseInstanceId.getInstance().getToken();
                 Log.i(TAG, "refreshedToken notification : " + refreshedToken);
-                inboxCtrl = new InboxCtrl(activity);
-                inboxCtrl.serverNewNotification(user, refreshedToken);
+                notificationCtrl = new NotificationCtrl();
+                notificationCtrl.serverNewNotification(user, refreshedToken);
                 activity.startActivity(new Intent(activity, MainUI.class));
                 activity.finish();
             }

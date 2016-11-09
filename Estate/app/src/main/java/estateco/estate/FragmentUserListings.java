@@ -22,7 +22,7 @@ import entities.Property;
 import entities.User;
 import handler.FragmentHandler;
 import handler.Utility;
-import handler.ViewAdapterRecycler;
+import handler.ViewAdapterRecyclerProperty;
 import tabs.SlidingTabLayout;
 
 import static android.view.View.GONE;
@@ -40,7 +40,7 @@ public class FragmentUserListings extends Fragment {
     private User user;
     private PropertyCtrl propertyCtrl;
     private RecyclerView recycler;
-    private ViewAdapterRecycler viewAdapter;
+    private ViewAdapterRecyclerProperty viewAdapter;
     private ArrayList<Property> propertyArrayList;
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
@@ -94,7 +94,7 @@ public class FragmentUserListings extends Fragment {
         propertyArrayList = propertyCtrl.getUserProperties(user);
         // displays into recycler view
         recycler = (RecyclerView) view.findViewById(R.id.recycleView);
-        viewAdapter = new ViewAdapterRecycler(FragmentUserListings.this, propertyArrayList);
+        viewAdapter = new ViewAdapterRecyclerProperty(FragmentUserListings.this, propertyArrayList);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         recycler.setAdapter(viewAdapter);
 

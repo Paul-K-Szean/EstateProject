@@ -200,7 +200,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         // new value for user
         ContentValues values = new ContentValues();
-        // values.put(KEY_USERID, user.getUserID());
+        // values.put(KEY_USERID, user.getNotifyUserId());
         values.put(UserCtrl.KEY_NAME, user.getName());
         values.put(UserCtrl.KEY_EMAIL, user.getEmail());
         values.put(UserCtrl.KEY_PASSWORD, user.getPassword());

@@ -34,7 +34,7 @@ import entities.User;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.JSONHandler;
-import handler.ViewAdapterRecycler;
+import handler.ViewAdapterRecyclerProperty;
 import tabs.SlidingTabLayout;
 
 import static android.view.View.GONE;
@@ -83,7 +83,7 @@ public class FragmentMainListings extends Fragment implements Filterable {
     private Property property;
     private ArrayList<Property> propertyArrayList;
     private RecyclerView recycler;
-    private ViewAdapterRecycler viewAdapter;
+    private ViewAdapterRecyclerProperty viewAdapter;
     private TextView tvAllListingCount, itemDataID;
     private SearchView searchView;
     private SlidingTabLayout slidingTabLayout;
@@ -204,7 +204,7 @@ public class FragmentMainListings extends Fragment implements Filterable {
                             jsonObject.getString(KEY_PROPERTY_CREATEDDATE));
                     propertyArrayList.add(property);
                     recycler = (RecyclerView) getView().findViewById(R.id.recycleView);
-                    viewAdapter = new ViewAdapterRecycler(FragmentMainListings.this, propertyArrayList);
+                    viewAdapter = new ViewAdapterRecyclerProperty(FragmentMainListings.this, propertyArrayList);
                     recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
                     recycler.setVisibility(VISIBLE);
                     recycler.setAdapter(viewAdapter);

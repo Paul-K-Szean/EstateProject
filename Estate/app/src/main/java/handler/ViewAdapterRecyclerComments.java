@@ -2,9 +2,12 @@ package handler;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -12,8 +15,8 @@ import java.util.ArrayList;
 import controllers.FavouriteCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
+import entities.Comment;
 import entities.Favourite;
-import entities.Inbox;
 import entities.Property;
 import entities.User;
 import estateco.estate.R;
@@ -26,7 +29,7 @@ public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapte
     private static final String TAG = ViewAdapterRecyclerComments.class.getSimpleName();
     private final LayoutInflater inflator;
     private Fragment fragment;
-    private ArrayList<Inbox> inboxArrayList;
+    private ArrayList<Comment> commentArrayList;
     private UserCtrl userCtrl;
     private PropertyCtrl propertyCtrl;
     private FavouriteCtrl favouriteCtrl;
@@ -35,15 +38,15 @@ public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapte
     private Property property;
     private Favourite favourite;
 
-    public ViewAdapterRecyclerComments(Fragment fragment, ArrayList<Inbox> inboxArrayList, User owner) {
+    public ViewAdapterRecyclerComments(Fragment fragment, ArrayList<Comment> inboxArrayList, User owner) {
         inflator = LayoutInflater.from(fragment.getContext());
         this.fragment = fragment;
-        this.inboxArrayList = inboxArrayList;
+        this.commentArrayList = inboxArrayList;
 
         userCtrl = new UserCtrl(fragment.getActivity());
         propertyCtrl = new PropertyCtrl(fragment.getActivity());
         favouriteCtrl = new FavouriteCtrl(fragment.getActivity());
-        user = userCtrl.getUserDetails();
+        this.user = userCtrl.getUserDetails();
         this.owner = owner;
     }
 
@@ -57,23 +60,25 @@ public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapte
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final Inbox inbox = inboxArrayList.get(position);
 
-        if (user.getUserID().equals(owner.getUserID()))
+        final Comment comment = commentArrayList.get(position);
+        holder.tvCmmtUserName.setText(comment.getSender().getName());
+        holder.tvCmmtMessage.setText(comment.getCommentmessage());
+        holder.tvCmmtCreateddate.setText(comment.getCreateddate());
+
+        if (owner.getUserID().equals(comment.getSender().getUserID()))
             holder.tvCmmtUserTitle.setText("Owner");
         else
             holder.tvCmmtUserTitle.setText("User");
-        holder.tvCmmtUserName.setText(inbox.getSender().getName());
-        holder.tvCmmtMessage.setText(inbox.getInboxmessage());
 
 
-        holder.tvCmmtCreateddate.setText(inbox.getCreateddate());
+
     }
 
 
     @Override
     public int getItemCount() {
-        return inboxArrayList.size();
+        return commentArrayList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -86,7 +91,6 @@ public class ViewAdapterRecyclerComments extends RecyclerView.Adapter<ViewAdapte
             tvCmmtUserName = (TextView) itemView.findViewById(R.id.TVCmmtUserName);
             tvCmmtMessage = (TextView) itemView.findViewById(R.id.TVCmmtMessage);
             tvCmmtCreateddate = (TextView) itemView.findViewById(R.id.TVCmmtCreatedDate);
-
         }
 
         @Override

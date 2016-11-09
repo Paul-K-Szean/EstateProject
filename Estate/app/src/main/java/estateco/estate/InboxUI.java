@@ -27,7 +27,7 @@ public class InboxUI extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarTopInbox);
         setSupportActionBar(toolbar);
-        toolbar.setSubtitle("Inbox");
+        toolbar.setSubtitle("Comment");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         viewPager = (ViewPager) findViewById(R.id.ViewPagerInbox);
@@ -73,7 +73,7 @@ public class InboxUI extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        String[] tabTitle = {"Inbox", "Announcement"};
+        String[] tabTitle = {"Comment", "Announcement"};
 
 
         public SectionsPagerAdapter(FragmentManager fm) {
