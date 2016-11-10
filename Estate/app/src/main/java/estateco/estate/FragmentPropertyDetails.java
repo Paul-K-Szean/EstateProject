@@ -239,7 +239,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 setFavouritedIcon(property);
 
 
-                // TODO do not use serverUpdateFavouriteCount in favouriteCtrl. Change to propertyctrl
+
                 // increase view count
                 favouriteCtrl.serverUpdateViewCount(FragmentPropertyDetails.this,
                         property, menuItemViewCount);
