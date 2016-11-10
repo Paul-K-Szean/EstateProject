@@ -28,7 +28,9 @@ public class Property {
     private String createddate;
 
     // for creating
-    public Property(User owner, String flatType, String block, String streetname, String floorlevel, String floorarea, String price, String image, String status, String dealType, String title, String description, String furnishLevel, String bedroomcount, String bathroomcount, String favouritecount, String viewcount, String wholeapartment) {
+    public Property(User owner, String flatType, String block, String streetname, String floorlevel, String floorarea, String price,
+                        String image, String status, String dealType, String title, String description, String furnishLevel,
+                        String bedroomcount, String bathroomcount, String favouritecount, String viewcount, String wholeapartment) {
         this.owner = owner;
         this.flatType = flatType;
         this.block = block;
@@ -50,7 +52,9 @@ public class Property {
     }
 
     // for editing
-    public Property(String propertyID, User owner, String flatType, String block, String streetname, String floorlevel, String floorarea, String price, String image, String status, String dealType, String title, String description, String furnishLevel, String bedroomcount, String bathroomcount, String wholeapartment) {
+    public Property(String propertyID, User owner, String flatType, String block, String streetname, String floorlevel, String floorarea,
+                    String price, String image, String status, String dealType, String title, String description, String furnishLevel,
+                    String bedroomcount, String bathroomcount, String wholeapartment) {
         this.propertyID = propertyID;
         this.owner = owner;
         this.flatType = flatType;
@@ -71,7 +75,9 @@ public class Property {
     }
 
     // for displaying
-    public Property(String propertyID, User owner, String flatType, String block, String streetname, String floorlevel, String floorarea, String price, String image, String status, String dealType, String title, String description, String furnishLevel, String bedroomcount, String bathroomcount, String favouritecount, String viewcount, String wholeapartment, String createddate) {
+    public Property(String propertyID, User owner, String flatType, String block, String streetname, String floorlevel, String floorarea,
+                    String price, String image, String status, String dealType, String title, String description, String furnishLevel,
+                    String bedroomcount, String bathroomcount, String favouritecount, String viewcount, String wholeapartment, String createddate) {
 
         this.propertyID = propertyID;
         this.owner = owner;
@@ -94,6 +100,7 @@ public class Property {
         this.wholeapartment = wholeapartment;
         this.createddate = createddate;
     }
+
 
     public String getPropertyID() {
         return propertyID;

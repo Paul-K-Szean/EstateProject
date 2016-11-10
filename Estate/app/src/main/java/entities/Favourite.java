@@ -11,6 +11,7 @@ public class Favourite {
     private Property propertyID;
     private String createddate;
 
+    // for display
     public Favourite(String favouriteID, User owner, Property property, String createddate) {
 
         this.ownerID = owner;
@@ -19,6 +20,7 @@ public class Favourite {
         this.createddate = createddate;
     }
 
+    // create favourite
     public Favourite(User owner, Property property) {
         this.ownerID = owner;
         this.propertyID = property;

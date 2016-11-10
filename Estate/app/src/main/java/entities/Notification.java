@@ -5,12 +5,24 @@ package entities;
  */
 
 public class Notification {
-    public User getNotifyUserId() {
-        return notifyUserId;
+    // Firebase Cloud Message (FCM)s
+    private User notifyUser;
+    private String notifyFCMToken;
+    private String notifyTitle;
+    private String notifyMessage;
+
+    public Notification(User notifyUserId, String notifyTitle, String notifyMessage) {
+        this.notifyUser = notifyUserId;
+        this.notifyTitle = notifyTitle;
+        this.notifyMessage = notifyMessage;
     }
 
-    public void setNotifyUserId(User notifyUserId) {
-        this.notifyUserId = notifyUserId;
+    public User getNotifyUser() {
+        return notifyUser;
+    }
+
+    public void setNotifyUser(User notifyUser) {
+        this.notifyUser = notifyUser;
     }
 
     public String getNotifyFCMToken() {
@@ -36,16 +48,4 @@ public class Notification {
     public void setNotifyMessage(String notifyMessage) {
         this.notifyMessage = notifyMessage;
     }
-
-    public Notification(User notifyUserId, String notifyTitle, String notifyMessage) {
-        this.notifyUserId = notifyUserId;
-        this.notifyTitle = notifyTitle;
-        this.notifyMessage = notifyMessage;
-    }
-
-    // Firebase Cloud Message (FCM)s
-    private User notifyUserId;
-    private String notifyFCMToken;
-    private String notifyTitle;
-    private String notifyMessage;
 }

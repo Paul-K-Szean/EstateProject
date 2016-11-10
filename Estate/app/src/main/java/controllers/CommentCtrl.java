@@ -93,8 +93,11 @@ public class CommentCtrl {
                     // server side created comment
                     Toast.makeText(fragment.getActivity(), "You have commented!", Toast.LENGTH_LONG).show();
 
-                    // owner made comment
-                    if (property.getOwner().getUserID().equals(comment.getSender().getUserID())) {
+                    Log.i(TAG, "Powner: " + property.getOwner().getUserID() + " == CommentSender: " +
+                                            comment.getSender().getUserID());
+
+                    // other user made comment, notify listing owner
+                    if (!property.getOwner().getUserID().equals(comment.getSender().getUserID())) {
                         // push notification
                         Notification notification = new Notification(property.getOwner(), "Comment", comment.getSender().getName() + " has commented your listing!");
                         new NotificationCtrl().serverPushNotification(notification, property);

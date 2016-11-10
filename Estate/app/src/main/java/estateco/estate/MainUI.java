@@ -108,7 +108,6 @@ public class MainUI extends AppCompatActivity
         } else if (id == R.id.nav_userfavourites) {
             viewPager.setVisibility(GONE);
             fragObj = new FragmentUserFavouriteListings();
-
         } else if (id == R.id.nav_logout) {
             userCtrl.deleteUserTable();
             propertyCtrl.deletePropertyTable();
