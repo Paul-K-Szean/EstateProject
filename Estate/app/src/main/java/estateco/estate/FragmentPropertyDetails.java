@@ -247,7 +247,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 //
                 if (valProDetStatus.equals("closed")) {
                     menuItemPhoneCall.setEnabled(false);
-                    menuItemPhoneMessage.setEnabled((false));
+                    menuItemPhoneMessage.setEnabled(false);
                     tvPropDetDealType.setText(valProDetDealType + " - " + valProDetStatus);
                     tvPropDetOwnerContact.setText(valProDetStatus);
                     tvPropDetOwnerEmail.setText(valProDetStatus);
