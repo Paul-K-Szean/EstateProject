@@ -2,10 +2,8 @@ package estateco.estate;
 
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +27,7 @@ import java.util.Map;
 
 import controllers.EstateConfig;
 import controllers.FavouriteCtrl;
+import controllers.PhoneCtrl;
 import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.Favourite;
@@ -239,7 +238,6 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 setFavouritedIcon(property);
 
 
-
                 // increase view count
                 favouriteCtrl.serverUpdateViewCount(FragmentPropertyDetails.this,
                         property, menuItemViewCount);
@@ -284,16 +282,16 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        // loop through all permission requested
-        for (String permission : permissions) {
-            // android.permission.CALL_PHONE
-            if (permission.equalsIgnoreCase("android.permission.CALL_PHONE")) {
-                // if permission granted
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                }
-            }
-        }
+//        // loop through all permission requested
+//        for (String permission : permissions) {
+//            // android.permission.CALL_PHONE
+//            if (permission.equalsIgnoreCase("android.permission.CALL_PHONE")) {
+//                // if permission granted
+//                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                }
+//            }
+//        }
 
         switch (requestCode) {
             case 1: {
@@ -301,9 +299,7 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // start calling
-                    getActivity().startActivity(new Intent(Intent.ACTION_CALL)
-                            .setData(Uri.parse("tel:" + property.getOwner().getContact()))
-                    );
+                    new PhoneCtrl().makeCall(FragmentPropertyDetails.this, property.getOwner().getContact());
                 }
                 return;
             }
@@ -311,13 +307,8 @@ public class FragmentPropertyDetails extends Fragment implements Toolbar.OnMenuI
                 // android.permission.SEND_SMS
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getActivity().startActivity(new Intent(Intent.ACTION_VIEW)
-                            .putExtra("sms_body", "Hi, i found your listing: " + property.getTitle() +
-                                    " from Estate App and I would like to find out more.")
-                            .setType("vnd.android-dir/mms-sms")
-                            .setData(Uri.parse("sms:" + property.getOwner().getContact()))
-
-                    );
+                    // send message
+                    new PhoneCtrl().sendMessage(FragmentPropertyDetails.this, property.getOwner().getContact(), property.getTitle());
                 }
                 return;
             }

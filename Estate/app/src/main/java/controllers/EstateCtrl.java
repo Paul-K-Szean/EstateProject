@@ -261,6 +261,25 @@ public class EstateCtrl extends Application {
         favouriteCtrl.deleteFavouriteProperty(favourite);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static int getSpinnerItemPosition(Spinner spinner, String value) {
         int index = 0;
         for (int i = 0; i < spinner.getCount(); i++) {

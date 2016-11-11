@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,51 +18,17 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
+import controllers.PropertyCtrl;
 import controllers.UserCtrl;
 import entities.Property;
 import entities.User;
-import handler.AsyncTaskHandler;
-import handler.AsyncTaskResponse;
-import handler.JSONHandler;
-import handler.ViewAdapterRecyclerProperty;
 import tabs.SlidingTabLayout;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
 import static controllers.EstateConfig.URL_LEASELISTINGS;
 import static controllers.EstateConfig.URL_SALELISTINGS;
 import static controllers.EstateConfig.URL_SEARCHLISTINGS;
-import static controllers.PropertyCtrl.KEY_PROPERTY_BATHROOMCOUNT;
-import static controllers.PropertyCtrl.KEY_PROPERTY_BEDROOMCOUNT;
-import static controllers.PropertyCtrl.KEY_PROPERTY_BLOCK;
-import static controllers.PropertyCtrl.KEY_PROPERTY_CREATEDDATE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_DEALTYPE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_DESC;
-import static controllers.PropertyCtrl.KEY_PROPERTY_FAVOURITECOUNT;
-import static controllers.PropertyCtrl.KEY_PROPERTY_FLATTYPE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORAREA;
-import static controllers.PropertyCtrl.KEY_PROPERTY_FLOORLEVEL;
-import static controllers.PropertyCtrl.KEY_PROPERTY_FURNISHLEVEL;
-import static controllers.PropertyCtrl.KEY_PROPERTY_IMAGE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_PRICE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_PROPERTYID;
-import static controllers.PropertyCtrl.KEY_PROPERTY_STATUS;
-import static controllers.PropertyCtrl.KEY_PROPERTY_STREETNAME;
-import static controllers.PropertyCtrl.KEY_PROPERTY_TITLE;
-import static controllers.PropertyCtrl.KEY_PROPERTY_VIEWCOUNT;
-import static controllers.PropertyCtrl.KEY_PROPERTY_WHOLEAPARTMENT;
-import static controllers.UserCtrl.KEY_CONTACT;
-import static controllers.UserCtrl.KEY_EMAIL;
-import static controllers.UserCtrl.KEY_NAME;
-import static controllers.UserCtrl.KEY_USERID;
 
 
 /**
@@ -78,12 +42,13 @@ public class FragmentMainListings extends Fragment implements Filterable {
     final int maxMemorySize = (int) Runtime.getRuntime().maxMemory() / 1024;
     final int cacheSize = maxMemorySize / 10;
     private UserCtrl userCtrl;
+    private PropertyCtrl propertyCtrl;
     private User user;
     private User owner;
     private Property property;
     private ArrayList<Property> propertyArrayList;
-    private RecyclerView recycler;
-    private ViewAdapterRecyclerProperty viewAdapter;
+    //    private RecyclerView recycler;
+//    private ViewAdapterRecyclerProperty viewAdapter;
     private TextView tvAllListingCount, itemDataID;
     private SearchView searchView;
     private SlidingTabLayout slidingTabLayout;
@@ -138,16 +103,15 @@ public class FragmentMainListings extends Fragment implements Filterable {
 
         // setup ctrl objects
         userCtrl = new UserCtrl(getActivity());
-
+        propertyCtrl = new PropertyCtrl(getActivity());
         setControls(view);
 
+
+//        propertyArrayList = new ArrayList<>();
+//        recycler = (RecyclerView) view.findViewById(R.id.recycleView);
+//        viewAdapter = new ViewAdapterRecyclerProperty(FragmentMainListings.this, propertyArrayList);
         // get all property listing from server
-        new AsyncTaskHandler(Request.Method.GET, URL_ADDRESS, null, getActivity(), new AsyncTaskResponse() {
-            @Override
-            public void onAsyncTaskResponse(String response) {
-                getAllListings(response);
-            }
-        }).execute();
+        propertyCtrl.serverGetAllListing(FragmentMainListings.this, URL_ADDRESS, tvAllListingCount);
 
         return view;
     }
@@ -166,67 +130,6 @@ public class FragmentMainListings extends Fragment implements Filterable {
         setHasOptionsMenu(true);
     }
 
-    private void getAllListings(String response) {
-        try {
-
-            propertyArrayList = new ArrayList<>();
-            JSONArray jsonArray = JSONHandler.getResultAsArray(getActivity(), response);
-            if (jsonArray != null) {
-                Log.i(TAG, "Results: " + jsonArray.length());
-                for (int index = 0; index < jsonArray.length(); index++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(index);
-                    owner = new User(
-                            jsonObject.getString(KEY_USERID),
-                            jsonObject.getString(KEY_NAME),
-                            jsonObject.getString(KEY_EMAIL),
-                            jsonObject.getString(KEY_CONTACT));
-
-                    property = new Property(
-                            jsonObject.getString(KEY_PROPERTY_PROPERTYID),
-                            owner,
-                            jsonObject.getString(KEY_PROPERTY_FLATTYPE),
-                            jsonObject.getString(KEY_PROPERTY_BLOCK),
-                            jsonObject.getString(KEY_PROPERTY_STREETNAME),
-                            jsonObject.getString(KEY_PROPERTY_FLOORLEVEL),
-                            jsonObject.getString(KEY_PROPERTY_FLOORAREA),
-                            jsonObject.getString(KEY_PROPERTY_PRICE),
-                            jsonObject.getString(KEY_PROPERTY_IMAGE),
-                            jsonObject.getString(KEY_PROPERTY_STATUS),
-                            jsonObject.getString(KEY_PROPERTY_DEALTYPE),
-                            jsonObject.getString(KEY_PROPERTY_TITLE),
-                            jsonObject.getString(KEY_PROPERTY_DESC),
-                            jsonObject.getString(KEY_PROPERTY_FURNISHLEVEL),
-                            jsonObject.getString(KEY_PROPERTY_BEDROOMCOUNT),
-                            jsonObject.getString(KEY_PROPERTY_BATHROOMCOUNT),
-                            jsonObject.getString(KEY_PROPERTY_FAVOURITECOUNT),
-                            jsonObject.getString(KEY_PROPERTY_VIEWCOUNT),
-                            jsonObject.getString(KEY_PROPERTY_WHOLEAPARTMENT),
-                            jsonObject.getString(KEY_PROPERTY_CREATEDDATE));
-                    propertyArrayList.add(property);
-                    recycler = (RecyclerView) getView().findViewById(R.id.recycleView);
-                    viewAdapter = new ViewAdapterRecyclerProperty(FragmentMainListings.this, propertyArrayList);
-                    recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    recycler.setVisibility(VISIBLE);
-                    recycler.setAdapter(viewAdapter);
-
-
-                    if (propertyArrayList.size() > 1)
-                        tvAllListingCount.setText(propertyArrayList.size() + " records");
-                    else
-                        tvAllListingCount.setText(propertyArrayList.size() + " record");
-                }
-
-
-            } else {
-                recycler.setVisibility(GONE);
-                String result = JSONHandler.getResultAsString(getActivity(), response);
-                tvAllListingCount.setText(result);
-            }
-
-        } catch (JSONException error) {
-
-        }
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -249,7 +152,7 @@ public class FragmentMainListings extends Fragment implements Filterable {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                viewAdapter.getFilter().filter(newText);
+                propertyCtrl.getViewAdapter().getFilter().filter(newText);
                 return false;
             }
         });
@@ -338,7 +241,7 @@ public class FragmentMainListings extends Fragment implements Filterable {
                 textView.setText(propertyArrayList.size() + " records");
             else
                 textView.setText(propertyArrayList.size() + " record");
-            viewAdapter.notifyDataSetChanged();
+            propertyCtrl.getViewAdapter().notifyDataSetChanged();
         }
     }
 

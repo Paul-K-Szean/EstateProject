@@ -75,8 +75,8 @@ public class CommentCtrl {
     // ********************* REMOTE WAMP SERVER ACCESS **********************
     // **********************************************************************
 
-    // create new property
-    public void serverNewComment(final Fragment fragment, final Comment comment, final Property property) {
+    // create new comment
+        public void serverNewComment(final Fragment fragment, final Comment comment, final Property property) {
         Log.i(TAG, "serverNewComment");
         Map<String, String> paramValues = new HashMap<>();
         paramValues.put(KEY_SENDERID, comment.getSender().getUserID());

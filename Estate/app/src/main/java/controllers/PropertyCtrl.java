@@ -2,12 +2,15 @@ package controllers;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +22,7 @@ import entities.Property;
 import entities.User;
 import enums.DealType;
 import estateco.estate.FragmentUserListings;
+import estateco.estate.R;
 import handler.AsyncTaskHandler;
 import handler.AsyncTaskResponse;
 import handler.ErrorHandler;
@@ -26,6 +30,14 @@ import handler.FragmentHandler;
 import handler.JSONHandler;
 import handler.SQLiteHandler;
 import handler.SessionHandler;
+import handler.ViewAdapterRecyclerProperty;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static controllers.UserCtrl.KEY_CONTACT;
+import static controllers.UserCtrl.KEY_EMAIL;
+import static controllers.UserCtrl.KEY_NAME;
+import static controllers.UserCtrl.KEY_USERID;
 
 /**
  * Created by Paul K Szean on 26/9/2016.
@@ -67,7 +79,11 @@ public class PropertyCtrl {
     private SQLiteHandler db;
     private ArrayList<Property> propertyArrayList;
     private Property property;
-    private View view;
+    private User owner;
+
+
+    private RecyclerView recycler;
+    private ViewAdapterRecyclerProperty viewAdapter;
 
     public PropertyCtrl(Context context) {
         // SQLite database handler
@@ -263,6 +279,80 @@ public class PropertyCtrl {
         }
     }
 
+    public void serverGetAllListing(final Fragment fragment, final String URL_ADDRESS, final TextView tvAllListingCount) {
+        // get all property listing from server
+        new AsyncTaskHandler(Request.Method.GET, URL_ADDRESS, null, fragment.getActivity(), new AsyncTaskResponse() {
+            @Override
+            public void onAsyncTaskResponse(String response) {
+                getAllListings(fragment, response, tvAllListingCount);
+            }
+        }).execute();
+    }
+
+    private void getAllListings(Fragment fragment, String response, TextView tvAllListingCount) {
+        try {
+            propertyArrayList = new ArrayList<>();
+            recycler = (RecyclerView) fragment.getView().findViewById(R.id.recycleView);
+            viewAdapter = new ViewAdapterRecyclerProperty(fragment, propertyArrayList);
+
+            JSONArray jsonArray = JSONHandler.getResultAsArray(fragment.getActivity(), response);
+            if (jsonArray != null) {
+                Log.i(TAG, "Results: " + jsonArray.length());
+                for (int index = 0; index < jsonArray.length(); index++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(index);
+                    owner = new User(
+                            jsonObject.getString(KEY_USERID),
+                            jsonObject.getString(KEY_NAME),
+                            jsonObject.getString(KEY_EMAIL),
+                            jsonObject.getString(KEY_CONTACT));
+
+                    property = new Property(
+                            jsonObject.getString(KEY_PROPERTY_PROPERTYID),
+                            owner,
+                            jsonObject.getString(KEY_PROPERTY_FLATTYPE),
+                            jsonObject.getString(KEY_PROPERTY_BLOCK),
+                            jsonObject.getString(KEY_PROPERTY_STREETNAME),
+                            jsonObject.getString(KEY_PROPERTY_FLOORLEVEL),
+                            jsonObject.getString(KEY_PROPERTY_FLOORAREA),
+                            jsonObject.getString(KEY_PROPERTY_PRICE),
+                            jsonObject.getString(KEY_PROPERTY_IMAGE),
+                            jsonObject.getString(KEY_PROPERTY_STATUS),
+                            jsonObject.getString(KEY_PROPERTY_DEALTYPE),
+                            jsonObject.getString(KEY_PROPERTY_TITLE),
+                            jsonObject.getString(KEY_PROPERTY_DESC),
+                            jsonObject.getString(KEY_PROPERTY_FURNISHLEVEL),
+                            jsonObject.getString(KEY_PROPERTY_BEDROOMCOUNT),
+                            jsonObject.getString(KEY_PROPERTY_BATHROOMCOUNT),
+                            jsonObject.getString(KEY_PROPERTY_FAVOURITECOUNT),
+                            jsonObject.getString(KEY_PROPERTY_VIEWCOUNT),
+                            jsonObject.getString(KEY_PROPERTY_WHOLEAPARTMENT),
+                            jsonObject.getString(KEY_PROPERTY_CREATEDDATE));
+                    propertyArrayList.add(property);
+
+
+                    recycler.setLayoutManager(new LinearLayoutManager(fragment.getActivity()));
+                    recycler.setVisibility(VISIBLE);
+                    recycler.setAdapter(viewAdapter);
+
+
+                    if (propertyArrayList.size() > 1)
+                        tvAllListingCount.setText(propertyArrayList.size() + " records");
+                    else
+                        tvAllListingCount.setText(propertyArrayList.size() + " record");
+                }
+
+
+            } else {
+                recycler.setVisibility(GONE);
+                String result = JSONHandler.getResultAsString(fragment.getActivity(), response);
+                tvAllListingCount.setText(result);
+            }
+
+        } catch (JSONException error) {
+
+        }
+    }
+
 
     //  OTHERS
     public String calculatePropertyPrice(String valNewDealType, String valNewWholeApartment, String valNewPrice) {
@@ -280,5 +370,8 @@ public class PropertyCtrl {
         return "000";
     }
 
+    public ViewAdapterRecyclerProperty getViewAdapter() {
+        return viewAdapter;
+    }
 }
 
