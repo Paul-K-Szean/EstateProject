@@ -95,6 +95,7 @@ public class NotificationCtrl {
                 return paramValues;
             }
         };
+
         // Adding request to request queue
         EstateCtrl.getInstance().addToRequestQueue(strReq, tag_string_req);
 
